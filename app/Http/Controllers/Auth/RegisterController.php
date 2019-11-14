@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Profile;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
 
-class RegisterController extends Controller
+class RegisterController extends BaseController
 {
     /*
     |--------------------------------------------------------------------------
@@ -49,8 +54,10 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'user_type' => ['required', 'string', 'max:255'],
+            'facebook_id' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'phone_number' => ['required', 'string', 'max:14','unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
@@ -63,10 +70,32 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
+        $user = User::create([
+            'phone_number' => $data['phone_number'],
+            'user_type' => 'CUSTOMER',
+            'facebook_id' => $data['facebook_id'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'password' => $data['password'],
         ]);
+
+        // $profile = Profile::create([
+        //     'user_id' => $user->id
+        //     'first_name' => $data['first_name'],
+        // ]);
+
+        return $user;
+    }
+
+    protected function registered(Request $request, $user)
+    {
+       $data  = [
+            'user' => $user,
+            'token' => [
+                'access_token' => $this->guard()->refresh(),
+                'token_type' => 'bearer',
+                'expires_in' => auth()->factory()->getTTL() * 60
+            ]
+        ];
+        return $this->sendResponse($data, 'User registered successfully.');
     }
 }

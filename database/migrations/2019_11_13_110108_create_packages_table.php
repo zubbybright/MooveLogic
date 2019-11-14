@@ -20,11 +20,9 @@ class CreatePackagesTable extends Migration
             $table->string('size');
             $table->string('weight');
             $table->unsignedBigInteger('customer_id');
-            $table->unsignedBigInteger('trip_id');
             $table->timestamps();
 
             $table->foreign('customer_id')->references('id')->on('users');
-            $table->foreign('trip_id')->references('id')->on('trips');
         });
     }
 

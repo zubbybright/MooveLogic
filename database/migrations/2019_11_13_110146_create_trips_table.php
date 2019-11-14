@@ -25,10 +25,12 @@ class CreateTripsTable extends Migration
             $table->string('recipient_name');
             $table->string('recipient_phone_number');
             $table->unsignedBigInteger('rider_id');
+            $table->unsignedBigInteger('package_id');
             $table->timestamps();
 
     
             $table->foreign('rider_id')->references('id')->on('users');
+            $table->foreign('package_id')->references('id')->on('packages');
         });
     }
 
