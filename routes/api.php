@@ -21,6 +21,7 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
 ], function ($router) {
+    Route::post('register/rider', 'Auth\RiderController@register');
     Route::post('login', 'Auth\LoginController@login');
     Route::post('register', 'Auth\RegisterController@register');
     Route::post('logout', 'Auth\LogoutController@logout');

@@ -13,20 +13,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
 
-class RegisterController extends BaseController
+class RiderController extends BaseController
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
-    use RegistersUsers;
+    //
+        use RegistersUsers;
 
     /**
      * Where to redirect users after registration.
@@ -74,7 +64,7 @@ class RegisterController extends BaseController
     {
         $user = User::create([
             'phone_number' => $data['phone_number'],
-            'user_type' => 'CUSTOMER',
+            'user_type' => 'RIDER',
             'facebook_id' => $data['facebook_id'],
             'email' => $data['email'],
             'password' => $data['password'],
@@ -84,9 +74,9 @@ class RegisterController extends BaseController
         $profile = Profile::create([
             'user_id' => $user->id,
             'first_name' => $data['first_name'],
-            // 'last_name' => $data['last_name'],
-            // 'date_of_birth'=> $data['date_of_birth'],
-        ]);
+        //     'last_name' => $data['last_name'],
+        //     'date_of_birth'=> $data['date_of_birth'],
+        // ]);
 
         return $user;
     }
@@ -101,6 +91,8 @@ class RegisterController extends BaseController
                 'expires_in' => auth()->factory()->getTTL() * 60
             ]
         ];
-        return $this->sendResponse($data, 'User registered successfully.');
+        return $this->sendResponse($data, 'Rider registered successfully.');
     }
+
+    
 }
