@@ -30,9 +30,9 @@ Route::group([
     Route::post('logout', 'Auth\LogoutController@logout');
     Route::post('refresh', 'Auth\LoginController@refresh');
 
-    //start a trip;
+});
+
+//start a trip;
 
     Route::post('trip', 'TripsController@start_trip');
 
-
-});

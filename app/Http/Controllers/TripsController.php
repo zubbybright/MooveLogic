@@ -67,7 +67,7 @@ class TripsController extends BaseController
 
     	
     	if($trip){
-    		return $this->sendResponse($trip, "Trip started")
+    		return $this->sendResponse($trip, "Trip started");
     	}else {
     		return response()->json('Cannot start trip.');
     	}
