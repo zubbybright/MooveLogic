@@ -15,10 +15,10 @@ class CreatePackagesTable extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->longText('description');
-            $table->enum('package_type',['FRAGILE', 'NOT_FRAGILE']);
-            $table->string('size');
-            $table->string('weight');
+            $table->longText('package_description')->nullable();
+            $table->enum('package_type',['FRAGILE', 'NOT_FRAGILE'])->nullable();
+            $table->string('size')->nullable();
+            $table->string('weight')->nullable();
             $table->unsignedBigInteger('customer_id');
             $table->timestamps();
 

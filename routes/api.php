@@ -21,9 +21,18 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
 ], function ($router) {
+
+	//User and Rider functionalities;
+
     Route::post('register/rider', 'Auth\RiderController@register');
     Route::post('login', 'Auth\LoginController@login');
     Route::post('register', 'Auth\RegisterController@register');
     Route::post('logout', 'Auth\LogoutController@logout');
     Route::post('refresh', 'Auth\LoginController@refresh');
+
+    //start a trip;
+
+    Route::post('trip', 'TripsController@start_trip');
+
+
 });

@@ -15,11 +15,11 @@ class CreateTripsTable extends Migration
     {
         Schema::create('trips', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('current_location');
+            $table->string('current_location')->nullable();
             $table->string('start_location');
             $table->string('end_location');
-            $table->dateTime('start_time');
-            $table->dateTime('end_time');
+            $table->dateTime('start_time')->nullable();
+            $table->dateTime('end_time')->nullable();
             $table->string('cost_of_trip');
             $table->enum('trip_status',['IN_PROGRESS', 'DELIVERED','PENDING', 'ENDED','CANCELLED']);
             $table->string('recipient_name');
