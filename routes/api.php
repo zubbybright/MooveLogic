@@ -29,10 +29,13 @@ Route::group([
     Route::post('register', 'Auth\RegisterController@register');
     Route::post('logout', 'Auth\LogoutController@logout');
     Route::post('refresh', 'Auth\LoginController@refresh');
+    Route::put('update-password', 'ProfileController@update');
+	
 
 });
-
-//start a trip;
+	//edit profile
+	
+	//start a trip;
 
     Route::post('trip', 'TripsController@start_trip');
 

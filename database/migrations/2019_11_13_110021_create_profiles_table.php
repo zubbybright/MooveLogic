@@ -17,8 +17,7 @@ class CreateProfilesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->string('first_name');
-            $table->string('last_name')->nullable();
-            $table->date('date_of_birth')->nullable();
+            $table->string('last_name');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
         });

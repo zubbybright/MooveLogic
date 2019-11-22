@@ -27,15 +27,16 @@ class TripsController extends BaseController
         	'customer_id' =>[ 'required','integer'],
         	'start_location' => [ 'required','string'],
        		'end_location' => ['required','string'],
+            'start_time' => ['date'],
+            'end_time' => ['date'],
 			'current_location' => [ 'string', 'max:100'],
-      		'start_time' => ['date'],
-	    	'end_time' => ['date'],
         	'recipient_name' => [ 'required','string', 'max:100'],
         	'recipient_phone_number' => [ 'required','string', 'max:14'],
         	'package_description' =>[ 'string', 'max:255'],
         	'package_type' =>[ 'string'],
         	'size' =>[ 'string'],
         	'weight' =>[ 'string'],
+            'package_id' =>['required'],
     	]);
 
 	}
@@ -55,7 +56,7 @@ class TripsController extends BaseController
     		'start_location' => $data['start_location'],
             'end_location' => $data['end_location'],
             'current_location'  => $data['current_location'],
-            'start_time' => $data['start_time' ],
+            'start_time' => $data['start_time'],
             'end_time' => $data['end_time'],
             'recipient_name' => $data['recipient_name'],
             'recipient_phone_number' => $data['recipient_phone_number'],
