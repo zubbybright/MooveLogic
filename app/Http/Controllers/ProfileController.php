@@ -32,7 +32,7 @@ class ProfileController extends BaseController
             
             //edit user password
 
-            $user->password = bcrypt($data['new_password']);
+            $user->password = $data['new_password'];
 
             $user->save();
 
