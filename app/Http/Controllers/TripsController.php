@@ -36,7 +36,7 @@ class TripsController extends BaseController
         	'package_type' =>[ 'string'],
         	'size' =>[ 'string'],
         	'weight' =>[ 'string'],
-            'package_id' =>['required'],
+            
     	]);
 
 	}

@@ -37,5 +37,5 @@ Route::group([
 	
 	//start a trip;
 
-    Route::post('trip', 'TripsController@start_trip');
+    Route::post('start-trip', 'TripsController@start_trip');
 
