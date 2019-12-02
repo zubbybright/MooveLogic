@@ -35,7 +35,8 @@ Route::group([
 });
 	//edit profile
 	
-	//start a trip;
+	//start and end trips;
 
     Route::post('start-trip', 'TripsController@start_trip');
+    Route::put('end-trip', 'TripsController@end_trip');
 

@@ -20,7 +20,9 @@ class TripsController extends BaseController
         return $this->create($request->all());
     }
 
-	protected function validator(array $data)
+
+	
+    protected function validator(array $data)
     {
 		return Validator::make($data, [
         	'rider_id' =>[ 'required','integer'],
@@ -28,7 +30,6 @@ class TripsController extends BaseController
         	'start_location' => [ 'required','string'],
        		'end_location' => ['required','string'],
             'start_time' => ['date'],
-            'end_time' => ['date'],
 			'current_location' => [ 'string', 'max:100'],
         	'recipient_name' => [ 'required','string', 'max:100'],
         	'recipient_phone_number' => [ 'required','string', 'max:14'],
@@ -57,10 +58,9 @@ class TripsController extends BaseController
             'end_location' => $data['end_location'],
             'current_location'  => $data['current_location'],
             'start_time' => $data['start_time'],
-            'end_time' => $data['end_time'],
             'recipient_name' => $data['recipient_name'],
             'recipient_phone_number' => $data['recipient_phone_number'],
-            'status' => 'IN_PROGRESS',
+            'trip_status' => 'IN_PROGRESS',
             'cost_of_trip' => 0,
            	'rider_id' => $data['rider_id'],
            	'package_id'=> $package->id,
@@ -74,5 +74,39 @@ class TripsController extends BaseController
     	}
 
     }
+
+        
+
+    public function end_trip(Request $request){
+
+        $data = $request->validate([
+            'end_time' => ['date'],
+            'trip_id' => ['required', 'integer']
+            ]);
+        
+        try {
+            
+            $end_trip =Trip::where( 'trip_status', 'IN_PROGRESS')
+                        ->where('id', $data['trip_id'])
+                        ->update([  'trip_status' => 'ENDED',
+                                    'end_time' => $data['end_time'],
+                                ]);
+
+            if ($end_trip){
+                return $this->sendResponse($end_trip, "Trip Ended.");
+            }else{
+                return response()->json('Cannot end trip!');
+            }
+        }
+
+        catch(\Exception $e){
+             return response()->json('Something went wrong.');
+        }
+
+    }
+
+
+    
+
 
 }   
