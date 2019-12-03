@@ -32,9 +32,7 @@ Route::group([
     Route::put('update-password', 'ProfileController@update');
 	
 
-});
-	//edit profile
-	
+});	
 	//start and end trips;
 
     Route::post('start-trip', 'TripsController@start_trip');

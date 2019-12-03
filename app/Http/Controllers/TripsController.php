@@ -50,6 +50,7 @@ class TripsController extends BaseController
             'size' => $data['size'],
             'weight'=> $data['weight'],
             'package_type'=> $data['package_type'],
+            'package_status' => 'ENROUTE'
         ]);
 
 
@@ -67,7 +68,7 @@ class TripsController extends BaseController
     	]);
 
     	
-    	if($trip){
+    	if($trip && $package){
     		return $this->sendResponse($trip, "Trip started");
     	}else {
     		return response()->json('Cannot start trip.');
@@ -92,7 +93,10 @@ class TripsController extends BaseController
                                     'end_time' => $data['end_time'],
                                 ]);
 
-            if ($end_trip){
+            $package_state= Package::where('package_status', 'ENROUTE')
+                            ->update(['package_status' => 'DELIVERED',]);
+
+            if ($end_trip && $package_state){
                 return $this->sendResponse($end_trip, "Trip Ended.");
             }else{
                 return response()->json('Cannot end trip!');

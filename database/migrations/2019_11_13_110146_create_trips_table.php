@@ -21,7 +21,7 @@ class CreateTripsTable extends Migration
             $table->dateTime('start_time')->nullable();
             $table->dateTime('end_time')->nullable();
             $table->string('cost_of_trip');
-            $table->enum('trip_status',['IN_PROGRESS', 'DELIVERED','PENDING', 'ENDED','CANCELLED']);
+            $table->enum('trip_status',['IN_PROGRESS','PENDING', 'ENDED','CANCELLED']);
             $table->string('recipient_name');
             $table->string('recipient_phone_number');
             $table->unsignedBigInteger('rider_id');

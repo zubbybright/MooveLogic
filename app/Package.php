@@ -9,7 +9,7 @@ use App\Trip;
 class Package extends Model
 {
     //
-    protected $fillable = ['description', 'package_type', 'size', 'weight', 'customer_id', 'trip_id'];
+    protected $fillable = ['description', 'package_type', 'size', 'weight', 'customer_id', 'package_status', 'trip_id'];
 
 
     public function user(){

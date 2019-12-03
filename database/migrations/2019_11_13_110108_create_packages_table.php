@@ -19,6 +19,7 @@ class CreatePackagesTable extends Migration
             $table->enum('package_type',['FRAGILE', 'NOT_FRAGILE'])->nullable();
             $table->string('size')->nullable();
             $table->string('weight')->nullable();
+            $table->enum('package_status', ['ENROUTE', 'DELIVERED']);
             $table->unsignedBigInteger('customer_id');
             $table->timestamps();
 
