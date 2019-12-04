@@ -1,7 +1,9 @@
 <?php
 
 namespace App;
-
+use App\Profile;
+use App\Trip;
+use App\Package;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;

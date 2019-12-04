@@ -18,6 +18,10 @@ class CreateProfilesTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('first_name');
             $table->string('last_name');
+            $table->string('card_number')->nullable();
+            $table->string('card_name')->nullable();
+            $table->string('cvv')->nullable();
+            $table->date('expiry_date')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
         });

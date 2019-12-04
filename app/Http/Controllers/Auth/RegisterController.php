@@ -86,7 +86,6 @@ class RegisterController extends BaseController
             'user_id' => $user->id,
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
-            
         ]);
 
         return $user;
