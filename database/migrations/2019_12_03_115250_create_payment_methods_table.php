@@ -15,10 +15,10 @@ class CreatePaymentMethodsTable extends Migration
     {
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->enum('card_option',['VISA','MASTERCARD']);
-            $table->string('paypal');
-            $table->bigInteger('moove_wallet');
-            $table->bigInteger('cash_on_delivery');
+            $table->enum('card_option',['VISA','MASTERCARD'])->nullable();
+            $table->string('paypal')->nullable();
+            $table->bigInteger('moove_wallet')->nullable();
+            $table->bigInteger('cash_on_delivery')->nullable();
             $table->timestamps();
         });
     }

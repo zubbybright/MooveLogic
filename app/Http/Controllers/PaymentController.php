@@ -9,6 +9,7 @@ use App\Trip;
 use App\User;
 use App\Package;
 use App\Profile;
+use App\Payment_Method;
 use App\Http\Controllers\BaseController;
 
 class PaymentController extends BaseController
@@ -20,12 +21,19 @@ class PaymentController extends BaseController
 
         $data = $request->validate([
             'card_option' => ['string'],
-            'paypal' => ['required', 'integer'],
-            'moove_wallet' =>[''],
-            'cash_on_delivery'=>[''],
+            'paypal' => [ 'string'],
+            'moove_wallet' =>['string'],
+            'cash_on_delivery'=>['string'],
             ]);
         
-        
+        try{
+        	$make_payment= 
+
+        }
+        catch(){
+
+        }
 
     }
 }
+	
