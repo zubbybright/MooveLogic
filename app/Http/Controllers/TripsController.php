@@ -97,7 +97,7 @@ class TripsController extends BaseController
                             ->update(['package_status' => 'DELIVERED',]);
 
             if ($end_trip && $package_state){
-                return $this->sendResponse($end_trip, "Trip Ended.");
+                return $this->sendResponse($end_trip, "Trip Ended, Package Delivered !.");
             }else{
                 return response()->json('Cannot end trip!');
             }
@@ -108,16 +108,6 @@ class TripsController extends BaseController
         }
 
     }
-
-    // public function make_moove_request(Request $request){
-
-    //         $validatedData = $request->validate([
-    //         'end_time' => ['date'],
-    //         'trip_id' => ['required', 'integer']
-    //         ]);
-
-    // }
-
 
     
 
