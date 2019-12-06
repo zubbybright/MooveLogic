@@ -109,6 +109,15 @@ class TripsController extends BaseController
 
     }
 
+    // public function make_moove_request(Request $request){
+
+    //         $validatedData = $request->validate([
+    //         'end_time' => ['date'],
+    //         'trip_id' => ['required', 'integer']
+    //         ]);
+
+    // }
+
 
     
 

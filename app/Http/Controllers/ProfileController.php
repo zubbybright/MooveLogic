@@ -21,7 +21,7 @@ class ProfileController extends BaseController
     }
 
 
-        public function update_password(Request $request){
+    public function update_password(Request $request){
             
             $data = $request->validate([
                 'old_password' => ['required', 'string', 'min:8'],
@@ -37,7 +37,7 @@ class ProfileController extends BaseController
             $user->save();
 
             return $this->sendResponse($user, "Password Changed!.");
-        }
+    }
 
     public function add_bank_card(Request $request){
         
