@@ -27,7 +27,7 @@ class PaymentController extends BaseController
             ]);
         
         try{
-        	$make_payment= 
+        	$make_payment= Payment_Method::
 
         }
         catch(){

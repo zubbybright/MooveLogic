@@ -49,6 +49,8 @@ class RiderController extends BaseController
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'phone_number' => ['required', 'string', 'max:14','unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'first_name' => ['required', 'string', 'max:100'],
+            'last_name' => ['required', 'string', 'max:100'],
             
 
         ]);
@@ -74,8 +76,7 @@ class RiderController extends BaseController
         $profile = Profile::create([
             'user_id' => $user->id,
             'first_name' => $data['first_name'],
-        //     'last_name' => $data['last_name'],
-        //     'date_of_birth'=> $data['date_of_birth'],
+            'last_name' => $data['last_name']
          ]);
 
         return $user;
