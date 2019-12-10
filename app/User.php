@@ -4,6 +4,7 @@ namespace App;
 use App\Profile;
 use App\Trip;
 use App\Package;
+use App\MooveRequest;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -19,7 +20,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'phone_number', 'email', 'password','facebook_id','user_type'
+        'phone_number', 'email', 'password','facebook_id','user_type', 'on_duty'
     ];
 
     /**
@@ -52,6 +53,9 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(Profile::class);
     }
 
+    public function moove_request(){
+        return $this->hasMany(MooveRequest::class);
+    }
 
     public function getJWTIdentifier()
     {

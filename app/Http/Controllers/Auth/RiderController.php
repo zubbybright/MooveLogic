@@ -79,6 +79,8 @@ class RiderController extends BaseController
             'last_name' => $data['last_name']
          ]);
 
+
+
         return $user;
     }
 

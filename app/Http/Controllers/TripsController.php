@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Trip;
 use App\User;
 use App\Package;
+use App\MooveRequest;
 use App\Http\Controllers\BaseController;
 
 class TripsController extends BaseController
@@ -20,6 +21,7 @@ class TripsController extends BaseController
         return $this->create($request->all());
     }
 
+    
 
 	
     protected function validator(array $data)
@@ -44,6 +46,7 @@ class TripsController extends BaseController
 
     protected function create(array $data){
 
+         $trip_cost = 0;
 	    $package = Package::create([
             'customer_id' => $data['customer_id'],
             'package_description' => $data['package_description'],
@@ -62,7 +65,7 @@ class TripsController extends BaseController
             'recipient_name' => $data['recipient_name'],
             'recipient_phone_number' => $data['recipient_phone_number'],
             'trip_status' => 'IN_PROGRESS',
-            'cost_of_trip' => 0,
+            'cost_of_trip' => $trip_cost,
            	'rider_id' => $data['rider_id'],
            	'package_id'=> $package->id,
     	]);
@@ -106,6 +109,59 @@ class TripsController extends BaseController
         catch(\Exception $e){
              return response()->json('Something went wrong.');
         }
+
+    }
+
+    public function make_moove_request(Request $request){
+        
+        $data = $request->validate([
+            'pick_up_location'=>['required','string', 'max:100'],
+            'delivery_location'=>['required','string', 'max:100'],
+            'customer_id' =>[ 'required','integer'],
+            'recipient_name' => [ 'required','string', 'max:100'],
+            'recipient_phone_number' => [ 'required','string', 'max:14'],
+            'package_description' =>['string', 'max:255'],
+            'who_pays'=>[ 'required','string', 'max:100'],
+            ]);
+        
+        $trip_cost = 0;
+        // try{
+
+            $moove_request= MooveRequest::create([
+                'recipient_name' => $data['recipient_name'],
+                'recipient_phone_number' => $data['recipient_phone_number'],
+                'package_description' => $data['package_description'],
+                'who_pays' => $data['who_pays'],
+                'customer_id' => $data['customer_id'],
+                'pick_up_location'=> $data['pick_up_location'],
+                'delivery_location' => $data['delivery_location'] ,
+                'cost_of_trip' => $trip_cost,
+                ]);                
+
+
+                if ($moove_request){
+
+                    $get_rider = User::where( 'user_type', 'RIDER')
+                                    ->get();
+                
+                        if($get_rider){
+                            
+                            return $this->sendResponse($get_rider, "Rider located.");
+                            
+                }
+                else {
+                    return response()->json('Cannot locate a rider');
+                }
+
+            // }
+            // catch(\Exception $e) {
+
+            //     return response()->json('Cannot Make Moove Request.');
+            // }
+
+
+    }
+        
 
     }
 
