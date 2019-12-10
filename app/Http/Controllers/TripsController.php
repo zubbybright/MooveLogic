@@ -146,7 +146,7 @@ class TripsController extends BaseController
                 
                         if($get_rider){
                             
-                            return $this->sendResponse($get_rider, "Rider located.");
+                            return $this->sendResponse($get_rider, $moove_request, "Rider located.");
                             
                 }
                 else {
