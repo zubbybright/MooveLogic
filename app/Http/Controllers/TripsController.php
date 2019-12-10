@@ -46,7 +46,7 @@ class TripsController extends BaseController
 
     protected function create(array $data){
 
-         $trip_cost = 0;
+        $trip_cost = 0;
 	    $package = Package::create([
             'customer_id' => $data['customer_id'],
             'package_description' => $data['package_description'],
@@ -72,6 +72,12 @@ class TripsController extends BaseController
 
     	
     	if($trip && $package){
+            $rider_status = User::where( 'user_type', 'RIDER')
+                                    ->where('id',$data['rider_id'] )
+                                    ->where('on_a_ride', 0)
+                                    ->update(['on_a_ride' => 1,
+                                ]);
+
     		return $this->sendResponse($trip, "Trip started");
     	}else {
     		return response()->json('Cannot start trip.');
@@ -85,7 +91,8 @@ class TripsController extends BaseController
 
         $data = $request->validate([
             'end_time' => ['date'],
-            'trip_id' => ['required', 'integer']
+            'trip_id' => ['required', 'integer'],
+            'rider_id' => ['required', 'integer'],
             ]);
         
         try {
@@ -100,6 +107,13 @@ class TripsController extends BaseController
                             ->update(['package_status' => 'DELIVERED',]);
 
             if ($end_trip && $package_state){
+
+                $rider_status = User::where( 'user_type', 'RIDER')
+                        ->where('id',$data['rider_id'] )
+                        ->where('on_a_ride', 1)
+                        ->update(['on_a_ride' => 0,
+                    ]);
+
                 return $this->sendResponse($end_trip, "Trip Ended, Package Delivered !.");
             }else{
                 return response()->json('Cannot end trip!');
@@ -125,7 +139,7 @@ class TripsController extends BaseController
             ]);
         
         $trip_cost = 0;
-        // try{
+        
 
             $moove_request= MooveRequest::create([
                 'recipient_name' => $data['recipient_name'],
@@ -142,6 +156,7 @@ class TripsController extends BaseController
                 if ($moove_request){
 
                     $get_rider = User::where( 'user_type', 'RIDER')
+                                    ->where('on_a_ride', 0)
                                     ->get();
                 
                         if($get_rider){
@@ -153,14 +168,10 @@ class TripsController extends BaseController
                     return response()->json('Cannot locate a rider');
                 }
 
-            // }
-            // catch(\Exception $e) {
-
-            //     return response()->json('Cannot Make Moove Request.');
-            // }
 
 
     }
+
         
 
     }

@@ -62,6 +62,7 @@ class RegisterController extends BaseController
             'first_name' => ['required', 'string', 'max:100'],
             'last_name' => ['required', 'string', 'max:100'],
 
+
         ]);
     }
 
@@ -103,4 +104,7 @@ class RegisterController extends BaseController
         ];
         return $this->sendResponse($data, 'User registered successfully.');
     }
+
+
+    
 }

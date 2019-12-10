@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('facebook_id')->nullable();
             $table->string('password');
             $table->enum('user_type',['CUSTOMER', 'RIDER']);
+            $table->boolean('on_a_ride')->default(0)->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

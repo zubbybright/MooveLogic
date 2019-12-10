@@ -70,6 +70,7 @@ class RiderController extends BaseController
             'facebook_id' => $data['facebook_id'],
             'email' => $data['email'],
             'password' => $data['password'],
+            'on_a_ride' =>0
         ]);
 
 
