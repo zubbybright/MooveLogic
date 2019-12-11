@@ -16,7 +16,7 @@ class CreateMooveRequestsTable extends Migration
         Schema::create('moove_requests', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('delivery_location');
-            $table->string('pick_up_location');
+            $table->string('pick_up_location')->nullable();
             $table->string('recipient_name');
             $table->string('cost_of_trip');
             $table->string('recipient_phone_number');
