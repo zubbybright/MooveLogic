@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->enum('user_type',['CUSTOMER', 'RIDER']);
             $table->boolean('on_a_ride')->default(0)->nullable();
+            $table->boolean('active_ride')->default(0)->nullable();
             $table->string('current_location')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();

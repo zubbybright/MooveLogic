@@ -155,19 +155,21 @@ class TripsController extends BaseController
 
                 if ($moove_request){
                     //gets the list of all free drivers at pickup location
-                    $get_rider = User::where( 'user_type', 'RIDER')
+                    $get_riders = User::where( 'user_type', 'RIDER')
                                     ->where('on_a_ride', 0)
                                     ->where('current_location', $data['pick_up_location'])
-                                    ->get();
+                                    ->where('active_ride', 0)
+                                    ->inRandomOrder()->take(1)->get();
+                    $get_rider= $get_riders->first()->profile;
                     
                         if($get_rider){
+                            User::where( 'user_type', 'RIDER')
+                                    ->where('on_a_ride', 0)
+                                    ->where('current_location', $data['pick_up_location'])
+                                    ->where('active_ride', 0)
+                                    ->update(['active_ride' => 1]);
                            
-                           //gets a particular rider for customer
-                           
-                            $get_one_rider= array_rand([$get_rider],1 );
-                            $found_rider= $get_rider[$get_one_rider];
-                    
-                                return $this->sendResponse($found_rider, $moove_request , 'Rider Located.');
+                                return $this->sendResponse($get_riders, $moove_request);
                                 
                         }
 
@@ -185,18 +187,22 @@ class TripsController extends BaseController
     public function rider_active_ride(Request $request){
 
         $data = $request->validate([
-            'rider_id' =>[ 'required','integer'],
-            'moove_request_id' => ['required','integer']
+            'current_location' =>[ 'required','string'],
+            'rider_id' =>['required', 'integer']
             ]);
 
-        $moove_ride = MooveRequest::where( 'id', $data['moove_request_id'])
-                                    ->get();
-        $rider = User::where('id', $data['rider_id'])
-                ->get()  ;   
+            $rider= User::where('active_ride',1)
+                        ->get();
+            
+            if($rider){
 
-                if($moove_ride &&  $rider)  {
-                    return $this->sendResponse($moove_ride, "You have an active ride");
-                }                    
+            $get_moove = MooveRequest::where('pick_up_location', $data['current_location'])
+                    ->get() ;
+
+                return $this->sendResponse($get_moove, "You have an active ride");
+            }
+
+                                    
 
     }
 

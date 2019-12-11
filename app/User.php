@@ -20,7 +20,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'phone_number', 'email', 'password','facebook_id','user_type', 'on_duty', 'current_location'
+        'phone_number', 'email', 'password','facebook_id','user_type', 'on_duty', 'current_location', 'active_ride'
     ];
 
     /**
@@ -54,7 +54,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
     public function moove_request(){
-        return $this->hasMany(MooveRequest::class);
+        return $this->hasOne(MooveRequest::class);
     }
 
     public function getJWTIdentifier()
