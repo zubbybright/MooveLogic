@@ -27,7 +27,7 @@ class LoginController extends BaseController
     {
         $credentials = request(['phone_number', 'password']);
         if (! $token = auth()->attempt($credentials)) {
-            return response()->json('Invalid phone number or password!', 401);
+            return response()->json('Invalid phone number or password!');
         }
 
         $data  = [
