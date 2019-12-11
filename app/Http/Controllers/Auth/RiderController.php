@@ -70,7 +70,7 @@ class RiderController extends BaseController
             'facebook_id' => $data['facebook_id'],
             'email' => $data['email'],
             'password' => $data['password'],
-            'on_a_ride' =>0
+            'on_a_ride' =>0,
         ]);
 
 
@@ -98,5 +98,5 @@ class RiderController extends BaseController
         return $this->sendResponse($data, 'Rider registered successfully.');
     }
 
-    
+
 }

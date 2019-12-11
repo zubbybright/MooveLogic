@@ -154,25 +154,54 @@ class TripsController extends BaseController
 
 
                 if ($moove_request){
-
+                    //gets the list of all free drivers at pickup location
                     $get_rider = User::where( 'user_type', 'RIDER')
                                     ->where('on_a_ride', 0)
+                                    ->where('current_location', $data['pick_up_location'])
                                     ->get();
-                
+                    
                         if($get_rider){
-                            
-                            return $this->sendResponse($get_rider, $moove_request, "Rider located.");
-                            
+                           
+                           //gets a particular rider for customer
+                           
+                            $get_one_rider= array_rand([$get_rider],1 );
+                            $found_rider= $get_rider[$get_one_rider];
+                    
+                                return $this->sendResponse($found_rider, $moove_request , 'Rider Located.');
+                                
+                        }
+
+                           
                 }
+                            
+                
                 else {
                     return response()->json('Cannot locate a rider');
                 }
 
 
 
-    }
+    
 
         
+
+    }
+
+    public function rider_active_ride(Request $request){
+
+        $data = $request->validate([
+            'rider_id' =>[ 'required','integer'],
+            'moove_request_id' => ['required','integer']
+            ]);
+
+        $moove_ride = MooveRequest::where( 'id', $data['moove_request_id'])
+                                    ->get();
+        $rider = User::where('id', $data['rider_id'])
+                ->get()  ;   
+
+                if($moove_ride &&  $rider)  {
+                    return $this->sendResponse($moove_ride, "You have an active ride");
+                }                    
 
     }
 

@@ -42,4 +42,7 @@ Route::group([
    //make a moove request, contact a rider:
     Route::post('request-rider', 'TripsController@make_moove_request');
 
+    //rider active ride:
+    Route::post('active-ride', 'TripsController@rider_active_ride');
+
 
