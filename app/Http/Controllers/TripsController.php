@@ -129,7 +129,7 @@ class TripsController extends BaseController
     public function make_moove_request(Request $request){
         
         $data = $request->validate([
-            'pick_up_location'=>['string', 'max:100'],
+            'pick_up_location'=>['nullable', 'max:100'],
             'delivery_location'=>['required','string', 'max:100'],
             'customer_id' =>[ 'required','integer'],
             'recipient_name' => [ 'required','string', 'max:100'],
@@ -177,12 +177,7 @@ class TripsController extends BaseController
                 
                 else {
                     return response()->json('Cannot locate a rider');
-                }
-
-
-
-    
-
+                }   
         
 
     }
