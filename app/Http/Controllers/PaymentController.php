@@ -21,13 +21,11 @@ class PaymentController extends BaseController
 
         $data = $request->validate([
             'card_option' => ['string'],
-            'paypal' => [ 'string'],
-            'moove_wallet' =>['string'],
             'cash_on_delivery'=>['string'],
             ]);
         
         try{
-        	$make_payment= Payment_Method::
+        	$make_payment= 
 
         }
         catch(){

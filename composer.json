@@ -12,6 +12,7 @@
         "barryvdh/laravel-cors": "^0.11.4",
         "fideloper/proxy": "^4.0",
         "fzaninotto/faker": "^1.8",
+        "laravel-validation-rules/credit-card": "^1.2",
         "laravel/framework": "^6.2",
         "laravel/tinker": "^1.0",
         "tymon/jwt-auth": "1.0.*"

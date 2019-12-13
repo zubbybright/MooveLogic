@@ -8,7 +8,7 @@ use App\User;
 class Profile extends Model
 {
     //
-    protected $fillable = ['first_name', 'last_name','email','password','user_id', 'card_number','card_name','cvv','expiry_date'];
+    protected $fillable = ['first_name', 'last_name','email','password','user_id', 'card_number','card_name','cvv','expiration_year', 'expiration_month'];
 
 
     public function user(){

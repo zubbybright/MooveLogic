@@ -10,5 +10,5 @@ class Payment_Method extends Model
 {
     //
 
-    protected $fillable = ['card_option', 'paypal','moove_wallet','cash_on_delivery'];
+    protected $fillable = ['card_option','cash_on_delivery'];
 }

@@ -21,7 +21,8 @@ class CreateProfilesTable extends Migration
             $table->string('card_number')->nullable();
             $table->string('card_name')->nullable();
             $table->string('cvv')->nullable();
-            $table->date('expiry_date')->nullable();
+            $table->string('expiration_month')->nullable();
+            $table->string('expiration_year')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
         });

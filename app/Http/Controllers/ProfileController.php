@@ -9,6 +9,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\BaseController;
 use Illuminate\Support\Facades\Hash;
+use LVR\CreditCard\CardCvc;
+use LVR\CreditCard\CardNumber;
+use LVR\CreditCard\CardExpirationYear;
+use LVR\CreditCard\CardExpirationMonth;
+use Illuminate\Foundation\Http\FormRequest;
 
 class ProfileController extends BaseController
 {
@@ -39,33 +44,37 @@ class ProfileController extends BaseController
             return $this->sendResponse($user, "Password Changed!.");
     }
 
+
     public function add_bank_card(Request $request){
         
-        $data = $request->validate([
-            'card_number' => ['required', 'string', 'max:16', 'min:16'],
-            'card_name' => ['required', 'string', 'max:255'],
-            'cvv' => ['required', 'string', 'max:3', 'min:3'],
-            'expiry_date'=>['required', 'date']
-            ]);
+            $data = $request->validate([
+                'card_number' => ['required',  new CardNumber],
+                'card_name' => ['required', 'string', 'max:255'],
+                'expiration_month' => ['required', 'string','min:1','max:2'],
+                //new CardExpirationMonth($request->input('expiration_month'))],
+                'expiration_year' => ['required','digits:4'] ,//new CardExpirationYear($request->input('expiration_year'))],
+                'cvv' => ['required', new CardCvc($request->input('card_number'))]
+                ]);
 
-        $card_details = auth()->user()->profile()
-                        ->update([  'card_number' => $data['card_number'],
-                                    'card_name' => $data['card_name'],
-                                    'cvv' => $data['cvv'],
-                                    'expiry_date' => $data['expiry_date'],
-                                ]);
-        if($card_details){
-            return $this->sendResponse($card_details, "Card Details Saved.");           
-        }
+            $card_details = auth()->user()->profile()
+                            ->update([  'card_number' => $data['card_number'],
+                           
+                                        'card_name' => $data['card_name'],
+                                        'cvv' => $data['cvv'],
+                                        'expiration_month' => $data['expiration_month'],
+                                        'expiration_year' => $data['expiration_year'],
+                                    ]);
+            if($card_details){
+                return $this->sendResponse($card_details, "Card Details Saved.");           
+            }
 
-        else{
-            return response()->json('Cannot add card!');
-        }
+            else{
+                return response()->json('Cannot add card!');
+            }
 
 
-        
+            
     }
-
 
 
 }

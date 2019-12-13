@@ -29,8 +29,8 @@ Route::group([
     Route::post('register', 'Auth\RegisterController@register');
     Route::post('logout', 'Auth\LogoutController@logout');
     Route::post('refresh', 'Auth\LoginController@refresh');
-    Route::put('update-password', 'ProfileController@update_password');
-    Route::put('add-card','ProfileController@add_bank_card' );
+    Route::post('update-password', 'ProfileController@update_password');
+    Route::post('add-card','ProfileController@add_bank_card' );
 	
 
 });	
