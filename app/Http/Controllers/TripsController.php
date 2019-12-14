@@ -154,13 +154,15 @@ class TripsController extends BaseController
 
 
                 if ($moove_request){
-                    //gets the list of all free drivers at pickup location
+                    //gets the list of all free drivers at pickup location and select one randomly
                     $get_riders = User::where( 'user_type', 'RIDER')
                                     ->where('on_a_ride', 0)
                                     ->where('current_location', $data['pick_up_location'])
                                     ->where('active_ride', 0)
                                     ->inRandomOrder()->take(1)->get();
-                    $get_rider= $get_riders->first()->profile;
+                                    //gets profile of selected rider:
+                    $get_rider= $get_riders->first()->profile; 
+
                     
                         if($get_rider){
                             User::where( 'user_type', 'RIDER')
@@ -169,7 +171,7 @@ class TripsController extends BaseController
                                     ->where('active_ride', 0)
                                     ->update(['active_ride' => 1]);
                            
-                                return $this->sendResponse($get_riders, $moove_request);
+                                return $this->sendResponse($get_riders, 'Rider located!');
                                 
                         }
 
