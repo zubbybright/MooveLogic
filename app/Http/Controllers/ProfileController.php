@@ -39,9 +39,13 @@ class ProfileController extends BaseController
 
             $user->password = $data['new_password'];
 
-            $user->save();
+
+          if( $user->save()){
 
             return $this->sendResponse($user, "Password Changed!.");
+            } else{
+                return response()->json("Cannot Change pasword.", 400);
+            }
     }
 
 
