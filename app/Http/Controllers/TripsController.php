@@ -80,7 +80,7 @@ class TripsController extends BaseController
 
     		return $this->sendResponse($trip, "Trip started");
     	}else {
-    		return response()->json('Cannot start trip.');
+    		return response()->json('Cannot start trip.', 400);
     	}
 
     }
@@ -116,12 +116,12 @@ class TripsController extends BaseController
 
                 return $this->sendResponse($end_trip, "Trip Ended, Package Delivered !.");
             }else{
-                return response()->json('Cannot end trip!');
+                return response()->json('Cannot end trip!', 400);
             }
         }
 
         catch(\Exception $e){
-             return response()->json('Something went wrong.');
+             return response()->json('Something went wrong.', 400);
         }
 
     }
@@ -136,6 +136,7 @@ class TripsController extends BaseController
             'recipient_phone_number' => [ 'required','string', 'max:14'],
             'package_description' =>['string', 'max:255'],
             'who_pays'=>[ 'required','string', 'max:100'],
+            'payment_method'=>['required', 'string', 'max:100']
             ]);
         
         $trip_cost = 0;
@@ -150,6 +151,7 @@ class TripsController extends BaseController
                 'pick_up_location'=> $data['pick_up_location'],
                 'delivery_location' => $data['delivery_location'] ,
                 'cost_of_trip' => $trip_cost,
+                'payment_method' => $data['payment_method']
                 ]);                
 
 
@@ -180,7 +182,7 @@ class TripsController extends BaseController
                             
                 
                 else {
-                    return response()->json('Cannot locate a rider');
+                    return response()->json('Cannot locate a rider', 400);
                 }   
         
 
@@ -190,7 +192,7 @@ class TripsController extends BaseController
 
         $data = $request->validate([
             'current_location' =>[ 'required','string'],
-            'rider_id' =>['required', 'integer']
+            'rider_id' =>['required', 'string']
             ]);
 
             $rider= User::where('active_ride',1)

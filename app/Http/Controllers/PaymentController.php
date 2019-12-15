@@ -24,12 +24,32 @@ class PaymentController extends BaseController
             'cash_on_delivery'=>['string'],
             ]);
         
-        try{
-        	$make_payment= 
+        if($data['card_option']){
 
+            $register_card = auth()->user()->profile()
+                ->whereNull('card_number')
+                ->whereNull('card_name')
+                ->whereNull('cvv')
+                ->whereNull('expiration_month')
+                ->whereNull('expiration_year');
+
+                if($register_card){
+
+                    return response()->json('Please add your card Details.');
+                }
+                else{
+
+                    return response()->json('card_option method selected!');
+
+                }
+        }elseif($data['cash_on_delivery']) {
+
+            return response()->json('cash on delivery method selected!');
         }
-        catch(){
 
+        else{
+
+           return response()->json('cannot make payment', 400); 
         }
 
     }

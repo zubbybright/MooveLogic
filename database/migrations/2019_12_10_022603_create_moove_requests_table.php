@@ -23,6 +23,7 @@ class CreateMooveRequestsTable extends Migration
             $table->longText('package_description')->nullable();
             $table->unsignedBigInteger('customer_id');
             $table->enum('who_pays',['REQUESTER', 'RECIPIENT']);
+            $table->enum('payment_method',['CASH', 'CARD']);
             $table->timestamps();
 
             $table->foreign('customer_id')->references('id')->on('users');

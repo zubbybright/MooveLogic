@@ -27,11 +27,12 @@ class LoginController extends BaseController
     {
         $credentials = request(['phone_number', 'password']);
         if (! $token = auth()->attempt($credentials)) {
-            return response()->json('Invalid phone number or password!');
+            return response()->json('Invalid phone number or password!', 400);
         }
 
         $data  = [
             'user' => auth()->user(),
+            'profile' => auth()->user()->profile,
             'token' => [
                 'access_token' => $token,
                 'token_type' => 'bearer',

@@ -69,12 +69,40 @@ class ProfileController extends BaseController
             }
 
             else{
-                return response()->json('Cannot add card!');
+                return response()->json('Cannot add card!', 400);
             }
-
-
             
     }
 
+    public function add_profile_pic(Request $request){
+
+        $this->validate($request, [
+            'file' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        try{
+           if ($request->hasFile('file')) {
+                $image = $request->file('file');
+                $name = $image->getClientOriginalName();
+                $size = $image->getClientSize();
+                $destinationPath = public_path('/images');
+                $image->move($destinationPath, $name);
+
+                $profile_pic = new Profile;
+                $profile_pic->profile_pic = $name;
+                $profile_pic->save();
+
+                return $this->sendResponse($profile_pic, "Profile Picture saved.");
+            } else {
+
+                return response()->json('Cannot upload your profile picture.', 400);
+            }
+        }
+
+            catch(\Exception $e){
+             return response()->json('Something went wrong.', 400);
+        }
+
+    }
 
 }

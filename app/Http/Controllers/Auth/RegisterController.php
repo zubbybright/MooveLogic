@@ -91,6 +91,7 @@ class RegisterController extends BaseController
         ]);
 
         return $user;
+        return $profile;
     }
 
     protected function registered(Request $request, $user)

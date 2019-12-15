@@ -31,6 +31,8 @@ Route::group([
     Route::post('refresh', 'Auth\LoginController@refresh');
     Route::post('update-password', 'ProfileController@update_password');
     Route::post('add-card','ProfileController@add_bank_card' );
+    Route::post('add-dp','ProfileController@add_profile_pic' );
+
 	
 
 });	
@@ -44,5 +46,7 @@ Route::group([
 
     //rider active ride:
     Route::post('active-ride', 'TripsController@rider_active_ride');
+
+    Route::post('payment-method', 'PaymentController@make_payment');
 
 
