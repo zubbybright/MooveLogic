@@ -68,8 +68,9 @@ class ProfileController extends BaseController
                                         'expiration_month' => $data['expiration_month'],
                                         'expiration_year' => $data['expiration_year'],
                                     ]);
+            $profile = auth()->user()->profile()->get();
             if($card_details){
-                return $this->sendResponse($card_details, "Card Details Saved.");           
+                return $this->sendResponse($profile, "Card Details Saved.");           
             }
 
             else{
