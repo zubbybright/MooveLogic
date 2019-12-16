@@ -98,10 +98,11 @@ class RegisterController extends BaseController
     {
        $data  = [
             'user' => $user,
+            'profile' => $user->profile,
             'token' => [
                 'access_token' => $this->guard()->refresh(),
                 'token_type' => 'bearer',
-                'expires_in' => auth()->factory()->getTTL() * 1440
+                'expires_in' => auth()->factory()->getTTL()
             ]
         ];
         return $this->sendResponse($data, 'User registered successfully.');

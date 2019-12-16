@@ -9,7 +9,7 @@ use App\Package;
 class Trip extends Model
 {
     //
-    protected $fillable = ['current_location', 'start_location', 'end_location','start_time', 'end_time','cost_of_trip','trip_status','recipient_name','recipient_phone_number', 'rider_id', 'package_id'];
+    protected $fillable = ['current_location', 'start_location', 'end_location','start_time', 'end_time','cost_of_trip','trip_status','recipient_name','recipient_phone_number', 'rider_id', 'package_id','who_pays','payment_method', 'customer_id'];
 
 
     public function user(){

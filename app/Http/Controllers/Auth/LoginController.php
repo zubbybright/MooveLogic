@@ -27,7 +27,7 @@ class LoginController extends BaseController
     {
         $credentials = request(['phone_number', 'password']);
         if (! $token = auth()->attempt($credentials)) {
-            return response()->json('Invalid phone number or password!', 400);
+            return $this->sendError("Invalid phone number or password!", 'Invalid phone number or password!.', 400);
         }
 
         $data  = [
@@ -36,7 +36,7 @@ class LoginController extends BaseController
             'token' => [
                 'access_token' => $token,
                 'token_type' => 'bearer',
-                'expires_in' => auth()->factory()->getTTL() * 1440
+                'expires_in' => auth()->factory()->getTTL()
             ]
         ];
 

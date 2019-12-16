@@ -92,7 +92,7 @@ class RiderController extends BaseController
             'token' => [
                 'access_token' => $this->guard()->refresh(),
                 'token_type' => 'bearer',
-                'expires_in' => auth()->factory()->getTTL() * 60
+                'expires_in' => auth()->factory()->getTTL()
             ]
         ];
         return $this->sendResponse($data, 'Rider registered successfully.');

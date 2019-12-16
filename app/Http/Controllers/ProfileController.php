@@ -14,6 +14,10 @@ use LVR\CreditCard\CardNumber;
 use LVR\CreditCard\CardExpirationYear;
 use LVR\CreditCard\CardExpirationMonth;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+
 
 class ProfileController extends BaseController
 {
@@ -79,35 +83,53 @@ class ProfileController extends BaseController
             
     }
 
-    public function add_profile_pic(Request $request){
 
-        $this->validate($request, [
-            'file' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+            //trait for file upload:
 
-        try{
-           if ($request->hasFile('file')) {
-                $image = $request->file('file');
-                $name = $image->getClientOriginalName();
-                $size = $image->getClientSize();
-                $destinationPath = public_path('/images');
-                $image->move($destinationPath, $name);
+        public function uploadOne(UploadedFile $uploadedFile, $folder = null, $disk = 'public', $filename = null)
+        {
+            $name = !is_null($filename) ? $filename : Str::random(25);
 
-                $profile_pic = new Profile;
-                $profile_pic->profile_pic = $name;
-                $profile_pic->save();
+            $file = $uploadedFile->storeAs($folder, $name.'.'.$uploadedFile->getClientOriginalExtension(), $disk);
 
-                return $this->sendResponse($profile_pic, "Profile Picture saved.");
-            } else {
+            return $file;
+        }
 
-                return response()->json('Cannot upload your profile picture.', 400);
+        public function add_profile_pic(Request $request)
+        {
+            try{
+
+                $request->validate([
+                    'profile_pic'     =>  'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+                ]);
+
+                // Get current user profile
+                $profile =$user = auth()->userOrFail()->profile; 
+                
+                    // Check if a profile image has been uploaded:
+                if ($request->has('profile_pic')) {
+                        // Get image file from input:
+                    $image = $request->file('profile_pic');
+                        // Make an image name 
+                    $name = $image->getClientOriginalName();
+                        // Define folder path
+                    $folder = '/images/';
+                        // Make a file path where image will be stored [ folder path + file name + file extension]
+                    $filePath = $folder . $name. '.' . $image->getClientOriginalExtension();
+                        // Upload image
+                    $this->uploadOne($image, $folder, 'public', $name);
+                        // Set user profile image path in database to filePath
+                    $profile->profile_pic = $filePath;
+
+                }
+                    // save record to database
+                $user->save();
+
+                    return $this->sendResponse($profile, "Profile Picture saved.");
             }
         }
-
-            catch(\Exception $e){
-             return response()->json('Something went wrong.', 400);
+        catch(\Exception $e){
+              return $this->sendError("Profile Picture Not Saved", 'File must be an image', 400);
         }
 
-    }
-
-}
+ }
