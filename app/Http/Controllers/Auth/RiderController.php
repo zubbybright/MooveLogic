@@ -89,6 +89,7 @@ class RiderController extends BaseController
     {
        $data  = [
             'user' => $user,
+            'profile' => $user->profile,
             'token' => [
                 'access_token' => $this->guard()->refresh(),
                 'token_type' => 'bearer',
