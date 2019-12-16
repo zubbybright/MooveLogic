@@ -127,9 +127,10 @@ class ProfileController extends BaseController
 
                     return $this->sendResponse($profile, "Profile Picture saved.");
             }
-        }
-        catch(\Exception $e){
-              return $this->sendError("Profile Picture Not Saved", 'File must be an image', 400);
-        }
+            catch(\Exception $e){
+                return $this->sendError("Profile Picture Not Saved", 'File must be an image', 400);
+            }
 
+        }
+        
  }
