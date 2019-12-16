@@ -104,7 +104,7 @@ class ProfileController extends BaseController
                 ]);
 
                 // Get current user profile
-                $profile =$user = auth()->userOrFail()->profile; 
+                $profile = auth()->userOrFail()->profile; 
                 
                     // Check if a profile image has been uploaded:
                 if ($request->has('profile_pic')) {
