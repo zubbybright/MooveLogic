@@ -123,7 +123,7 @@ class ProfileController extends BaseController
 
                 }
                     // save record to database
-                $user->save();
+                $profile->save();
 
                     return $this->sendResponse($profile, "Profile Picture saved.");
             }
