@@ -45,8 +45,9 @@ Route::group([
     Route::post('request-rider', 'TripsController@findRider');
 
     //rider active ride:
-    Route::post('active-ride', 'TripsController@rider_active_ride');
+    Route::post('active-ride', 'TripsController@findActiveTrip');
 
     Route::post('payment-method', 'PaymentController@make_payment');
+    Route::post('cost', 'TripsController@calculateCost');
 
 

@@ -15,75 +15,26 @@ class TripsController extends BaseController
 {
     //
    
- //    public function start_trip(Request $request){
- //        $this->validator($request->all())->validate();
+    public function startTrip($tripId){
+        //locate the trip
+        //check the current status of the trip
+        // if in progress return already started
+        //update status to in progress
 
- //        return $this->create($request->all());
- //    }
+        $trip = Trip::find($tripId);
+        if('trip_status', 'IN_PROGRESS'){
+            return $this->sendError("Trip already started!");
+        }
+        else{
+            $trip->update('trip_status', 'IN_PROGRESS');
+        }
+                    
+    		return $this->sendResponse($trip, "Trip started");
+    	}else {
+            return $this->sendResponse("Cannot start trip");
+    	}
 
-    
-
-	
- //    protected function validator(array $data)
- //    {
-	// 	return Validator::make($data, [
- //        	'rider_id' =>[ 'required','integer'],
- //        	'customer_id' =>[ 'required','integer'],
- //        	'start_location' => [ 'required','string'],
- //       		'end_location' => ['required','string'],
- //            'start_time' => ['date'],
-	// 		'current_location' => [ 'string', 'max:100'],
- //        	'recipient_name' => [ 'required','string', 'max:100'],
- //        	'recipient_phone_number' => [ 'required','string', 'max:14'],
- //        	'package_description' =>[ 'string', 'max:255'],
- //        	'package_type' =>[ 'string'],
- //        	'size' =>[ 'string'],
- //        	'weight' =>[ 'string'],
-            
- //    	]);
-
-	// }
-
- //    protected function create(array $data){
-
- //        $trip_cost =1000;
-	//     $package = Package::create([
- //            'customer_id' => $data['customer_id'],
- //            'package_description' => $data['package_description'],
- //            'size' => $data['size'],
- //            'weight'=> $data['weight'],
- //            'package_type'=> $data['package_type'],
- //            'package_status' => 'ENROUTE'
- //        ]);
-
-
- //    	$trip= Trip::create([
- //    		'start_location' => $data['start_location'],
- //            'end_location' => $data['end_location'],
- //            'current_location'  => $data['current_location'],
- //            'start_time' => $data['start_time'],
- //            'recipient_name' => $data['recipient_name'],
- //            'recipient_phone_number' => $data['recipient_phone_number'],
- //            'trip_status' => 'IN_PROGRESS',
- //            'cost_of_trip' => $trip_cost,
- //           	'rider_id' => $data['rider_id'],
- //           	'package_id'=> $package->id,
- //    	]);
-
-    	
- //    	if($trip && $package){
- //            $rider_status = User::where( 'user_type', 'RIDER')
- //                                    ->where('id',$data['rider_id'] )
- //                                    ->where('on_a_ride', 0)
- //                                    ->update(['on_a_ride' => 1,
- //                                ]);
-
- //    		return $this->sendResponse($trip, "Trip started");
- //    	}else {
- //    		return response()->json('Cannot start trip.', 400);
- //    	}
-
- //    }
+    }
 
         
 
@@ -130,104 +81,122 @@ class TripsController extends BaseController
      *
      */
     
-    public function calculateCost(){
+    public function calculateCost(Request $request){
 
-        $trip_cost = 1000;
-    }
-
-
-    public function findRider(Request $request){
-        //find a free rider in the location of the customer
-        // - if there is no rider, return "No rider available"
-        //save the trip information using the available rider
         $data = $request->validate([
             'start_location'=>['nullable', 'max:100'],
             'end_location'=>['required','string', 'max:100'],
-            'recipient_name' => [ 'required','string', 'max:100'],
-            'recipient_phone_number' => [ 'required','string', 'max:14'],
             'package_description' =>['string', 'max:255'],
-            'who_pays'=>[ 'required','string', 'max:100'],
-            'payment_method'=>['required', 'string', 'max:100']
             ]);
-        
-        $trip_cost = 1000;
-        
 
-            $findRider= Trip::create([
-                'recipient_name' => $data['recipient_name'],
-                'recipient_phone_number' => $data['recipient_phone_number'],
-                'package_description' => $data['package_description'],
-                'who_pays' => $data['who_pays'],
-                'customer_id' => auth()->user('id'),
-                'start_location'=> $data['start_location'],
-                'end_location' => $data['end_location'] ,
-                'cost_of_trip' => $trip_cost,
-                'payment_method' => $data['payment_method']
-                ]);                
+        $trip_cost = $this->_calculateCostOfTrip();
 
-
-                if ($findRider){
-
-
-                    //gets the list of all free drivers at pickup location and select one randomly
-                    $get_riders = User::where( 'user_type', 'RIDER')
-                                    ->where('on_a_ride', 0)
-                                    ->where('current_location', $data['start_location'])
-                                    ->where('active_ride', 0)
-                                    ->inRandomOrder()->take(1)->get();
-                                    //gets profile of selected rider:
-                    $get_rider= $get_riders->first()->profile; 
-
-                    //update active ride status of selected rider :
-                        if($get_rider){
-                            User::where( 'user_type', 'RIDER')
-                                    ->where('on_a_ride', 0)
-                                    ->where('current_location', $data['start_location'])
-                                    ->where('active_ride', 0)
-                                    ->update(['active_ride' => 1]);
-                           
-                                return $this->sendResponse($get_riders,'Rider located! Your trip cost is '.$trip_cost);
-                                
-                        }else{
-
-                            return $this->sendError("No rider Available", 'Try again later', 400);
-                        }
-
-                           
-                }
-                            
-                
-                else {
-
-                    return $this->sendError("Cannot locate a rider", 'Cannot locate a rider', 400);
-                }   
-        
-
+            return $this->sendResponse($trip_cost, 'Estimated cost of trip' );
     }
 
-    public function rider_active_ride(Request $request){
+    private function _calculateCostOfTrip(){
+        return "1000 - 2000";
+    }
 
-        $data = $request->validate([
-            'current_location' =>[ 'required','string'],
-            'rider_id' =>['required', 'string']
-            ]);
 
-            $rider= User::where('active_ride',1)
-                        ->get();
-            
-            if($rider){
+    public function findRider(){
+    //find a free rider in the location of the customer:
+        //get the customer's start location
+        //look for riders in the customer's location that has rider_status is false
+            //how do we get the rider's current location
+                //pin the location from the map?
+                //assign the location by default at register
+            //how do we know that a rider is free
+                //if rider id is not attatced to trip with pending or in progress status
+        //pick preferred rider
+        
+    //if there is no rider, return "No rider available"
+    //save the trip information using the available rider
+    }
 
-            $get_ride =Trip::where('start_location', $data['current_location'])
-                    ->get() ;
+    // public function findRider(Request $request){
 
-                return $this->sendResponse($get_ride, "You have an active ride");
+    //     $data = $request->validate([
+    //         'start_location'=>['nullable', 'max:100'],
+    //         'end_location'=>['required','string', 'max:100'],
+    //         'recipient_name' => [ 'required','string', 'max:100'],
+    //         'recipient_phone_number' => [ 'required','string', 'max:14'],
+    //         'package_description' =>['string', 'max:255'],
+    //         'who_pays'=>[ 'required','string', 'max:100'],
+    //         'payment_method'=>['required', 'string', 'max:100']
+    //     ]);
+        
+    //     $trip_cost = $this->_calculateCostOfTrip();
+        
+
+    //         $findRider= Trip::create([
+    //             'recipient_name' => $data['recipient_name'],
+    //             'recipient_phone_number' => $data['recipient_phone_number'],
+    //             'package_description' => $data['package_description'],
+    //             'who_pays' => $data['who_pays'],
+    //             'customer_id' => auth()->user('id'),
+    //             'trip_status' => 'PENDING',
+    //             'start_location'=> $data['start_location'],
+    //             'end_location' => $data['end_location'] ,
+    //             'cost_of_trip' => $trip_cost,
+    //             'payment_method' => $data['payment_method']
+    //             ]);                
+
+
+    //             if ($findRider){
+
+
+    //                 //gets the list of all free drivers at pickup location and select one randomly
+    //                 $get_riders = User::where( 'user_type', 'RIDER')
+    //                                 ->where('on_a_ride', 0)
+    //                                 ->where('current_location', $data['start_location'])
+    //                                 ->where('active_ride', 0)
+    //                                 ->inRandomOrder()->take(1)->get();
+    //                                 //gets profile of selected rider:
+    //                 $get_rider= $get_riders->first()->profile; 
+
+    //                 //update active ride status of selected rider :
+    //                     if($get_rider){
+    //                         User::where( 'user_type', 'RIDER')
+    //                                 ->where('on_a_ride', 0)
+    //                                 ->where('current_location', $data['start_location'])
+    //                                 ->where('active_ride', 0)
+    //                                 ->update(['active_ride' => 1]);
+                           
+    //                             return $this->sendResponse($get_riders,'Rider located!');
+                                
+    //                     }else{
+
+    //                         return $this->sendError("No rider Available", 'Try again later', 400);
+    //                     }
+
+                           
+    //             }
+                            
+                
+    //             else {
+
+    //                 return $this->sendError("Cannot locate a rider", 'Cannot locate a rider', 400);
+    //             }   
+        
+
+    // }
+
+    public function findActiveTrip(){
+        //get the rider's id
+        //find a trip with this rider's id and with status pending
+        //if found return tthe trip
+        //if not found return "No trip found"
+        $rider = auth()->user();
+        $trip = Trip::where('rider_id', $rider->id)
+                    ->where('trip_status','PENDING')->first();
+            if($trip){
+                return $this->sendResponse($trip, 'This is your active ride');
             }
-
             else{
-                 return $this->sendError("Cannot get active ride", 'Cannot get active ride', 400);
-            }
 
-                                    
+                return $this->sendError('No trip found');
+            }
 
     }
 
