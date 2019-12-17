@@ -23,34 +23,47 @@ class ProfileController extends BaseController
 {
     //
 
-    public function __construct()
-    
-    {
-        $this->middleware('auth:api');
-    }
+        public function __construct()
+        
+        {
+            $this->middleware('auth:api');
+        }
 
 
-    public function update_password(Request $request){
-            
+        public function update_password(Request $request){
+            //validate input:
             $data = $request->validate([
                 'old_password' => ['required', 'string', 'min:8'],
                 'new_password' => ['required', 'string', 'min:8', 'confirmed'],
                 ]);
 
-            $user = $request->user();
-            
-            //edit user password
+                //check if old and new passwords are the same.
+                if( $data['old_password'] ===$data['new_password']){
+                    
+                    return $this->sendError("The new password must be different from the old password.", "Please Change your password.", 400);
+                }
 
-            $user->password = $data['new_password'];
+                else{
 
+                    $user = $request->user();
+                    
 
-          if( $user->save()){
+                    if (Hash::check($data['old_password'], $user->password )){
 
-            return $this->sendResponse($user, "Password Changed!.");
-            } else{
-                return response()->json("Cannot Change pasword.", 400);
-            }
-    }
+                        $user->password = $data['new_password'];
+
+                        $user->save();
+
+                        return $this->sendResponse($user, "Password Changed!.");
+
+                    }else{
+
+                            return $this->sendError("Password could not be changed.","Old password does not match existing password.", 400);
+                        }
+                  
+                }
+
+        }
 
 
     public function add_bank_card(Request $request){
