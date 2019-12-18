@@ -38,8 +38,8 @@ Route::group([
 });	
 	//start and end trips;
 
-    Route::post('start-trip', 'TripsController@start_trip');
-    Route::post('end-trip', 'TripsController@end_trip');
+    Route::post('start-trip/{tripId}', 'TripsController@startTrip');
+    Route::post('end-trip/{tripId}', 'TripsController@endTrip');
    
    //make a moove request, contact a rider:
     Route::post('request-rider', 'TripsController@findRider');
