@@ -142,22 +142,27 @@ class TripsController extends BaseController
             if ($findRider){
                                
                 //get id's of all riders not on a trip and randomly select one:
-                $freeRider= Trip::where('trip_status', 'ENDED')
-                                ->where('trip_status', 'CANCELLED')
-                                ->inRandomOrder()->take(1)->find('rider_id');
+                // $freeRider= Trip::where('trip_status', 'ENDED')
+                //                 ->where('trip_status', 'CANCELLED')
+                //                 ->inRandomOrder()->take(1)->find('rider_id');
                  
-                 //check if selected rider is in customer's location:
-                $riderLocation = User::where( 'id', $freeRider)
-                                ->where('current_location', $data['start_location'])->first();
+                 //the above won't work because at this point, no rider has been assigned to any trip for the first time, no trip has even been started. The trips status is PENDING. the user table has to be used.So we have:
+
+                $Rider =  User::where( 'user_type', 'RIDER')
+                                ->where('current_location', $data['start_location'])->inRandomOrder()->take(1)->find('id');
+
+                 //now to check if selected rider is free:
+                $freeRider = 
+
                 //get the profile of the selected rider:
-                $riderProfile = $riderLocation->profile;
+                $riderProfile =
 
                 //update trip with selected rider id:
 
-                Trip::where('package_id',$package->id)
-                        ->update(['rider_id'=>$riderLocation->id]);
+                // Trip::where('package_id',$package->id)
+                //         ->update(['rider_id'=>$Rider->id]);
 
-                    return $this->sendResponse($riderLocation, $riderProfile, 'Rider located!');
+                    return $this->sendResponse(, 'Rider located!');
 
             } else {
 
