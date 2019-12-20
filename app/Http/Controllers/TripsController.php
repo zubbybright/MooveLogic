@@ -26,18 +26,26 @@ class TripsController extends BaseController
             //find it on package model
             //update status to enroute
 
+        try{
 
-        $trip = Trip::find($tripId);
-        if('trip_status'=== 'IN_PROGRESS'){
-            return $this->sendError("Trip already started!");
+        $alreadyStarted = Trip::where('id',$tripId)
+                            ->where('trip_status','IN_PROGRESS')->first();
+                
+                if($alreadyStarted){
+                    return $this->sendError("Trip already started!");
+                }
 
-            $startTrip = $trip->update('trip_status', 'IN_PROGRESS');
+                else{
+                    $startTrip = Trip::where('id',$tripId)
+                                ->update(['trip_status'=>'IN_PROGRESS']);
            
-                return $this->sendResponse($trip, "Trip started");  
-        }
+                        return $this->sendResponse($startTrip, "Trip started");  
+                }
+
+        }   
     		
-    	else {
-            return $this->sendResponse("Cannot start trip", "Cannot start trip");
+    	catch(\Exception $e) {
+            return $this->sendError("Cannot start trip", "Cannot start trip");
     	}
 
     }
@@ -47,24 +55,38 @@ class TripsController extends BaseController
         //check the current status of the trip
         // if ended return already ended
         //update status to ended
+        //update rider on a ride to false.
 
-         //how do I update the status of the package to delivered?
-            //get the id of package on trip
-            //find it on package model
-            //update status to delivered
+            try{
+                //locate the trip
+        $alreadyEnded = Trip::where('id',$tripId)
+                            ->where('trip_status','ENDED')->first();
+                //check the current status of the trip
+                // if ended return already ended
+                if($alreadyEnded){
+                    return $this->sendError("Trip already ended!");
+                }
 
-        $trip = Trip::find($tripId);
-        if('trip_status'=== 'ENDED'){
-            return $this->sendError("Trip already ended!");
+                else{
+                    //update status to ended
 
-            $endTrip = $trip->update('trip_status', 'ENDED');
+                    $endTrip = Trip::where('id',$tripId)
+                                ->update(['trip_status'=>'ENDED']);
+
+                        //update rider on a ride to false:
+                    $rider= auth()->user();
+                    $freeRider= User::where('id', $rider->id)
+                                ->update(['on_a_ride'=> 0]);
            
-                return $this->sendResponse($trip, "Trip has ended");  
-        }
+                        return $this->sendResponse($endTrip, "Trip ended");  
+                }
+
+        }   
             
-        else {
-            return $this->sendResponse("Cannot end trip", "Cannot start trip");
+        catch(\Exception $e) {
+            return $this->sendError("Cannot end trip", "Cannot end trip");
         }
+
     }
         
 
@@ -194,6 +216,60 @@ class TripsController extends BaseController
 
                 return $this->sendError('No trip found');
             }
+
+    }
+
+    public function riderTripHistory(){
+
+        //get te rider id
+        //check ended trips with rider id
+        //get
+
+        $rider = auth()->user();
+        $tripHistory = Trip::where('rider_id', $rider->id)
+                        ->where('trip_status', 'ENDED')->get();
+                
+                if($tripHistory){
+                    return $this->sendResponse($tripHistory, 'Your trip history');
+                }
+                else{
+                    return $this->sendError('You have no history yet', 'You have no history yet');
+                }
+    }
+
+    public function customerOrderHistory(){
+         //get te user id
+        //check trips with customer id
+        //get
+        $user= auth()->user();
+        $orderHistory = Trip::where('customer_id', $user->id)->get();
+            
+            if($orderHistory){
+                    return $this->sendResponse($orderHistory, 'Your history');
+                }
+                else{
+                    return $this->sendError('You have no order history yet', 'You have no order history yet');
+                }
+    }
+
+    public function packageDelivered($id){
+        //get the package id 
+        //check in package model if package is already delivered
+            //if delivered respond package already delivered
+        //if not, update package status as delivered.
+        $alreadyDelivered = Package::where('id', $id)
+                            ->where('package_status', 'DELIVERED')->first();
+                if($alreadyDelivered){
+                    return $this->sendError("This package has already been delivered!");
+                }
+                else{
+
+                    $packageDelivered = Package::where('id',$id)
+                                        ->update(['package_status'=>'DELIVERED']);
+
+                            return $this->sendResponse("Package Delivered!", "Package Delivered!");
+                }
+                
 
     }
 

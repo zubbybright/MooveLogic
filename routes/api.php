@@ -40,6 +40,9 @@ Route::group([
 
     Route::post('start-trip/{tripId}', 'TripsController@startTrip');
     Route::post('end-trip/{tripId}', 'TripsController@endTrip');
+
+    //deliver package:
+    Route::post('delivered/{id}', 'TripsController@packageDelivered');
    
    //make a moove request, contact a rider:
     Route::post('request-rider', 'TripsController@findRider');
@@ -47,7 +50,13 @@ Route::group([
     //rider active ride:
     Route::post('active-ride', 'TripsController@findActiveTrip');
 
+    //rider trip history:
+    Route::post('trip-history', 'TripsController@riderTripHistory');
+    //payment
     Route::post('payment-method', 'PaymentController@make_payment');
+    //calculate cost:
     Route::post('cost', 'TripsController@calculateCost');
+    //customer order history;
+    Route::post('customer-history', 'TripsController@customerOrderHistory');
 
 
