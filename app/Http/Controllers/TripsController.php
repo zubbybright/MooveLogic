@@ -95,10 +95,9 @@ class TripsController extends BaseController
             //get the customer's start location
             //look for riders in the customer's location
                 //how do we get the rider's current location
-                    //pin the location from the map?
                     //assign the location by default at register***
-                //how do we know that a rider is free
-                    //if rider id is not attatched to trip with pending or in progress status
+                //check if rider is free
+                    //rider is free if on a ride in false.
             //pick preferred rider
             
         //if there is no rider, return "No rider available"
@@ -140,30 +139,38 @@ class TripsController extends BaseController
                 ]);   
 
             if ($findRider){
-                               
-                //get id's of all riders not on a trip and randomly select one:
-                // $freeRider= Trip::where('trip_status', 'ENDED')
-                //                 ->where('trip_status', 'CANCELLED')
-                //                 ->inRandomOrder()->take(1)->find('rider_id');
-                 
-                 //the above won't work because at this point, no rider has been assigned to any trip for the first time, no trip has even been started. The trips status is PENDING. the user table has to be used.So we have:
 
                 $Rider =  User::where( 'user_type', 'RIDER')
-                                ->where('current_location', $data['start_location'])->inRandomOrder()->take(1)->find('id');
+                                ->where('current_location', $data['start_location'])
+                                ->where('on_a_ride', 0)
+                                ->inRandomOrder()->take(1)->first();
 
-                 //now to check if selected rider is free:
-                $freeRider = 
+                        if(!$Rider){
 
-                //get the profile of the selected rider:
-                $riderProfile =
+                            Trip::where('package_id',$package->id)
+                                    ->update(['trip_status'=>"CANCELLED"]);
+                            
+                            return $this->sendError("No rider available at the moment. Please try again later", "No rider available at the moment");
+                        }
+                       
+                       else{
 
-                //update trip with selected rider id:
+                            //get the profile of the selected rider:
 
-                // Trip::where('package_id',$package->id)
-                //         ->update(['rider_id'=>$Rider->id]);
+                            $riderProfile = $Rider->profile->get();
 
-                    return $this->sendResponse(, 'Rider located!');
+                            //update trip with selected rider id:
 
+                            Trip::where('package_id',$package->id)
+                                    ->update(['rider_id'=>$Rider->id]);
+                            
+                            //update rider ride status:
+                            User::where('id', $Rider->id)
+                                ->update(['on_a_ride'=> 1]);
+
+                                return $this->sendResponse($Rider, 'Rider located!');
+                        }                
+                
             } else {
 
                 return $this->sendError("Cannot locate a rider at the moment", 'Cannot locate a rider at the moment');
