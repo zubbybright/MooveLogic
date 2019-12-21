@@ -18,7 +18,6 @@ class CreateProfilesTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('profile_pic')->nullable();
             $table->string('card_number')->nullable();
             $table->string('card_name')->nullable();
             $table->string('cvv')->nullable();

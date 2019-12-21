@@ -19,6 +19,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 
+
 class ProfileController extends BaseController
 {
     //
@@ -97,53 +98,26 @@ class ProfileController extends BaseController
     }
 
 
-            //trait for file upload:
-
-        public function uploadOne(UploadedFile $uploadedFile, $folder = null, $disk = 'public', $filename = null)
-        {
-            $name = !is_null($filename) ? $filename : Str::random(25);
-
-            $file = $uploadedFile->storeAs($folder, $name.'.'.$uploadedFile->getClientOriginalExtension(), $disk);
-
-            return $file;
-        }
 
         public function add_profile_pic(Request $request)
         {
             try{
 
                 $request->validate([
-                    'profile_pic'     =>  'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+                    'profile_pic'     =>  'required|image|mimes:jpeg,png,jpg,gif,base64|max:2048'
                 ]);
 
-                // Get current user profile
-                $profile = auth()->userOrFail()->profile; 
-                
-                    // Check if a profile image has been uploaded:
-                if ($request->has('profile_pic')) {
-                        // Get image file from input:
-                    $image = $request->file('profile_pic');
-                        // Make an image name 
-                    $name = $image->getClientOriginalName();
-                        // Define folder path
-                    $folder = '/images/';
-                        // Make a file path where image will be stored [ folder path + file name + file extension]
-                    $filePath = $folder . $name. '.' . $image->getClientOriginalExtension();
-                        // Upload image
-                    $this->uploadOne($image, $folder, 'public', $name);
-                        // Set user profile image path in database to filePath
-                    $profile->profile_pic = $filePath;
+                    //using spatie media collection:
+                $profile = auth()->userOrFail()->profile;
 
-                }
-                    // save record to database
-                $profile->save();
+                $dp= $profile->addMedia($request->profile_pic)->toMediaCollection();
 
-                    return $this->sendResponse($profile, "Profile Picture saved.");
+                return $this->sendResponse($profile, $dp, "Profile Picture saved.");
             }
             catch(\Exception $e){
-                return $this->sendError("Profile Picture Not Saved", 'File must be an image', 400);
+                return $this->sendError("Profile Picture Not Saved", 'Profile Picture Not Saved', 400);
             }
 
         }
-        
+         
  }
