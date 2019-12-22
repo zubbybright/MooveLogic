@@ -17,4 +17,8 @@ class Profile extends Model implements HasMedia
     public function user(){
         return $this->belongsTo(User::class);
     }
+
+    public function feedbacks(){
+        return $this->hasMany(Feedback::class);
+    }
 }

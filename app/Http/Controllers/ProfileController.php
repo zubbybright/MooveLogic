@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Feedback;
 use App\Profile;
 use App\User;
 use Illuminate\Http\Request;
@@ -67,7 +68,7 @@ class ProfileController extends BaseController
         }
 
 
-    public function add_bank_card(Request $request){
+        public function add_bank_card(Request $request){
         
             $data = $request->validate([
                 'card_number' => ['required',  new CardNumber],
@@ -95,7 +96,7 @@ class ProfileController extends BaseController
                 return response()->json('Cannot add card!', 400);
             }
             
-    }
+        }
 
 
 
@@ -119,5 +120,35 @@ class ProfileController extends BaseController
             }
 
         }
+   
+    public function feedback(Request $request){
+        $data = $request->validate([
+                'feedback'     =>  ['required','string',' max: 1000']
+            ]);
+        try{
+
+        $user = auth()->user();
+        $profile = auth()->user()->profile;
+
+        $feedback = new Feedback;
+
+        $feedback->feedback = $data['feedback'];
+        $feedback->user_id= $user->id;
+        $feedback->profile_id= $profile->id;
+
+        $feedback->save();
+
+        return $this->sendResponse($user, "Your feedback has been submitted, Thank You.");
+        }
+
+        catch(\Exception $e){
+            return $this->sendError("Your feedback could not be submitted at the moment", "Your feedback could not be submitted at the moment");
+        }
+    }
+
+
+
+
+   
          
- }
+}

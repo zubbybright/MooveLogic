@@ -59,4 +59,5 @@ Route::group([
     //customer order history;
     Route::post('customer-history', 'TripsController@customerOrderHistory');
 
-
+    //submit feedback:
+    Route::post('feedback', 'ProfileController@feedback');
