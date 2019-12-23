@@ -128,7 +128,7 @@ class ProfileController extends BaseController
         try{
 
         $user = auth()->user();
-        $profile = auth()->user()->profile;
+        $profile = $user->profile;
 
         $feedback = new Feedback;
 
@@ -138,7 +138,7 @@ class ProfileController extends BaseController
 
         $feedback->save();
 
-        return $this->sendResponse($user, "Your feedback has been submitted, Thank You.");
+        return $this->sendResponse($feedback, "Your feedback has been submitted, Thank You.");
         }
 
         catch(\Exception $e){

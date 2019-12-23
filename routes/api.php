@@ -42,7 +42,7 @@ Route::group([
     Route::post('end-trip/{tripId}', 'TripsController@endTrip');
 
     //deliver package:
-    Route::post('delivered/{id}', 'TripsController@packageDelivered');
+    Route::post('delivered/{id}', 'TripsController@deliverPackage');
    
    //make a moove request, contact a rider:
     Route::post('request-rider', 'TripsController@findRider');

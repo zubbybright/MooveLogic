@@ -26,66 +26,57 @@ class TripsController extends BaseController
             //find it on package model
             //update status to enroute
 
-        try{
 
-        $alreadyStarted = Trip::where('id',$tripId)
-                            ->where('trip_status','IN_PROGRESS')->first();
-                
-                if($alreadyStarted){
-                    return $this->sendError("Trip already started!");
-                }
+        $trip = Trip::find($tripId);
+        if($trip == null){
+            return $this->sendError("Trip does not exist");
+        }
+        if($trip->trip_status == "IN_PROGRESS"){
+            return $this->sendError("Trip already started!");
+        }
+        else{
+            $trip->trip_status = 'IN_PROGRESS';
+            $trip->save();
+   
+            return $this->sendResponse($trip, "Trip started");  
+        }
 
-                else{
-                    $startTrip = Trip::where('id',$tripId)
-                                ->update(['trip_status'=>'IN_PROGRESS']);
-           
-                        return $this->sendResponse($startTrip, "Trip started");  
-                }
-
-        }   
-    		
-    	catch(\Exception $e) {
-            return $this->sendError("Cannot start trip", "Cannot start trip");
-    	}
+        return $this->sendError("Cannot start trip", "Cannot start trip");
 
     }
 
     public function endTrip($tripId){
         //locate the trip
+        //  check if the trip exist
         //check the current status of the trip
         // if ended return already ended
         //update status to ended
         //update rider on a ride to false.
 
-            try{
-                //locate the trip
-        $alreadyEnded = Trip::where('id',$tripId)
-                            ->where('trip_status','ENDED')->first();
-                //check the current status of the trip
-                // if ended return already ended
-                if($alreadyEnded){
-                    return $this->sendError("Trip already ended!");
-                }
+            $trip = Trip::find($tripId);
 
-                else{
-                    //update status to ended
+            if($trip == null){
+                return $this->sendError("Trip does not exist");
+            }
 
-                    $endTrip = Trip::where('id',$tripId)
-                                ->update(['trip_status'=>'ENDED']);
+            if($trip->trip_status == "ENDED"){
+                return $this->sendError("Trip already ended!");
+            }
 
-                        //update rider on a ride to false:
-                    $rider= auth()->user();
-                    $freeRider= User::where('id', $rider->id)
-                                ->update(['on_a_ride'=> 0]);
+            else{
+                //update status to ended
+                $trip->trip_status = "ENDED";
+                $trip->save();
+
+
+                //update rider on a ride to false:
+                $rider= auth()->user();
+                $rider->on_a_ride = false;
+                $rider->save();
+
+                return $this->sendResponse($trip, "Trip ended");  
+            }            
            
-                        return $this->sendResponse($endTrip, "Trip ended");  
-                }
-
-        }   
-            
-        catch(\Exception $e) {
-            return $this->sendError("Cannot end trip", "Cannot end trip");
-        }
 
     }
         
@@ -102,7 +93,7 @@ class TripsController extends BaseController
 
         $trip_cost = $this->_calculateCostOfTrip();
 
-            return $this->sendResponse($trip_cost, 'Estimated cost of trip' );
+        return $this->sendResponse($trip_cost, 'Estimated cost of trip' );
     }
 
     private function _calculateCostOfTrip(){
@@ -126,6 +117,10 @@ class TripsController extends BaseController
         //save the trip information using the available rider
         //set package status to Pending.
 
+
+        //find free rider in customer location
+            //if rider not found, ask customer to try again
+
         $data = $request->validate([
             'start_location'=>['nullable', 'max:100'],
             'end_location'=>['required','string', 'max:100'],
@@ -136,67 +131,56 @@ class TripsController extends BaseController
             'payment_method'=>['required', 'string', 'max:100']
         ]);
 
+        $rider =  User::where( 'user_type', 'RIDER')
+                        ->where('current_location', $data['start_location'])
+                        ->where('on_a_ride', 0)
+                        ->inRandomOrder()->take(1)->first();
+
+         if(!$rider){
+            return $this->sendError("No rider available at the moment. Please try again later", "No rider available at the moment");
+        }
+
         $trip_cost = $this->_calculateCostOfTrip();
 
-             //create package:
-            $package = Package::create([
-                'package_description' => $data['package_description'],
-                'customer_id' => auth()->user()->id,
-                'package_status' => 'PENDING'
-            ]);
+        try{
+         //create package:
+        
+        $package = Package::create([
+            'package_description' => $data['package_description'],
+            'customer_id' => auth()->user()->id,
+            'package_status' => 'PENDING'
+        ]);
 
              //create trip:
-            $findRider= Trip::create([
-                'recipient_name' => $data['recipient_name'],
-                'recipient_phone_number' => $data['recipient_phone_number'],
-                'package_description' => $data['package_description'],
-                'who_pays' => $data['who_pays'],
-                'customer_id' => auth()->user()->id,
-                'trip_status' => 'PENDING',
-                'start_location'=> $data['start_location'],
-                'end_location' => $data['end_location'] ,
-                'cost_of_trip' => $trip_cost,
-                'payment_method' => $data['payment_method'],
-                'package_id' => $package->id
-                ]);   
+        $trip= Trip::create([
+            'recipient_name' => $data['recipient_name'],
+            'recipient_phone_number' => $data['recipient_phone_number'],
+            'package_description' => $data['package_description'],
+            'who_pays' => $data['who_pays'],
+            'customer_id' => auth()->user()->id,
+            'trip_status' => 'PENDING',
+            'start_location'=> $data['start_location'],
+            'end_location' => $data['end_location'] ,
+            'cost_of_trip' => $trip_cost,
+            'payment_method' => $data['payment_method'],
+            'package_id' => $package->id
+            ]);   
 
-            if ($findRider){
 
-                $Rider =  User::where( 'user_type', 'RIDER')
-                                ->where('current_location', $data['start_location'])
-                                ->where('on_a_ride', 0)
-                                ->inRandomOrder()->take(1)->first();
+        //update trip with selected rider id:
+        $trip->rider_id = $rider->id;
+        $trip->save();
 
-                        if(!$Rider){
+        //update rider ride status:
+        $rider->on_a_ride = true;
+        $rider->save();
 
-                            Trip::where('package_id',$package->id)
-                                    ->update(['trip_status'=>"CANCELLED"]);
-                            
-                            return $this->sendError("No rider available at the moment. Please try again later", "No rider available at the moment");
-                        }
-                       
-                       else{
-
-                            //get the profile of the selected rider:
-
-                            $riderProfile = $Rider->profile->get();
-
-                            //update trip with selected rider id:
-
-                            Trip::where('package_id',$package->id)
-                                    ->update(['rider_id'=>$Rider->id]);
-                            
-                            //update rider ride status:
-                            User::where('id', $Rider->id)
-                                ->update(['on_a_ride'=> 1]);
-
-                                return $this->sendResponse($Rider, 'Rider located!');
-                        }                
+        return $this->sendResponse($rider, 'Rider located!');
                 
-            } else {
+    } catch(\Exception $e){
 
-                return $this->sendError("Cannot locate a rider at the moment", 'Cannot locate a rider at the moment');
-            }
+        return $this->sendError("Cannot locate a rider at the moment", 'Cannot locate a rider at the moment');
+    }
             
             
     }
@@ -252,25 +236,24 @@ class TripsController extends BaseController
                 }
     }
 
-    public function packageDelivered($id){
+    public function deliverPackage($id){
         //get the package id 
         //check in package model if package is already delivered
             //if delivered respond package already delivered
         //if not, update package status as delivered.
-        $alreadyDelivered = Package::where('id', $id)
-                            ->where('package_status', 'DELIVERED')->first();
-                if($alreadyDelivered){
-                    return $this->sendError("This package has already been delivered!");
-                }
-                else{
+        $package = Package::find($id);
+        if($package == null){
+            return $this->sendError("Package not found", 404);
+        }
 
-                    $packageDelivered = Package::where('id',$id)
-                                        ->update(['package_status'=>'DELIVERED']);
+        if($package->package_status == "DELIVERED"){
+            return $this->sendError("This package has already been delivered!");
+        }
 
-                            return $this->sendResponse("Package Delivered!", "Package Delivered!");
-                }
-                
+        $package->package_status = "DELIVERED";
+        $package->save();
 
+        return $this->sendResponse("Package Delivered!", "Package Delivered!");
     }
 
     
