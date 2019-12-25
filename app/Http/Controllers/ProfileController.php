@@ -123,7 +123,8 @@ class ProfileController extends BaseController
    
     public function feedback(Request $request){
         $data = $request->validate([
-                'feedback'     =>  ['required','string',' max: 1000']
+                'feedback_type' => ['required','string'],
+                'feedback_description'     =>  ['required','string',' max: 1000'],
             ]);
         try{
 
@@ -132,7 +133,8 @@ class ProfileController extends BaseController
 
         $feedback = new Feedback;
 
-        $feedback->feedback = $data['feedback'];
+        $feedback->feedback_description = $data['feedback_description'];
+        $feedback->feedback_type= $data['feedback_type'];
         $feedback->user_id= $user->id;
         $feedback->profile_id= $profile->id;
 

@@ -11,7 +11,7 @@ class Feedback extends Model
     protected $table = 'feedbacks';
 
 
-    protected $fillable = ['user_id', 'profile_id', 'feedback'];
+    protected $fillable = ['user_id', 'profile_id', 'feedback_description', 'feedback_type'];
 
 
     public function user(){
