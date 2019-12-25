@@ -226,13 +226,15 @@ class TripsController extends BaseController
         //check trips with customer id
         //get
         $user= auth()->user();
-        $orderHistory = Trip::where('customer_id', $user->id)->get();
+        $orderHistory = Trip::where('customer_id', $user->id)->get()
+        ;
             
-            if($orderHistory){
-                    return $this->sendResponse($orderHistory, 'Your history');
+            if($orderHistory==null){
+                    return $this->sendResponse($orderHistory, 'You have no history');
                 }
                 else{
-                    return $this->sendError('You have no order history yet', 'You have no order history yet');
+
+                    return $this->sendResponse($orderHistory, 'Your order history');
                 }
     }
 
