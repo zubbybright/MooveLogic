@@ -213,7 +213,7 @@ class TripsController extends BaseController
         $tripHistory = Trip::where('rider_id', $rider->id)
                         ->where('trip_status', 'ENDED')->get();
                 
-                if($tripHistory){
+                if(count($tripHistory)){
                     return $this->sendResponse($tripHistory, 'Your trip history');
                 }
                 else{
@@ -226,17 +226,17 @@ class TripsController extends BaseController
         //check trips with customer id
         //get
         $user= auth()->user();
-        $orderHistory = Trip::where('customer_id', $user->id)
-                            ->where('trip_status', 'ENDED')->first();
-        
+        $id = $user->id;
+        $history = Trip::where('customer_id', $id)->get();
             
-            if($orderHistory){
-                    
-                    return $this->sendResponse($orderHistory, 'Your order history');
-                }
-                else{ 
-                    return $this->sendError('You have no history yet', 'You have no history yet');
-                }
+            if(count($history)){
+
+                return $this->sendResponse($history, 'Your order history');
+                
+            }
+            else{
+                return $this->sendError('You have no history yet', 'You have no history yet');
+            }
     }
 
     public function deliverPackage($id){
