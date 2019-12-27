@@ -113,7 +113,7 @@ class ProfileController extends BaseController
 
                 $dp= $profile->addMedia($request->profile_pic)->toMediaCollection();
 
-                return $this->sendResponse($profile, $dp, "Profile Picture saved.");
+                return $this->sendResponse($dp, "Profile Picture saved.");
             }
             catch(\Exception $e){
                 return $this->sendError("Profile Picture Not Saved", 'Profile Picture Not Saved', 400);
