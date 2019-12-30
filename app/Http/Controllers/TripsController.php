@@ -175,7 +175,9 @@ class TripsController extends BaseController
         $rider->on_a_ride = true;
         $rider->save();
 
-        return $this->sendResponse($rider, 'Rider located!');
+        //get the profile of the rider:
+        $profile = $rider->profile;
+        return $this->sendResponse($rider,'Rider located!');
                 
     } catch(\Exception $e){
 
