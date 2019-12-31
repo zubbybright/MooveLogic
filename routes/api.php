@@ -51,13 +51,13 @@ Route::group([
     Route::post('active-ride', 'TripsController@findActiveTrip');
 
     //rider trip history:
-    Route::post('trip-history', 'TripsController@riderTripHistory');
+    Route::get('trip-history', 'TripsController@riderTripHistory');
     //payment
     Route::post('payment-method', 'PaymentController@make_payment');
     //calculate cost:
     Route::post('cost', 'TripsController@calculateCost');
     //customer order history;
-    Route::post('customer-history', 'TripsController@customerOrderHistory');
+    Route::get('customer-history', 'TripsController@customerOrderHistory');
 
     //submit feedback:
     Route::post('feedback', 'ProfileController@feedback');
