@@ -131,10 +131,15 @@ class TripsController extends BaseController
             'payment_method'=>['required', 'string', 'max:100']
         ]);
 
+        if(!$data){
+            return $this->sendError("Something is wrong with your input", "Something is wrong with your input");
+        }
+        else{
+
         $rider =  User::where( 'user_type', 'RIDER')
-                        ->where('current_location', $data['start_location'])
-                        ->where('on_a_ride', 0)
-                        ->inRandomOrder()->take(1)->first();
+            ->where('current_location', $data['start_location'])
+            ->where('on_a_ride', 0)
+            ->inRandomOrder()->take(1)->first();
 
          if(!$rider){
             return $this->sendError("No rider available at the moment. Please try again later", "No rider available at the moment");
@@ -177,7 +182,14 @@ class TripsController extends BaseController
 
         //get the profile of the rider:
         $profile = $rider->profile;
-        return $this->sendResponse($rider,'Rider located!');
+
+        //nest trip and rider together to get all in reponse:
+        $info  = [
+            'trip' => $trip,
+            'rider' => $rider,
+        ];
+        return $this->sendResponse($info, 'Rider located!');
+
                 
     } catch(\Exception $e){
 
@@ -185,6 +197,8 @@ class TripsController extends BaseController
     }
             
             
+        }
+
     }
 
     public function findActiveTrip(){
@@ -261,6 +275,10 @@ class TripsController extends BaseController
         return $this->sendResponse("Package Delivered!", "Package Delivered!");
     }
 
+    public function getCurrentLocation($riderId){
+        //get the id of the found rider
+        // get the current location per moment
+    }
     
 
 
