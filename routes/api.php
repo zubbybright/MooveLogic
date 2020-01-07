@@ -36,10 +36,14 @@ Route::group([
 	
 
 });	
-	//start and end trips;
+	//start, end and cancel trips;
 
     Route::post('start-trip/{tripId}', 'TripsController@startTrip');
     Route::post('end-trip/{tripId}', 'TripsController@endTrip');
+    Route::post('cancel-trip/{tripId},{riderId}', 'TripsController@cancelTrip');
+
+    //save rider current location
+    Route::post('rider-location', 'TripsController@saveRiderLocation');
 
     //deliver package:
     Route::post('delivered/{id}', 'TripsController@deliverPackage');

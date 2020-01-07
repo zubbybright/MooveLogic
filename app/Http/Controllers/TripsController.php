@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Trip;
 use App\User;
 use App\Package;
-use App\MooveRequest;
+use App\RiderLocation;
 use App\Http\Controllers\BaseController;
 
 class TripsController extends BaseController
@@ -78,6 +78,36 @@ class TripsController extends BaseController
             }            
            
 
+    }
+
+    public function cancelTrip($tripId, $riderId){
+            $trip = Trip::find($tripId);
+
+            if($trip == null){
+                return $this->sendError("Trip does not exist");
+            }
+
+            if($trip->trip_status == "CANCELLED"){
+                return $this->sendError("Trip has already been cancelled!");
+            }
+
+            else{
+                //update status to cancelled
+                $trip->trip_status = "CANCELLED";
+                $trip->save();
+
+
+                //update rider on a ride to false:
+                // $riderId= Trip::where('id', $tripId)
+                //             ->get('rider_id');
+
+                $rider = User::find($riderId);
+                $rider->on_a_ride = false;
+                $rider->save();
+
+                return $this->sendResponse($trip, "Trip cancelled.");  
+            }            
+           
     }
         
 
@@ -275,11 +305,54 @@ class TripsController extends BaseController
         return $this->sendResponse("Package Delivered!", "Package Delivered!");
     }
 
-    public function getCurrentLocation($riderId){
-        //get the id of the found rider
-        // get the current location per moment
+    public function getRiderLocation($tripId, $riderId){
+            $riderLocation = Riderlocation::where('rider_id', $riderId)
+                                ->where('trip_id',$tripId)->first();
+
+            if($riderLocation == null){
+                return $this->sendError("Invalid request.");
+            }
+
+            else{
+
+                return $this->sendResponse($riderLocation, "This is your rider's current location.");  
+            }            
     }
     
+    public function saveRiderLocation(Request $request){
+        //get the ridr id
+        //get latitude and longitude
+        //get the trip id
+        //save to the database
+
+        $data = $request->validate([
+            'latitude'=>['required', 'string', 'max:20'],
+            'longitude'=>['required','string', 'max:20'],
+            'trip_id' => ['required', 'string', 'max:20']
+        ]);
+
+        if(!$data){
+            return $this->sendError("Something is wrong with your input", "Something is wrong with your input");
+        }
+        else{
+
+            $riderlocation = RiderLocation::create([
+                'latitude' => $data['latitude'],
+                'longitude' => $data['longitude'],
+                'rider_id' => auth()->user()->id,
+                'trip_id' => $data['trip_id']
+            ]);
+
+            if($riderlocation){
+                    return $this->sendResponse($riderlocation, 'Current location saved.');
+                }
+                else{
+
+                    return $this->sendError('Could not save your current location.');
+                }
+
+        }
+    }
 
 
 }   
