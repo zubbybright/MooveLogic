@@ -45,6 +45,10 @@ Route::group([
     //save rider current location
     Route::post('rider-location', 'TripsController@saveRiderLocation');
 
+    //get rider current location
+
+    Route::get('getRiderLocation/{tripId},{riderId}','TripsController@getRiderLocation');
+
     //deliver package:
     Route::post('delivered/{id}', 'TripsController@deliverPackage');
    
