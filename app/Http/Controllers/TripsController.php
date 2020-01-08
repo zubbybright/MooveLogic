@@ -357,6 +357,19 @@ class TripsController extends BaseController
 
         }
     }
+    
+    public function getTrip($tripId){
+        $trip = Trip::find($tripId);
+
+        if($trip == null){
+            return $this->sendError("Trip does not exist");
+        }else{
+            $trip->get();
+
+            return $this->sendResponse($trip, 'Trip Details.');
+
+        }
+    }
 
 
 }   

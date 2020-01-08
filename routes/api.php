@@ -69,3 +69,6 @@ Route::group([
 
     //submit feedback:
     Route::post('feedback', 'ProfileController@feedback');
+
+    //get trip
+    Route::get('get-trip/{tripId}', 'TripsController@getTrip');
