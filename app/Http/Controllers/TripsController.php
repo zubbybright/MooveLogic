@@ -310,7 +310,7 @@ class TripsController extends BaseController
                                 ->where('trip_id',$tripId)->first();
 
             if($riderLocation == null){
-                return $this->sendError("Invalid request.");
+                return $this->sendError("The rider location is not yet available.", "The rider location is not yet available.");
             }
 
             else{
