@@ -257,7 +257,9 @@ class TripsController extends BaseController
 
         $rider = auth()->user();
         $tripHistory = Trip::where('rider_id', $rider->id)
-                        ->where('trip_status', 'ENDED')->get();
+                        ->where('trip_status', 'ENDED')
+                        ->latest()
+                        ->get();
                 
                 if(count($tripHistory)){
                     return $this->sendResponse($tripHistory, 'Your trip history');
@@ -273,7 +275,9 @@ class TripsController extends BaseController
         //get
         $user= auth()->user();
         $id = $user->id;
-        $history = Trip::where('customer_id', $id)->get();
+        $history = Trip::where('customer_id', $id)
+                    ->latest()
+                    ->get();
             
             if(count($history)){
 
