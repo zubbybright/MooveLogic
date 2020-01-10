@@ -312,7 +312,7 @@ class TripsController extends BaseController
     public function getRiderLocation($tripId, $riderId){
             $riderLocation = Riderlocation::where('rider_id', $riderId)
                                 ->where('trip_id',$tripId)->latest()
-                                ->get();
+                                ->first();
 
             if($riderLocation == null){
                 return $this->sendError("The rider location is not yet available.", "The rider location is not yet available.");
