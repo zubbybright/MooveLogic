@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,25 +33,26 @@ Route::group([
     Route::post('add-card','ProfileController@add_bank_card' );
     Route::post('add-dp','ProfileController@add_profile_pic' );
 
-	
 
-});	
+
+});
 	//start, end and cancel trips;
 
     Route::post('start-trip/{tripId}', 'TripsController@startTrip');
     Route::post('end-trip/{tripId}', 'TripsController@endTrip');
     Route::post('cancel-trip/{tripId},{riderId}', 'TripsController@cancelTrip');
+    Route::post('cancel-trip/{tripId}/{riderId}', 'TripsController@cancelTrip');
 
     //save rider current location
     Route::post('rider-location', 'TripsController@saveRiderLocation');
 
     //get rider current location
-
     Route::get('getRiderLocation/{tripId},{riderId}','TripsController@getRiderLocation');
+    Route::get('get-rider-location/{tripId}/{riderId}','TripsController@getRiderLocation');
 
     //deliver package:
     Route::post('delivered/{id}', 'TripsController@deliverPackage');
-   
+
    //make a moove request, contact a rider:
     Route::post('request-rider', 'TripsController@findRider');
 
