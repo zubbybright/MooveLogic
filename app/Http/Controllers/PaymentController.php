@@ -17,13 +17,13 @@ class PaymentController extends BaseController
     //
 
 
-    public function make_payment(Request $request){
+    public function makePayment(Request $request){
 
         $data = $request->validate([
             'card_option' => ['string'],
             'cash_on_delivery'=>['string'],
             ]);
-        
+
         if($data['card_option']){
 
             $register_card = auth()->user()->profile()
@@ -49,9 +49,8 @@ class PaymentController extends BaseController
 
         else{
 
-           return response()->json('cannot make payment', 400); 
+           return response()->json('cannot make payment', 400);
         }
 
     }
 }
-	

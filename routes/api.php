@@ -29,9 +29,9 @@ Route::group([
     Route::post('register', 'Auth\RegisterController@register');
     Route::post('logout', 'Auth\LogoutController@logout');
     Route::post('refresh', 'Auth\LoginController@refresh');
-    Route::post('update-password', 'ProfileController@update_password');
-    Route::post('add-card','ProfileController@add_bank_card' );
-    Route::post('add-dp','ProfileController@add_profile_pic' );
+    Route::post('update-password', 'ProfileController@updatePassword');
+    Route::post('add-card','ProfileController@addBankCard');
+    Route::post('add-dp','ProfileController@addProfilePic');
 
 
 
@@ -62,7 +62,7 @@ Route::group([
     //rider trip history:
     Route::get('trip-history', 'TripsController@riderTripHistory');
     //payment
-    Route::post('payment-method', 'PaymentController@make_payment');
+    Route::post('payment-method', 'PaymentController@makePayment');
     //calculate cost:
     Route::post('cost', 'TripsController@calculateCost');
     //customer order history;

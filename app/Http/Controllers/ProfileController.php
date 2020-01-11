@@ -26,13 +26,13 @@ class ProfileController extends BaseController
     //
 
         public function __construct()
-        
+
         {
             $this->middleware('auth:api');
         }
 
 
-        public function update_password(Request $request){
+        public function updatePassword(Request $request){
             //validate input:
             $data = $request->validate([
                 'old_password' => ['required', 'string', 'min:8'],
@@ -41,14 +41,14 @@ class ProfileController extends BaseController
 
                 //check if old and new passwords are the same.
                 if( $data['old_password'] ===$data['new_password']){
-                    
+
                     return $this->sendError("The new password must be different from the old password.", "Please Change your password.", 400);
                 }
 
                 else{
 
                     $user = $request->user();
-                    
+
 
                     if (Hash::check($data['old_password'], $user->password )){
 
@@ -62,14 +62,14 @@ class ProfileController extends BaseController
 
                             return $this->sendError("Password could not be changed.","Old password does not match existing password.", 400);
                         }
-                  
+
                 }
 
         }
 
 
-        public function add_bank_card(Request $request){
-        
+        public function addBankCard(Request $request){
+
             $data = $request->validate([
                 'card_number' => ['required',  new CardNumber],
                 'card_name' => ['required', 'string', 'max:255'],
@@ -81,7 +81,7 @@ class ProfileController extends BaseController
 
             $card_details = auth()->user()->profile()
                             ->update([  'card_number' => $data['card_number'],
-                           
+
                                         'card_name' => $data['card_name'],
                                         'cvv' => $data['cvv'],
                                         'expiration_month' => $data['expiration_month'],
@@ -89,18 +89,18 @@ class ProfileController extends BaseController
                                     ]);
             $profile = auth()->user()->profile()->get();
             if($card_details){
-                return $this->sendResponse($profile, "Card Details Saved.");           
+                return $this->sendResponse($profile, "Card Details Saved.");
             }
 
             else{
                 return response()->json('Cannot add card!', 400);
             }
-            
+
         }
 
 
 
-        public function add_profile_pic(Request $request)
+        public function addProfilePic(Request $request)
         {
             try{
 
@@ -120,7 +120,7 @@ class ProfileController extends BaseController
             }
 
         }
-   
+
     public function feedback(Request $request){
         $data = $request->validate([
                 'feedback_type' => ['required','string'],
@@ -151,6 +151,6 @@ class ProfileController extends BaseController
 
 
 
-   
-         
+
+
 }
