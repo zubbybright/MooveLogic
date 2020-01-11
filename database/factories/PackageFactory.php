@@ -11,8 +11,7 @@ $factory->define(Package::class, function (Faker $faker) {
 
         'package_description'=> $faker->sentence,
         'package_type' => $faker->randomElement(['FRAGILE' ,'NOT_FRAGILE']),
-        'size' => $faker->text, 
-        'weight'=>$faker->randomDigit,
-        'customer_id'=>$faker->randomDigit,
+        'customer_id'=> $faker->randomElement([1,2,3,4]),
+        'package_status' => 'PENDING'
     ];
 });
