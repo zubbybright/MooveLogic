@@ -294,7 +294,8 @@ class TripsController extends BaseController
         //get the package id 
         //check in package model if package is already delivered
             //if delivered respond package already delivered
-        //if not, update package status as delivered.
+            //if not, update package status as delivered.
+        //if package not delivered, change status to not delivered
         $package = Package::find($id);
         if($package == null){
             return $this->sendError("Package not found", 404);
@@ -307,13 +308,41 @@ class TripsController extends BaseController
         $package->package_status = "DELIVERED";
         $package->save();
 
-        return $this->sendResponse("Package Delivered!", "Package Delivered!");
+        return $this->sendResponse($package, "Package Delivered!");
     }
 
-    public function getRiderLocation($tripId, $riderId){
+    public function packageNotDelivered($id){
+        //get the package id 
+        //check in package model if package is already delivered
+            //if delivered respond package already delivered
+            //if not, update package status as delivered.
+        //if package not delivered, change status to not delivered
+        $package = Package::find($id);
+        if($package == null){
+            return $this->sendError("Package not found", 404);
+        }
+
+        if($package->package_status == "NOT_DELIVERED"){
+            return $this->sendError("This package has already been set as not delivered!");
+        }
+
+        $package->package_status = "NOT_DELIVERED";
+        $package->save();
+
+        return $this->sendResponse($package, "Package Not Delivered!");
+    }
+
+    public function getRiderLocation($tripId, $riderId, $packageId){
             $riderLocation = Riderlocation::where('rider_id', $riderId)
                                 ->where('trip_id',$tripId)->latest()
                                 ->first();
+            
+            $package = Package::find($packageId);
+
+            $info  = [
+            'riderLocation'=> $riderLocation,
+            'package' => $package,
+            ];
 
             if($riderLocation == null){
                 return $this->sendError("The rider location is not yet available.", "The rider location is not yet available.");
@@ -321,7 +350,7 @@ class TripsController extends BaseController
 
             else{
 
-                return $this->sendResponse($riderLocation, "This is your rider's current location.");  
+                return $this->sendResponse($info, "This is your rider's current location.");  
             }            
     }
     

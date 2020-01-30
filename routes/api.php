@@ -41,17 +41,16 @@ Route::group([
     Route::post('start-trip/{tripId}', 'TripsController@startTrip');
     Route::post('end-trip/{tripId}', 'TripsController@endTrip');
     Route::post('cancel-trip/{tripId},{riderId}', 'TripsController@cancelTrip');
-    Route::post('cancel-trip/{tripId}/{riderId}', 'TripsController@cancelTrip');
-
+    
     //save rider current location
     Route::post('rider-location', 'TripsController@saveRiderLocation');
 
     //get rider current location
-    Route::get('getRiderLocation/{tripId},{riderId}','TripsController@getRiderLocation');
-    Route::get('get-rider-location/{tripId}/{riderId}','TripsController@getRiderLocation');
+    Route::get('getRiderLocation/{tripId},{riderId},{packageId}','TripsController@getRiderLocation');
 
-    //deliver package:
+    //delivered or not delivered package:
     Route::post('delivered/{id}', 'TripsController@deliverPackage');
+    Route::post('not-delivered/{id}', 'TripsController@packageNotDelivered');
 
    //make a moove request, contact a rider:
     Route::post('request-rider', 'TripsController@findRider');
