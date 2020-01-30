@@ -213,10 +213,11 @@ class TripsController extends BaseController
         //get the profile of the rider:
         $profile = $rider->profile;
 
-        //nest trip and rider together to get all in reponse:
+        //nest trip, rider and package together to get all in reponse:
         $info  = [
             'trip' => $trip,
             'rider' => $rider,
+            'package' => $package,
         ];
         return $this->sendResponse($info, 'Rider located!');
 
