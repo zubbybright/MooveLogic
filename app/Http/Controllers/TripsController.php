@@ -333,16 +333,11 @@ class TripsController extends BaseController
         return $this->sendResponse($trip_cost, 'Estimated cost of trip' );
     }
 
-    public function getRiderLocation($tripId, $riderId, $packageId, Request $request){
+    public function getRiderLocation($tripId, $riderId, $packageId, $km,$time){
 
-            $data = $request->validate([
-                'km' => ['required','string', 'max:100'],
-                'time' => ['required','string'],
-            ]);
-
-             $time = (($data['time']) * 60);
+             $timeInMin = ($time * 60);
              $baseFare = 200; 
-             $CalculateCost = $baseFare + ($time * $data['km']);
+             $CalculateCost = $baseFare + ($timeInMin * $km);
 
             $riderLocation = Riderlocation::where('rider_id', $riderId)
                                 ->where('trip_id',$tripId)->latest()
