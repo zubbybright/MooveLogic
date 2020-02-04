@@ -320,18 +320,18 @@ class TripsController extends BaseController
     }
 
 
-    // private function calculateCost(Request $request){
+    public function calculateCost(Request $request){
 
-    //     $data = $request->validate([
-    //         'start_location'=>['nullable', 'max:100'],
-    //         'end_location'=>['required','string', 'max:100'],
-    //         'package_description' =>['string', 'max:255'],
-    //         ]);
+        $data = $request->validate([
+            'start_location'=>['nullable', 'max:100'],
+            'end_location'=>['required','string', 'max:100'],
+            'package_description' =>['string', 'max:255'],
+            ]);
 
-    //     $trip_cost = $this->_calculateCostOfTrip();
+        $trip_cost = $this->_estimatedCostOfTrip();
 
-    //     return $this->sendResponse($trip_cost, 'Estimated cost of trip' );
-    // }
+        return $this->sendResponse($trip_cost, 'Estimated cost of trip' );
+    }
 
     public function getRiderLocation($tripId, $riderId, $packageId, Request $request){
 
