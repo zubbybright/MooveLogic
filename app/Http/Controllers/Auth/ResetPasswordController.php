@@ -35,19 +35,25 @@ class ResetPasswordController extends BaseController
             public function reset(Request $request){
             //validate input:
             $data = $request->validate([
+                'email' => ['required', "string", "email"],
                 'new_password' => ['required', 'string', 'min:8','confirmed'],
                     
                 ]);
-               
-                if($data){
+                
+                
+                
+                if($data ){                   
 
-                    $user = new User;
-
+                    $user = User::where('email', $data['email']);
+                        
+                        if ($user == null){
+                            return $this->sendError("email is incorrect", "email is incorrect");
+                        }
                     $user->password = $data['new_password'];
 
-                    $user->save();
+                    $user->update(['password' => bcrypt($data['new_password'])]);
 
-                    return $this->sendResponse($user, "Password reset successful.");
+                    return $this->sendResponse("Password reset successful.", "Password reset successful.");
 
                 }else{
 
