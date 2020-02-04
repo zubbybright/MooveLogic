@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\BaseController;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
-
+use App\User;
 
 class ResetPasswordController extends BaseController
 {
@@ -41,7 +41,7 @@ class ResetPasswordController extends BaseController
                
                 if($data){
 
-                    $user = $request->user();
+                    $user = new User;
 
                     $user->password = $data['new_password'];
 
