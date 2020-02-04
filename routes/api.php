@@ -33,7 +33,7 @@ Route::group([
     Route::post('add-card','ProfileController@addBankCard');
     Route::post('add-dp','ProfileController@addProfilePic');
 
-    Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
+    Route::post('password/email', 'Auth\ForgotPasswordController@sendEmail');
     Route::post('password/reset', 'Auth\ResetPasswordController@reset');
     Route::get('password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
 
