@@ -33,11 +33,14 @@ Route::group([
     Route::post('add-card','ProfileController@addBankCard');
     Route::post('add-dp','ProfileController@addProfilePic');
 
+    Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
+    Route::get('password/reset/{token}', 'Auth\ResetPasswordController@reset')->name('password.reset');
+
 
 
 });
 	//start, end and cancel trips;
-
+    
     Route::post('start-trip/{tripId}', 'TripsController@startTrip');
     Route::post('end-trip/{tripId}', 'TripsController@endTrip');
     Route::post('cancel-trip/{tripId},{riderId}', 'TripsController@cancelTrip');

@@ -10,6 +10,7 @@ use App\User;
 use App\Package;
 use App\RiderLocation;
 use App\Http\Controllers\BaseController;
+use Carbon\Carbon;
 
 class TripsController extends BaseController
 {
@@ -111,24 +112,10 @@ class TripsController extends BaseController
     }
         
 
-
-    
-    public function calculateCost(Request $request){
-
-        $data = $request->validate([
-            'start_location'=>['nullable', 'max:100'],
-            'end_location'=>['required','string', 'max:100'],
-            'package_description' =>['string', 'max:255'],
-            ]);
-
-        $trip_cost = $this->_calculateCostOfTrip();
-
-        return $this->sendResponse($trip_cost, 'Estimated cost of trip' );
-    }
-
-    private function _calculateCostOfTrip(){
+    private function _estimatedCostOfTrip(){
         return "1000 - 2000";
     }
+
 
 
     public function findRider(Request $request){
@@ -175,7 +162,7 @@ class TripsController extends BaseController
             return $this->sendError("No rider available at the moment. Please try again later", "No rider available at the moment");
         }
 
-        $trip_cost = $this->_calculateCostOfTrip();
+        $trip_cost = $this->_estimatedCostOfTrip();
 
         try{
          //create package:
@@ -332,7 +319,31 @@ class TripsController extends BaseController
         return $this->sendResponse($package, "Package Not Delivered!");
     }
 
-    public function getRiderLocation($tripId, $riderId, $packageId){
+
+    // private function calculateCost(Request $request){
+
+    //     $data = $request->validate([
+    //         'start_location'=>['nullable', 'max:100'],
+    //         'end_location'=>['required','string', 'max:100'],
+    //         'package_description' =>['string', 'max:255'],
+    //         ]);
+
+    //     $trip_cost = $this->_calculateCostOfTrip();
+
+    //     return $this->sendResponse($trip_cost, 'Estimated cost of trip' );
+    // }
+
+    public function getRiderLocation($tripId, $riderId, $packageId, Request $request){
+
+            $data = $request->validate([
+                'km' => ['required','string', 'max:100'],
+                'time' => ['required','string'],
+            ]);
+
+             $time = (($data['time']) * 60);
+             $baseFare = 200; 
+             $CalculateCost = $baseFare + ($time * $data['km']);
+
             $riderLocation = Riderlocation::where('rider_id', $riderId)
                                 ->where('trip_id',$tripId)->latest()
                                 ->first();
@@ -342,6 +353,7 @@ class TripsController extends BaseController
             $info  = [
             'riderLocation'=> $riderLocation,
             'package' => $package,
+            'cost' => $CalculateCost ,
             ];
 
             if($riderLocation == null){
@@ -350,7 +362,7 @@ class TripsController extends BaseController
 
             else{
 
-                return $this->sendResponse($info, "This is your rider's current location.");  
+                return $this->sendResponse($info, "This is your rider's current location and your trip cost.");  
             }            
     }
     
