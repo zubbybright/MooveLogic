@@ -32,6 +32,6 @@ class ForgotPasswordController extends BaseController
 
     protected function sendResetLinkFailedResponse(Request $request, $response)
     {
-        return $this->sendError('Link not sent', 'Please enter your registered email address');
+        return $this->sendError('Please enter your registered email address', 'Please enter your registered email address');
     }
 }
