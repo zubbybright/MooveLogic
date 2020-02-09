@@ -37,16 +37,18 @@ Route::group([
     Route::post('password/reset', 'Auth\ResetPasswordController@reset');
     Route::get('password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
 
+    Route::post('create-admin', 'ProfileController@createAdmin');
+
 
 
 
 });
 	//start, end and cancel trips;
-    
+
     Route::post('start-trip/{tripId}', 'TripsController@startTrip');
     Route::post('end-trip/{tripId}', 'TripsController@endTrip');
     Route::post('cancel-trip/{tripId},{riderId}', 'TripsController@cancelTrip');
-    
+
     //save rider current location
     Route::post('rider-location', 'TripsController@saveRiderLocation');
 

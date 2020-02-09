@@ -20,7 +20,8 @@ class CreateAdminsTable extends Migration
             $table->string('username');
             $table->string('email');
             $table->string('password');
-            $table->string('reset_token');
+            $table->string('phone_number');
+            $table->string('reset_token')->nullable();
             $table->timestamps();
         });
     }

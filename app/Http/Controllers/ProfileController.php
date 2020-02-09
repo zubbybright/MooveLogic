@@ -18,6 +18,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use App\Admin;
 
 
 
@@ -146,6 +147,33 @@ class ProfileController extends BaseController
         catch(\Exception $e){
             return $this->sendError("Your feedback could not be submitted at the moment", "Your feedback could not be submitted at the moment");
         }
+
+
+    }
+
+
+    public function createAdmin(Request $request){
+        $data = $request->validate([
+            'first_name'=>['required','string', 'max:100'],
+            'last_name'=>['required','string', 'max:100'],
+            'username' => [ 'required','string', 'max:100'],
+            'email' => ['required','string', 'email', 'max:100'],
+            'password' =>['required','string', 'max:100'],
+            'phone_number'=>['required','string', 'max:100']
+        ]);
+
+
+
+        $admin = Admin::create([
+            'first_name' => $data['phone_number'],
+            'last_name' => 'CUSTOMER',
+            'username' => $data['facebook_id'],
+            'email' => $data['email'],
+            'password' => $data['password'],
+            'phone_number'=> $data['phone_number']
+        ]);
+
+        return $this->sendResponse($admin, 'User registered successfully.');
     }
 
 
