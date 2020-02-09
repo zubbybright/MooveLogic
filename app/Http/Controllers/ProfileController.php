@@ -164,16 +164,17 @@ class ProfileController extends BaseController
 
 
 
-        $admin = Admin::create([
-            'first_name' => $data['phone_number'],
-            'last_name' => 'CUSTOMER',
-            'username' => $data['facebook_id'],
-            'email' => $data['email'],
-            'password' => $data['password'],
-            'phone_number'=> $data['phone_number']
-        ]);
+        $admin = new Admin;
+            $admin->first_name = $data['first_name'];
+            $admin->last_name = $data['last_name'];
+            $admin->username = $data['username'];
+            $admin->email = $data['email'];
+            $admin->password = $data['password'];
+            $admin->phone_number= $data['phone_number'];
+            $admin->save();
 
-        return $this->sendResponse($admin, 'User registered successfully.');
+
+        return $this->sendResponse($admin, 'Admin registered successfully.');
     }
 
 

@@ -42,6 +42,8 @@ Route::group([
 
 
 
+
+
 });
 	//start, end and cancel trips;
 
@@ -79,3 +81,5 @@ Route::group([
 
     //get trip
     Route::get('get-trip/{tripId}', 'TripsController@getTrip');
+
+
