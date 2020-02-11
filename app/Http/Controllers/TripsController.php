@@ -116,6 +116,24 @@ class TripsController extends BaseController
         return "1000 - 2000";
     }
 
+    public function calculateCost(Request $request){
+
+        $data = $request->validate([
+            'start_location'=>['nullable', 'max:100'],
+            'end_location'=>['required','string', 'max:100'],
+            'package_description' =>['string', 'max:255'],
+            "km" => ['required','string', 'max:100'],
+            "time" => ['required','string', "max:100"]
+            ]);
+
+        $timeInMin = ($data['time'] * 60);
+        $baseFare = 200; 
+        $calculateCost = $baseFare + ($timeInMin * $data['km']);
+
+
+        return $this->sendResponse($calculateCost, 'Cost of trip' );
+    }
+
 
 
     public function findRider(Request $request){
@@ -162,7 +180,7 @@ class TripsController extends BaseController
             return $this->sendError("No rider available at the moment. Please try again later", "No rider available at the moment");
         }
 
-        $trip_cost = $this->_estimatedCostOfTrip();
+        $trip_cost = $this->calculateCost();
 
         try{
          //create package:
@@ -319,19 +337,6 @@ class TripsController extends BaseController
         return $this->sendResponse($package, "Package Not Delivered!");
     }
 
-
-    public function calculateCost(Request $request){
-
-        $data = $request->validate([
-            'start_location'=>['nullable', 'max:100'],
-            'end_location'=>['required','string', 'max:100'],
-            'package_description' =>['string', 'max:255'],
-            ]);
-
-        $trip_cost = $this->_estimatedCostOfTrip();
-
-        return $this->sendResponse($trip_cost, 'Estimated cost of trip' );
-    }
 
     public function getRiderLocation($tripId, $riderId, $packageId, $km,$time){
 
