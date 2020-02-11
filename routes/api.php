@@ -65,7 +65,7 @@ Route::group([
     Route::post('request-rider', 'TripsController@findRider');
 
     //rider active ride:
-    Route::post('active-ride', 'TripsController@findActiveTrip');
+    Route::get('active-ride', 'TripsController@findActiveTrip');
 
     //rider trip history:
     Route::get('trip-history', 'TripsController@riderTripHistory');
