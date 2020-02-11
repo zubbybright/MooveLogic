@@ -130,7 +130,7 @@ class TripsController extends BaseController
         $baseFare = 200; 
         $calculateCost = $baseFare + ($timeInMin * $data['km']);
 
-
+        
         return $this->sendResponse($calculateCost, 'Cost of trip' );
     }
 
@@ -180,7 +180,7 @@ class TripsController extends BaseController
             return $this->sendError("No rider available at the moment. Please try again later", "No rider available at the moment");
         }
 
-        $trip_cost = $this->calculateCost();
+        $trip_cost = $this->_estimatedCostOfTrip();
 
         try{
          //create package:
@@ -349,6 +349,11 @@ class TripsController extends BaseController
                                 ->first();
             
             $package = Package::find($packageId);
+
+            //update trip cost
+            $trip = Trip::find($tripId);    
+            $trip->cost_of_trip = $CalculateCost;
+            $trip->save();
 
             $info  = [
             'riderLocation'=> $riderLocation,
