@@ -295,13 +295,13 @@ class TripsController extends BaseController
             }
     }
 
-    public function deliverPackage($id){
+    public function deliverPackage($packageId){
         //get the package id 
         //check in package model if package is already delivered
             //if delivered respond package already delivered
             //if not, update package status as delivered.
         //if package not delivered, change status to not delivered
-        $package = Package::find($id);
+        $package = Package::find($packageId);
         if($package == null){
             return $this->sendError("Package not found", 404);
         }
@@ -316,13 +316,13 @@ class TripsController extends BaseController
         return $this->sendResponse($package, "Package Delivered!");
     }
 
-    public function packageNotDelivered($id){
+    public function packageNotDelivered($packageId){
         //get the package id 
         //check in package model if package is already delivered
             //if delivered respond package already delivered
             //if not, update package status as delivered.
         //if package not delivered, change status to not delivered
-        $package = Package::find($id);
+        $package = Package::find($packageId);
         if($package == null){
             return $this->sendError("Package not found", 404);
         }

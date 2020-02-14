@@ -58,8 +58,8 @@ Route::group([
     Route::get('getRiderLocation/{tripId}/{riderId}/{packageId}/{km}/{time}','TripsController@getRiderLocation');
 
     //delivered or not delivered package:
-    Route::post('delivered/{id}', 'TripsController@deliverPackage');
-    Route::post('not-delivered/{id}', 'TripsController@packageNotDelivered');
+    Route::post('delivered/{packageId}', 'TripsController@deliverPackage');
+    Route::post('not-delivered/{packageId}', 'TripsController@packageNotDelivered');
 
    //make a moove request, contact a rider:
     Route::post('request-rider', 'TripsController@findRider');
