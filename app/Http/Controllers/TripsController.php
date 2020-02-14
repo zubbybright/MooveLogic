@@ -174,6 +174,7 @@ class TripsController extends BaseController
         $rider =  User::where( 'user_type', 'RIDER')
             ->where('current_location', $data['start_location'])
             ->where('on_a_ride', 0)
+            ->where('id', 15)
             ->inRandomOrder()->take(1)->first();
 
          if(!$rider){
