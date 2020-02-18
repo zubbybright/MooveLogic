@@ -174,8 +174,7 @@ class TripsController extends BaseController
         $rider =  User::where( 'user_type', 'RIDER')
             ->where('current_location', $data['start_location'])
             ->where('on_a_ride', 0)
-            ->where('id',15)->first();
-            // ->inRandomOrder()->take(1)->first();
+            ->inRandomOrder()->take(1)->first();
 
          if(!$rider){
             return $this->sendError("No rider available at the moment. Please try again later", "No rider available at the moment");
