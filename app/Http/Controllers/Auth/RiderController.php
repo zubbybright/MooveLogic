@@ -32,7 +32,7 @@ class RiderController extends BaseController
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        // $this->middleware('auth', ['except' => ['register']]);
     }
 
     /**
@@ -51,7 +51,7 @@ class RiderController extends BaseController
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'first_name' => ['required', 'string', 'max:100'],
             'last_name' => ['required', 'string', 'max:100'],
-            
+
 
         ]);
     }
