@@ -126,9 +126,10 @@ class TripsController extends BaseController
             "time" => ['required','string', "max:100"]
             ]);
 
-        $timeInMin = ($data['time'] * 60);
-        $baseFare = 200; 
-        $calculateCost = $baseFare + ($timeInMin * $data['km']);
+        // $timeInMin = ($data['time'] * 60);
+        // $baseFare = 200; 
+        // $calculateCost = $baseFare + ($timeInMin * $data['km']);
+        $calculateCost = 1500;
 
         
         return $this->sendResponse($calculateCost, 'Cost of trip' );
