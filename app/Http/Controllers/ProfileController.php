@@ -179,8 +179,8 @@ class ProfileController extends BaseController
 
     public function getProfile(){
         
-        $user = auth()->user();  
-        $profile = $user->profile->first();
+        $user= auth()->user();
+        $profile = $user->profile;
         
         if($profile == null){
             return $this->sendError("Profile does not exist", "Profile does not exist");
