@@ -185,7 +185,12 @@ class ProfileController extends BaseController
         if($profile == null){
             return $this->sendError("Profile does not exist", "Profile does not exist");
         }
-        return $this->sendResponse($profile, "Your Profile.");
+
+        $info  = [
+            'User'=> $user,
+            'Profile' => $profile,
+            ];
+        return $this->sendResponse($info, "Your Profile.");
 
     }
 
