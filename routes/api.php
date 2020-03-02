@@ -82,4 +82,7 @@ Route::group([
     //get trip
     Route::get('get-trip/{tripId}', 'TripsController@getTrip');
 
+    //get profile
+    Route::get('profile', 'ProfileController@getProfile');
+
 

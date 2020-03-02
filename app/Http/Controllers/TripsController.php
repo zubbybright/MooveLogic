@@ -304,7 +304,7 @@ class TripsController extends BaseController
         //if package not delivered, change status to not delivered
         $package = Package::find($packageId);
         if($package == null){
-            return $this->sendError("Package not found", 404);
+            return $this->sendError("Package not found", "Package not found");
         }
 
         if($package->package_status == "DELIVERED"){

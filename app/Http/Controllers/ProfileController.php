@@ -177,6 +177,18 @@ class ProfileController extends BaseController
         return $this->sendResponse($admin, 'Admin registered successfully.');
     }
 
+    public function getProfile(){
+        
+        $user = auth()->user();  
+        $profile = $user->profile->get();
+        
+        if($profile == null){
+            return $this->sendError("Profile does not exist", "Profile does not exist");
+        }
+        return $this->sendResponse($profile, "Your Profile.");
+
+    }
+
 
 
 
