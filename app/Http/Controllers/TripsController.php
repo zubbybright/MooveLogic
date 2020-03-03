@@ -339,17 +339,11 @@ class TripsController extends BaseController
         //  $CalculateCost = $baseFare + ($timeInMin * $km);
         $CalculateCost = 1500;
 
-<<<<<<< HEAD
             $riderLocation = RiderLocation::where('rider_id', $riderId)
                                 ->where('trip_id',$tripId)->latest()
                                 ->first();
             
             $package = Package::find($packageId);
-=======
-        $riderLocation = Riderlocation::where('rider_id', $riderId)
-            ->where('trip_id', $tripId)->latest()
-            ->first();
->>>>>>> ff872dd54042e6f9eba1874a86c690e4b503b299
 
         $package = Package::find($packageId);
 
