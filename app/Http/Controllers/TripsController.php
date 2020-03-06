@@ -178,7 +178,7 @@ class TripsController extends BaseController
                 return $this->sendError("No rider available at the moment. Please try again later", "No rider available at the moment");
             }
 
-            $trip_cost = $this->_estimatedCostOfTrip();
+            $trip_cost = 1500;
 
             try {
                 //create package:
@@ -374,9 +374,9 @@ class TripsController extends BaseController
         //save to the database
 
         $data = $request->validate([
-            'latitude' => ['required', 'string', 'max:20'],
-            'longitude' => ['required', 'string', 'max:20'],
-            'trip_id' => ['required', 'string', 'max:20']
+            'latitude' => ['required', 'max:20'],
+            'longitude' => ['required', 'max:20'],
+            'trip_id' => ['required', 'max:20']
         ]);
 
         if (!$data) {
