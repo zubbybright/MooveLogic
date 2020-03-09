@@ -70,8 +70,9 @@ class TripsController extends BaseController
 
             //update rider on a ride to false:
             $rider = auth()->user();
-            $rider->on_a_ride = false;
-            $rider->save();
+            
+            $rider_status = User::where('id', $rider->id)
+                            ->update(['on_a_ride', 0]);
 
             return $this->sendResponse($trip, "Trip ended");
         }
