@@ -62,10 +62,7 @@ class TripsController extends BaseController
 
         if ($trip->trip_status == "ENDED") {
             return $this->sendError("Trip already ended!");
-        } else {
-            //update status to ended
-            $trip->trip_status = "ENDED";
-            $trip->save();
+        } 
 
 
             //update rider on a ride to false:
@@ -73,9 +70,16 @@ class TripsController extends BaseController
             
             $rider_status = User::where('id', $rider->id)
                             ->update(['on_a_ride', 0]);
+                            
+            //update status to ended
+            $trip->trip_status = "ENDED";
+            $trip->save();
+
+
+            
 
             return $this->sendResponse($trip, "Trip ended");
-        }
+        
     }
 
     public function cancelTrip($tripId, $riderId)
