@@ -69,8 +69,8 @@ class TripsController extends BaseController
             $rider = auth()->user();
             
             $rider_status = User::where('id', $rider->id)
-                            ->update(['on_a_ride', 0]);
-                            
+                            ->update(['on_a_ride'=> 0]);
+
             //update status to ended
             $trip->trip_status = "ENDED";
             $trip->save();
