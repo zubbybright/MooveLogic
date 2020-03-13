@@ -53,7 +53,7 @@ class TripsController extends BaseController
         // if ended return already ended
         //update status to ended
         //update rider on a ride to false.
-
+    try{
         $trip = Trip::find($tripId);
 
         if ($trip == null) {
@@ -79,6 +79,11 @@ class TripsController extends BaseController
             
 
             return $this->sendResponse($trip, "Trip ended");
+    }
+
+        catch(\Exception $e){
+            return $this->sendError("This Trip Could not be ended", "This Trip Could not be ended");
+        }
         
     }
 
