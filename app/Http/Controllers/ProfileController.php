@@ -43,7 +43,7 @@ class ProfileController extends BaseController
                 //check if old and new passwords are the same.
                 if( $data['old_password'] ===$data['new_password']){
 
-                    return $this->sendError("The new password must be different from the old password.", "Please Change your password.", 400);
+                    return $this->sendError("The new password must be different from the old password.", "Please Change your password.");
                 }
 
                 else{
@@ -61,7 +61,7 @@ class ProfileController extends BaseController
 
                     }else{
 
-                            return $this->sendError("Password could not be changed.","Old password does not match existing password.", 400);
+                            return $this->sendError("Password could not be changed.","Old password does not match existing password.");
                         }
 
                 }
@@ -94,7 +94,7 @@ class ProfileController extends BaseController
             }
 
             else{
-                return response()->json('Cannot add card!', 400);
+                return $this->sendError('Cannot add card!', 'Cannot add card!');
             }
 
         }
@@ -117,7 +117,7 @@ class ProfileController extends BaseController
                 return $this->sendResponse($dp, "Profile Picture saved.");
             }
             catch(\Exception $e){
-                return $this->sendError("Profile Picture Not Saved", 'Profile Picture Not Saved', 400);
+                return $this->sendError("Profile Picture Not Saved", 'Profile Picture Not Saved');
             }
 
         }

@@ -27,7 +27,7 @@ class LoginController extends BaseController
     {
         $credentials = request(['phone_number', 'password']);
         if (! $token = auth()->attempt($credentials)) {
-            return $this->sendError("Invalid phone number or password!", 'Invalid phone number or password!.', 400);
+            return $this->sendError("Invalid phone number or password!", "Invalid phone number or password!");
         }
 
         $data  = [
