@@ -68,7 +68,7 @@ Route::group([
     Route::get('active-ride', 'TripsController@findActiveTrip');
 
     //rider trip history:
-    Route::get('trip-history', 'TripsController@riderTripHistory');
+    Route::get('trip-history', 'TripsController@riderTripHistory')->middleware('auth:api');
     //payment
     Route::post('payment-method', 'PaymentController@makePayment');
     //calculate cost:
