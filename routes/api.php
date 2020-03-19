@@ -47,34 +47,34 @@ Route::group([
 });
 	//start, end and cancel trips;
 
-    Route::post('start-trip/{tripId}', 'TripsController@startTrip');
-    Route::post('end-trip/{tripId}', 'TripsController@endTrip');
-    Route::post('cancel-trip/{tripId},{riderId}', 'TripsController@cancelTrip');
+    Route::post('start-trip/{tripId}', 'TripsController@startTrip')->middleware('auth:api');
+    Route::post('end-trip/{tripId}', 'TripsController@endTrip')->middleware('auth:api');
+    Route::post('cancel-trip/{tripId},{riderId}', 'TripsController@cancelTrip')->middleware('auth:api');
 
     //save rider current location
-    Route::post('rider-location', 'TripsController@saveRiderLocation');
+    Route::post('rider-location', 'TripsController@saveRiderLocation')->middleware('auth:api');
 
     //get rider current location
-    Route::get('getRiderLocation/{tripId}/{riderId}/{packageId}/{km}/{time}','TripsController@getRiderLocation');
+    Route::get('getRiderLocation/{tripId}/{riderId}/{packageId}/{km}/{time}','TripsController@getRiderLocation')->middleware('auth:api');
 
     //delivered or not delivered package:
-    Route::post('delivered/{packageId}', 'TripsController@deliverPackage');
-    Route::post('not-delivered/{packageId}', 'TripsController@packageNotDelivered');
+    Route::post('delivered/{packageId}', 'TripsController@deliverPackage')->middleware('auth:api');
+    Route::post('not-delivered/{packageId}', 'TripsController@packageNotDelivered')->middleware('auth:api');
 
    //make a moove request, contact a rider:
-    Route::post('request-rider', 'TripsController@findRider');
+    Route::post('request-rider', 'TripsController@findRider')->middleware('auth:api');
 
     //rider active ride:
-    Route::get('active-ride', 'TripsController@findActiveTrip');
+    Route::get('active-ride', 'TripsController@findActiveTrip')->middleware('auth:api');
 
     //rider trip history:
     Route::get('trip-history', 'TripsController@riderTripHistory')->middleware('auth:api');
     //payment
-    Route::post('payment-method', 'PaymentController@makePayment');
+    // Route::post('payment-method', 'PaymentController@makePayment');
     //calculate cost:
     Route::post('cost', 'TripsController@calculateCost');
     //customer order history;
-    Route::get('customer-history', 'TripsController@customerOrderHistory');
+    Route::get('customer-history', 'TripsController@customerOrderHistory')->middleware('auth:api');
 
     //submit feedback:
     Route::post('feedback', 'ProfileController@feedback');
