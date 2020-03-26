@@ -178,16 +178,6 @@ class TripsController extends BaseController
             return $this->sendError("Something is wrong with your input", "Something is wrong with your input");
         } else {
 
-            $rider =  User::where('user_type', 'RIDER')
-                ->where('on_a_ride', 0)
-                ->inRandomOrder()
-                ->take(1)
-                ->first();
-
-            if (!$rider) {
-                return $this->sendError("No rider available at the moment. Please try again later", "No rider available at the moment");
-            }
-
             $trip_cost = 1500;
 
             try {
@@ -213,6 +203,16 @@ class TripsController extends BaseController
                     'payment_method' => $data['payment_method'],
                     'package_id' => $package->id
                 ]);
+
+                $rider =  User::where('user_type', 'RIDER')
+                ->where('on_a_ride', 0)
+                ->inRandomOrder()
+                ->take(1)
+                ->first();
+
+                if (!$rider) {
+                    return $this->sendError("No rider available at the moment. Please try again later", "No rider available at the moment");
+                }
 
 
                 //update trip with selected rider id:
