@@ -248,7 +248,7 @@ class TripsController extends BaseController
         //if not found return "No trip found"
         $rider = auth()->user();
         $trip = Trip::where('rider_id', $rider->id)
-            ->where('trip_status', 'PENDING')->first();
+            ->where('trip_status', 'PENDING')->latest()->first();
         if ($trip) {
             return $this->sendResponse($trip, 'This is your active ride');
         } else {
