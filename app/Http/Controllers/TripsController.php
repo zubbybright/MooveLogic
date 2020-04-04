@@ -355,8 +355,7 @@ class TripsController extends BaseController
             
             $package = Package::find($packageId);
 
-        $package = Package::find($packageId);
-
+       
         //update trip cost
         $trip = Trip::find($tripId);
         $trip->cost_of_trip = $CalculateCost;
