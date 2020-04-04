@@ -12,8 +12,8 @@ class RiderLocation extends Model
     protected $fillable = ['latitude','longitude', 'rider_id', 'trip_id'];
 
     protected $casts = [
-        'latitude' => 'decimal',
-        'longitude' =>'decimal'
+        'latitude' => 'decimal:8',
+        'longitude' =>'decimal:8'
     ];
 
    	public function user(){
