@@ -53,6 +53,8 @@ Route::group([
 
     //save rider current location
     Route::post('rider-location', 'TripsController@saveRiderLocation')->middleware('auth:api');
+    Route::post('update-location', 'TripsController@updateLocation')->middleware('auth:api');
+
 
     //get rider current location
     Route::get('getRiderLocation/{tripId}/{riderId}/{packageId}/{km}/{time}','TripsController@getRiderLocation')->middleware('auth:api');
