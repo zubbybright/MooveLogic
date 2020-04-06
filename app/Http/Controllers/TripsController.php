@@ -171,7 +171,9 @@ class TripsController extends BaseController
             'recipient_phone_number' => ['required', 'string', 'max:14'],
             'package_description' => ['string', 'max:255'],
             'who_pays' => ['required', 'string', 'max:100'],
-            'payment_method' => ['required', 'string', 'max:100']
+            'payment_method' => ['required', 'string', 'max:100'],
+            'latitude' => ['required', 'max:20'],
+            'longitude' => ['required', 'max:20'],
         ]);
 
         if (!$data) {
@@ -206,6 +208,8 @@ class TripsController extends BaseController
 
                 $rider =  User::where('user_type', 'RIDER')
                 ->where('on_a_ride', 0)
+                ->where('latitude',$data['latitude'])
+                ->where('longitude', $data['longitude'])
                 ->inRandomOrder()
                 ->take(1)
                 ->first();
