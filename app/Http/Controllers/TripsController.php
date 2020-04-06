@@ -408,6 +408,38 @@ class TripsController extends BaseController
         }
     }
 
+    public function updateLocation(Request $request)
+    {
+        //get the ridr id
+        //get latitude and longitude
+        //save to the database
+
+        $data = $request->validate([
+            'latitude' => ['required', 'max:20'],
+            'longitude' => ['required', 'max:20'],
+        ]);
+
+        if (!$data) {
+            return $this->sendError("Something is wrong with your input", "Something is wrong with your input");
+        } else {
+
+            $userId = auth()->user()->id;
+
+            $location = User::where('id' , $userId)
+                        ->update(['latitude'=>$data['latitude'],
+                                'longitude'=>$data['longitude']]);
+           
+
+            if ($location) {
+                return $this->sendResponse($location, 'Current location saved.');
+            } else {
+
+                return $this->sendError('Could not save your current location.');
+            }
+        }
+    }
+
+
     public function getTrip($tripId)
     {
         $trip = Trip::find($tripId);

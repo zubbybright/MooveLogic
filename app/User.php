@@ -21,7 +21,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'phone_number', 'email', 'password','facebook_id','user_type', 'current_location','on_a_ride'
+        'phone_number', 'email', 'password','facebook_id','user_type', 'current_location','on_a_ride','latitude','longitude'
     ];
 
     /**
@@ -33,6 +33,7 @@ class User extends Authenticatable implements JWTSubject
         'password', 'remember_token',
     ];
 
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -40,6 +41,8 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'latitude' => 'float',
+        'longitude' =>'float'
     ];
 
     public function packages(){
