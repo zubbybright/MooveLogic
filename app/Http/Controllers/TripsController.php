@@ -208,8 +208,8 @@ class TripsController extends BaseController
 
                 $rider =  User::where('user_type', 'RIDER')
                 ->where('on_a_ride', 0)
-                ->where('latitude',$data['latitude'])
-                ->where('longitude', $data['longitude'])
+                ->where('latitude','>=',$data['latitude'])
+                ->where('longitude', '>=',$data['longitude'])
                 ->inRandomOrder()
                 ->take(1)
                 ->first();
