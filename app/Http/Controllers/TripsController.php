@@ -423,7 +423,8 @@ class TripsController extends BaseController
             return $this->sendError("Something is wrong with your input", "Something is wrong with your input");
         } else {
 
-            $userId = auth()->user()->id;
+            $user = auth()->user();
+            $userId = $user->id;
 
             $location = User::where('id' , $userId)
                         ->update(['latitude'=>$data['latitude'],
@@ -431,7 +432,7 @@ class TripsController extends BaseController
            
 
             if ($location) {
-                return $this->sendResponse($location, 'Current location saved.');
+                return $this->sendResponse($user, 'Current location saved.');
             } else {
 
                 return $this->sendError('Could not save your current location.');
