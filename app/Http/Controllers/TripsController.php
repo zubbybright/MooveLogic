@@ -200,11 +200,12 @@ class TripsController extends BaseController
                     'payment_method' => $data['payment_method'],
                     'package_id' => $package->id
                 ]);
+                
 
                 $rider =  User::where('user_type', 'RIDER')
                 ->where('on_a_ride', 0)
-                // ->whereBetween('latitude', [$data['latitude']- (10 * 0.018), $data['latitude']+ (10 * 0.018)])
-                // ->whereBetween('longitude', [$data['longitude']- (10 * 0.018), $data['longitude']+ (10 * 0.018)])
+                ->whereBetween('latitude', [$data['latitude']- (10 * 0.018), $data['latitude']+ (10 * 0.018)])
+                ->whereBetween('longitude', [$data['longitude']- (10 * 0.018), $data['longitude']+ (10 * 0.018)])
                 ->inRandomOrder()
                 ->take(1)
                 ->first();
