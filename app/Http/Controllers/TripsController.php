@@ -147,22 +147,17 @@ class TripsController extends BaseController
     {
         //create package
         //create trip
-        //find a free rider in the location of the customer:
-        //get the customer's start location
-        //look for riders in the customer's location
-        //how do we get the rider's current location
-        //assign the location by default at register***
-        //check if rider is free
-        //rider is free if on a ride in false.
-        //pick preferred rider
-
-        //if there is no rider, return "No rider available"
-        //save the trip information using the available rider
+        //find a free rider in the location of the customer by:
+            //get the customer's latitude and longitude
+            //check if rider's latitude and longitude is in the same range with
+            //that of the customer;
+            //check if rider is on a ride;
+            //randomly pick rider
+        
+            //if there is no rider, meeting the criteria, return "No rider available"
+        //save the trip information using the available rider id
+        //update rider "on a ride" to true
         //set package status to Pending.
-
-
-        //find free rider in customer location
-        //if rider not found, ask customer to try again
 
         $data = $request->validate([
             'start_location' => ['nullable', 'max:100'],
@@ -208,8 +203,8 @@ class TripsController extends BaseController
 
                 $rider =  User::where('user_type', 'RIDER')
                 ->where('on_a_ride', 0)
-                ->where('latitude','BETWEEN',$data['latitude']- (10 * 0.018), 'AND', $data['latitude']+ (10 * 0.018))
-                ->where('longitude', 'BETWEEN',$data['longitude']- (10 * 0.018), 'AND', $data['longitude']+ (10 * 0.018))
+                ->whereBetween('latitude', [$data['latitude']- (10 * 0.018), $data['latitude']+ (10 * 0.018)])
+                ->whereBetween('longitude', [$data['longitude']- (10 * 0.018), $data['longitude']+ (10 * 0.018)])
                 ->inRandomOrder()
                 ->take(1)
                 ->first();
