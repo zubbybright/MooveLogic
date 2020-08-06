@@ -187,8 +187,8 @@ class ProfileController extends BaseController
         }
 
         $info  = [
-            'User'=> $user,
-            'Profile' => $profile,
+            'user'=> $user,
+            'profile' => $profile,
             ];
         return $this->sendResponse($info, "Your Profile.");
 

@@ -55,7 +55,7 @@ class RegisterController extends BaseController
     {
         return Validator::make($data, [
             'user_type' => [ 'string', 'max:255'],
-            'facebook_id' => ['nullable','string', 'max:255'],
+            // 'facebook_id' => ['nullable','string', 'max:255'],
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'phone_number' => ['required', 'string', 'max:14','unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -78,7 +78,7 @@ class RegisterController extends BaseController
         $user = User::create([
             'phone_number' => $data['phone_number'],
             'user_type' => 'CUSTOMER',
-            'facebook_id' => $data['facebook_id'],
+            // 'facebook_id' => $data['facebook_id'],
             'email' => $data['email'],
             'password' => $data['password'],
         ]);
