@@ -30,12 +30,13 @@ Route::group([
     Route::post('logout', 'Auth\LogoutController@logout');
     Route::post('refresh', 'Auth\LoginController@refresh');
     Route::post('update-password', 'ProfileController@updatePassword');
-    Route::post('add-card','ProfileController@addBankCard');
+    Route::post('add-card','Auth\CreditCardRequest@addBankCard');
     Route::post('add-dp','ProfileController@addProfilePic');
 
     Route::post('password/email', 'Auth\ForgotPasswordController@sendEmail');
     Route::post('password/reset', 'Auth\ResetPasswordController@reset');
-    Route::get('password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
+    Route::get('token/validate','Auth\ResetPasswordController@validateToken' );
+    // Route::get('password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
 
     Route::post('create-admin', 'ProfileController@createAdmin');
 

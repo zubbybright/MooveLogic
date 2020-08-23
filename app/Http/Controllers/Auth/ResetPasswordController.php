@@ -32,36 +32,40 @@ class ResetPasswordController extends BaseController
     //      return $this->sendError("Password reset failed", "Password reset failed");
     // }
 
-            public function reset(Request $request){
-            //validate input:
-            $data = $request->validate([
-                'email' => ['required', "string", "email"],
-                'new_password' => ['required', 'string', 'min:8','confirmed'],
-                    
-                ]);
+    public function validateToken(Request $request){
+        $data = $request->validate(['token' => ['required', 'string', 'min:4', 'max:4']]);
+
+        $validToken = User::where('token',$data['token'])->first();
+        // echo($validToken);
+        // die();
+        
+        if($validToken == null){
+            return $this->sendError("Invalid token.", "Invalid token.");
+        }
+        return $this->sendResponse("Token is valid.", "Token is valid");
+    }
+    
+    public function reset(Request $request){
+   
+        $data = $request->validate([
+            'token' => ['required', "string", "min:4", "max:4"],
+            'new_password' => ['required', 'string', 'min:8','confirmed'],
                 
-                
-                
-                if($data ){                   
+            ]);
+            
+        $user = User::where('token', $data['token'])->first();
+        // echo ($user->password);
+        // die();
+            
+        if ($user == null){
+            return $this->sendError("The token is invalid", "The token is invalid");
+        }
+        
+        User::where('token', $data['token'])->update(['password' => bcrypt($data['new_password'])]);
 
-                    $user = User::where('email', $data['email']);
-                        
-                        if ($user == null){
-                            return $this->sendError("email is incorrect", "email is incorrect");
-                        }
-                    $user->password = $data['new_password'];
+        return $this->sendResponse("Password reset successful.", "Password reset successful.");
+        
 
-                    $user->update(['password' => bcrypt($data['new_password'])]);
-
-                    return $this->sendResponse("Password reset successful.", "Password reset successful.");
-
-                }else{
-
-                    return $this->sendError("password reset failed", "password reset failed");
-                
-                }
-                
-
-            }
+    }
 
 }

@@ -18,7 +18,7 @@ use App\Http\Controllers\BaseController;
 class CreditCardRequest extends FormRequest
 {
     //
-        public function add_bank_card(Request $request){
+        public function addBankCard(Request $request){
         
 	        $data = $request->validate([
 	            'card_number' => ['required',  new CardNumber],
@@ -41,7 +41,7 @@ class CreditCardRequest extends FormRequest
 	        }
 
 	        else{
-	            return response()->json('Cannot add card!');
+	            return response()->json('Cannot add card!','Cannot add card!');
 	        }
 
 

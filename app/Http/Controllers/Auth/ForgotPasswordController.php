@@ -9,6 +9,8 @@ use App\Notifications\PasswordResetNotification;
 use App\Notifications\DatabaseNotification;
 use App\User;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ResetPassword;
 
 
 class ForgotPasswordController extends BaseController
@@ -24,19 +26,26 @@ class ForgotPasswordController extends BaseController
     |
     */
 
-    use SendsPasswordResetEmails;
+    // use SendsPasswordResetEmails;
 
-    public function sendEmail()
+    public function sendEmail(Request $request)
     {
-        $user = User::where('email', request()->input('email'))->first();
+        $data = $request->validate([
+            'email' => ['required', 'string', 'min:8'],
+        ]);
+        
+        $token = rand(1000,9999);
+        $email = $data['email'];
 
-        if (!$user){
-
+        $validEmail = User::where('email', $email)->first();
+        
+        if (!$validEmail){
             return $this->sendError('Please enter your registered email address', 'Please enter your registered email address');
         }
 
-        $token = Password::getRepository()->create($user);
-        $user->sendPasswordResetNotification($token);
+        Mail::send(new ResetPassword($token,$email));
+        
+        User::where('email',$email)->update(['token'=>$token]);
 
         return $this->sendResponse('Link Sent' , 'Link Sent');
     
