@@ -32,10 +32,12 @@ class ForgotPasswordController extends BaseController
     {
         $data = $request->validate([
             'email' => ['required', 'string', 'min:8'],
+            'link' => ['required', 'string']
         ]);
         
         $token = rand(1000,9999);
         $email = $data['email'];
+        $link = $data['link'];
 
         $validEmail = User::where('email', $email)->first();
         
@@ -43,7 +45,7 @@ class ForgotPasswordController extends BaseController
             return $this->sendError('Please enter your registered email address', 'Please enter your registered email address');
         }
 
-        Mail::send(new ResetPassword($token,$email));
+        Mail::send(new ResetPassword($token,$email,$link));
         
         User::where('email',$email)->update(['token'=>$token]);
 

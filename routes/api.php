@@ -30,7 +30,7 @@ Route::group([
     Route::post('logout', 'Auth\LogoutController@logout');
     Route::post('refresh', 'Auth\LoginController@refresh');
     Route::post('update-password', 'ProfileController@updatePassword');
-    Route::post('add-card','Auth\CreditCardRequest@addBankCard');
+    Route::post('add-card','Auth\CreditCardRequest@rules')->middleware('auth:api');
     Route::post('add-dp','ProfileController@addProfilePic');
 
     Route::post('password/email', 'Auth\ForgotPasswordController@sendEmail');
