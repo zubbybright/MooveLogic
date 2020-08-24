@@ -15,6 +15,7 @@ class RenameExpirationYear extends Migration
     {
         Schema::table('profiles', function (Blueprint $table) {
             //
+            $table->renameColumn('expiration_year', 'expiration_date');
         });
     }
 
@@ -27,6 +28,7 @@ class RenameExpirationYear extends Migration
     {
         Schema::table('profiles', function (Blueprint $table) {
             //
+            $table->renameColumn('expiration_date', 'expiration_year');
         });
     }
 }

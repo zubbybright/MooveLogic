@@ -17,7 +17,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\BaseController;
 
-class CreditCardRequest extends FormRequest
+class CreditCardRequest extends BaseController
 {
     //
         public function rules(Request $request){
@@ -25,7 +25,7 @@ class CreditCardRequest extends FormRequest
 	        $data = $request->validate([
 	            'card_number' => ['required', 'string'],
 	            'card_name' => ['required', 'string', 'max:255'],
-	            'expiration_date' => ['required', 'date_format:m-y'],
+	            'expiration_date' => ['required', 'date_format:m/y'],
             	// 'expiration_year' => ['required', new CardExpirationYear($this->get('expiration_year'))],
             	'cvv' => ['required', 'string']
 	            ]);
@@ -37,7 +37,8 @@ class CreditCardRequest extends FormRequest
 	                                    'expiration_date' => $data['expiration_date'],
 	                                ]);
 	        if($card_details){
-	            return $this->sendResponse($card_details, "Card Details Saved.");           
+				
+	            return $this->sendResponse("Card Details Saved.", "Card Details Saved.");           
 	        }
 
 	        else{
