@@ -29,7 +29,7 @@ class LoginController extends BaseController
         $input = $request->all();
   
         $this->validate($request, [
-            'email' => 'nullable',
+            'email' => 'required',
             'password' => 'required',
             
         ]);
