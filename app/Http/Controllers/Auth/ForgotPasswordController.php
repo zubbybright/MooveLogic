@@ -31,13 +31,12 @@ class ForgotPasswordController extends BaseController
     public function sendEmail(Request $request)
     {
         $data = $request->validate([
-            'email' => ['required', 'string', 'min:8'],
-            'link' => ['required', 'string']
+            'email' => ['required', 'string', 'min:8']
         ]);
         
         $token = rand(1000,9999);
         $email = $data['email'];
-        $link = $data['link'];
+        $link =  "moovelogic://reset/$email";
 
         $validEmail = User::where('email', $email)->first();
         

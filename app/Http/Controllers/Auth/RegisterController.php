@@ -94,7 +94,7 @@ class RegisterController extends BaseController
         ]);
         
         $email =  $data['email'];
-        $link = "deepLinkToVerifyEmailSuccessScreen";
+        $link = "moovelogic://verify";
 
         Mail::send(new VerifyEmail($email,$link));
 
