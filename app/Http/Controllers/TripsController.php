@@ -176,7 +176,7 @@ class TripsController extends BaseController
         } else {
 
             $trip_cost = 1500;
-
+           
             try {
                 //create package:
 
@@ -198,7 +198,8 @@ class TripsController extends BaseController
                     'end_location' => $data['end_location'],
                     'cost_of_trip' => $trip_cost,
                     'payment_method' => $data['payment_method'],
-                    'package_id' => $package->id
+                    'package_id' => $package->id,
+                    'moove_id' => ('Moove - MV' . mt_rand(1000, 9999))
                 ]);
                 
 
