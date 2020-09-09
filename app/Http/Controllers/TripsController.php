@@ -199,6 +199,7 @@ class TripsController extends BaseController
                     'cost_of_trip' => $trip_cost,
                     'payment_method' => $data['payment_method'],
                     'package_id' => $package->id,
+                    'moove_id' => mt_rand(1000, 9999)
                 ]);
                 
 
@@ -217,7 +218,6 @@ class TripsController extends BaseController
 
                 //update trip with selected rider id:
                 $trip->rider_id = $rider->id;
-                $trip->moove_id = mt_rand(1000, 9999);
                 $trip->save();
 
                 //update rider ride status:
