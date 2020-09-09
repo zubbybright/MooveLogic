@@ -217,7 +217,7 @@ class TripsController extends BaseController
 
                 //update trip with selected rider id:
                 $trip->rider_id = $rider->id;
-                $trip->moove_id = 'Moove - MV' . mt_rand(1000, 9999);
+                $trip->moove_id = mt_rand(1000, 9999);
                 $trip->save();
 
                 //update rider ride status:
