@@ -177,7 +177,7 @@ class TripsController extends BaseController
 
             $trip_cost = 1500;
            
-            try {
+            // try {
                 //create package:
 
                 $package = Package::create([
@@ -216,6 +216,7 @@ class TripsController extends BaseController
                 }
 
 
+               
                 //update trip with selected rider id:
                 $trip->rider_id = $rider->id;
                 $trip->save();
@@ -234,10 +235,10 @@ class TripsController extends BaseController
                     'package' => $package,
                 ];
                 return $this->sendResponse($info, 'Rider located!');
-            } catch (\Exception $e) {
+            // } catch (\Exception $e) {
 
-                return $this->sendError("Cannot locate a rider at the moment", 'Cannot locate a rider at the moment');
-            }
+            //     return $this->sendError("Cannot locate a rider at the moment", 'Cannot locate a rider at the moment');
+            // }
         }
     }
 

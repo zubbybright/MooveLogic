@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\User;
 use App\Package;
+use Carbon\Carbon;
 
 class Trip extends Model
 {
@@ -18,5 +19,9 @@ class Trip extends Model
 
     public function package(){
         return $this->belongsTo(Package::class);
+    }
+
+    public function getCreatedAtAttribute($timestamp) {
+        return Carbon::parse($timestamp)->format('F d, Y');
     }
 }
