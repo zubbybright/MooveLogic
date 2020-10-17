@@ -36,7 +36,7 @@ class ForgotPasswordController extends BaseController
         
         $token = rand(1000,9999);
         $email = $data['email'];
-        $link =  "moovelogic://reset/$email";
+        // $link =  "moovelogic://reset/$email";
 
         $validEmail = User::where('email', $email)->first();
         
@@ -44,7 +44,7 @@ class ForgotPasswordController extends BaseController
             return $this->sendError('Please enter your registered email address', 'Please enter your registered email address');
         }
 
-        Mail::send(new ResetPassword($token,$email,$link));
+        Mail::send(new ResetPassword($token,$email));
         
         User::where('email',$email)->update(['token'=>$token]);
 

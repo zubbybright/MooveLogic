@@ -19,14 +19,14 @@ class ResetPassword extends Mailable
 
     public $token;
     public $email;
-    public $link;
+    // public $link;
 
-    public function __construct($token, $email,$link)
+    public function __construct($token, $email)
     {
         //
         $this->token = $token;
         $this->email = $email;
-        $this->link = $link;
+       
     }
 
     /**

@@ -57,7 +57,7 @@
         <h4>Hello There!!</h4>
         <div >
             <p >Did you just request for a password reset?</p>
-            <p>If yes, please use this <a href=`{{$link}}`> Reset Link </a> to reset your password. </p>
+            <p>If yes, please use this code: {{$token}} to reset your password. </p>
             <p>If you did not request for a password reset, please ignore this mail. </p>
         </div>
     </body>
