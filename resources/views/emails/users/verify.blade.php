@@ -57,7 +57,7 @@
         <h3>Welcome To Moovelogic!!!</h3>
         <h4>Just one more step...</h4>
         <div >
-            <p>Please Verify Your Email address by clicking this <a href=`{{$link}}`> Link .</a> </p>
+            <p>Please use this code : <b>{{$token}}</b> to verify your email. </p>
         
         </div>
     </body>

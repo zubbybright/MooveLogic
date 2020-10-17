@@ -77,13 +77,16 @@ class RegisterController extends BaseController
      * @return \App\User
      */
     protected function create(array $data)
-    {
+    {   
+        $token = rand(1000,9999); 
+
         $user = User::create([
             'phone_number' => $data['phone_number'],
             'user_type' => 'CUSTOMER',
             // 'facebook_id' => $data['facebook_id'],
             'email' => $data['email'],
             'password' => $data['password'],
+            'token' => $token,
         ]);
 
 
@@ -94,9 +97,8 @@ class RegisterController extends BaseController
         ]);
         
         $email =  $data['email'];
-        $link = "moovelogic://verify";
-
-        Mail::send(new VerifyEmail($email,$link));
+        // $link = "moovelogic://verify";
+        Mail::send(new VerifyEmail($email,$token));
 
         return $user;
         return $profile;
@@ -116,6 +118,16 @@ class RegisterController extends BaseController
         return $this->sendResponse($data, 'User registered successfully.');
     }
 
+    public function checkToken(Request $request){
+        $data = $request->validate(['token' => ['required', 'string', 'min:4', 'max:4']]);
+
+        $validToken = User::where('token',$data['token'])->first();
+        
+        if($validToken == null){
+            return $this->sendError("Invalid token.", "Invalid token.");
+        }
+        return $this->sendResponse("Token is valid.", "Registration complete");
+    }
 
 
 }

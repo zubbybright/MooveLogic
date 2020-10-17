@@ -18,13 +18,13 @@ class VerifyEmail extends Mailable
      */
 
     public $email;
-    public $link ;
+    public $token ;
 
-    public function __construct($email,$link)
+    public function __construct($email,$token)
     {
         //
         $this->email = $email;
-        $this->link = $link;
+        $this->token = $token;
     }
 
     /**

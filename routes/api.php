@@ -32,12 +32,10 @@ Route::group([
     Route::post('update-password', 'ProfileController@updatePassword');
     Route::post('add-card','Auth\CreditCardRequest@rules')->middleware('auth:api');
     Route::post('add-dp','ProfileController@addProfilePic');
-
     Route::post('password/email', 'Auth\ForgotPasswordController@sendEmail');
     Route::post('password/reset', 'Auth\ResetPasswordController@reset');
-    Route::get('token/validate','Auth\ResetPasswordController@validateToken' );
-    // Route::get('password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
-
+    Route::post('token/validate','Auth\ResetPasswordController@validateToken' );
+    Route::post('register/validate','Auth\RegisterController@checkToken' );
     Route::post('create-admin', 'ProfileController@createAdmin');
 
 
