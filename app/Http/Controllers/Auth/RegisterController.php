@@ -78,7 +78,7 @@ class RegisterController extends BaseController
      */
     protected function create(array $data)
     {   
-        $token = rand(1000,9999); 
+        // $token = rand(1000,9999); 
 
         $user = User::create([
             'phone_number' => $data['phone_number'],
@@ -96,9 +96,9 @@ class RegisterController extends BaseController
             'last_name' => $data['last_name'],
         ]);
         
-        $email =  $data['email'];
-        // $link = "moovelogic://verify";
-        Mail::send(new VerifyEmail($email,$token));
+        // $email =  $data['email'];
+        // // $link = "moovelogic://verify";
+        // Mail::send(new VerifyEmail($email,$token));
 
         return $user;
         return $profile;
