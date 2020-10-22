@@ -86,7 +86,7 @@ class RegisterController extends BaseController
             // 'facebook_id' => $data['facebook_id'],
             'email' => $data['email'],
             'password' => $data['password'],
-            'token' => $token,
+            // 'token' => $token,
         ]);
 
 
