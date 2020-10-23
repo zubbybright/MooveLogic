@@ -33,16 +33,16 @@ class ResetPasswordController extends BaseController
     // }
 
     public function validateToken(Request $request){
-        $data = $request->validate(['token' => ['required', 'string', 'min:4', 'max:4']]);
+        $data = $request->validate(['otp' => ['required', 'string', 'min:4', 'max:4']]);
 
-        $validToken = User::where('token',$data['token'])->first();
+        $validToken = User::where('token',$data['otp'])->first();
         // echo($validToken);
         // die();
         
         if($validToken == null){
-            return $this->sendError("Invalid token.", "Invalid token.");
+            return $this->sendError("Invalid OTP code.", "Invalid OTP code.");
         }
-        return $this->sendResponse("Token is valid.", "Token is valid");
+        return $this->sendResponse("OTP is valid.", "OTP is valid");
     }
     
     public function reset(Request $request){
