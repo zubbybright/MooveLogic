@@ -33,6 +33,7 @@ Route::group([
     Route::post('add-card','Auth\CreditCardRequest@rules')->middleware('auth:api');
     Route::post('add-dp','ProfileController@addProfilePic');
     Route::post('password/email', 'Auth\ForgotPasswordController@sendEmail');
+    Route::post('resend/{email}', 'Auth\ForgotPasswordController@resendEmail');
     Route::post('password/reset/{otp}', 'Auth\ResetPasswordController@reset');
     Route::post('token/validate','Auth\ResetPasswordController@validateToken' );
     Route::post('register/validate','Auth\RegisterController@checkToken' );

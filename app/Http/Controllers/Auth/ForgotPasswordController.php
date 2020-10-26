@@ -51,4 +51,18 @@ class ForgotPasswordController extends BaseController
         return $this->sendResponse('Link Sent' , 'Link Sent');
     
     }
+
+    public function resendEmail($email)
+    {
+        $token = rand(1000,9999);
+
+        $validEmail = User::where('email', $email)->first();
+
+        Mail::send(new ResetPassword($token,$email));
+        
+        User::where('email',$email)->update(['token'=>$token]);
+
+        return $this->sendResponse('Link Sent' , 'Link Sent');
+    
+    }
 }
