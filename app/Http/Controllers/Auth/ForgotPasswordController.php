@@ -56,8 +56,6 @@ class ForgotPasswordController extends BaseController
     {
         $token = rand(1000,9999);
 
-        $validEmail = User::where('email', $email)->first();
-
         Mail::send(new ResetPassword($token,$email));
         
         User::where('email',$email)->update(['token'=>$token]);
