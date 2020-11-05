@@ -49,7 +49,7 @@ Route::group([
 
     Route::post('start-trip/{tripId}', 'TripsController@startTrip')->middleware('auth:api');
     Route::post('end-trip/{tripId}', 'TripsController@endTrip')->middleware('auth:api');
-    Route::post('cancel-trip/{tripId},{riderId}', 'TripsController@cancelTrip')->middleware('auth:api');
+    Route::post('cancel-trip/{tripId}/{riderId}', 'TripsController@cancelTrip')->middleware('auth:api');
 
     //save rider current location
     Route::post('rider-location', 'TripsController@saveRiderLocation')->middleware('auth:api');
