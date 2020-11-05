@@ -64,7 +64,7 @@ Route::group([
     Route::post('not-delivered/{packageId}', 'TripsController@packageNotDelivered')->middleware('auth:api');
 
    //make a moove request, contact a rider:
-    Route::post('request-rider', 'TripsController@findRider');
+    Route::post('request-rider', 'TripsController@findRider')->middleware('auth:api');
 
     //rider active ride:
     Route::get('active-ride', 'TripsController@findActiveTrip')->middleware('auth:api');
