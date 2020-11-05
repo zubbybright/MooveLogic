@@ -166,7 +166,7 @@ class TripsController extends BaseController
             'recipient_phone_number' => ['required', 'string', 'max:14'],
             'package_description' => ['string', 'max:255'],
             'who_pays' => ['required', 'string', 'max:100'],
-            'payment_method' => ['required', 'string', 'max:100'],
+            'payment_method' => ['nullable', 'string', 'max:100'],
             'latitude' => ['required', 'max:20'],
             'longitude' => ['required', 'max:20'],
         ]);
