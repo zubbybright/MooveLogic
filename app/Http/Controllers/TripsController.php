@@ -190,12 +190,12 @@ class TripsController extends BaseController
                 $trip = Trip::create([
                     'recipient_name' => $data['recipient_name'],
                     'recipient_phone_number' => $data['recipient_phone_number'],
-                    'package_description' => $data['package_description'],
                     'who_pays' => $data['who_pays'],
                     'customer_id' => auth()->user()->id,
                     'trip_status' => 'PENDING',
                     'start_location' => $data['start_location'],
                     'end_location' => $data['end_location'],
+                    'package_description' => $data['package_description'],
                     'cost_of_trip' => $trip_cost,
                     'payment_method' => $data['payment_method'],
                     'package_id' => $package->id,
@@ -205,8 +205,8 @@ class TripsController extends BaseController
 
                 $rider =  User::where('user_type', 'RIDER')
                 ->where('on_a_ride', 0)
-                ->whereBetween('latitude', [$data['latitude']- (10 * 0.018), $data['latitude']+ (10 * 0.018)])
-                ->whereBetween('longitude', [$data['longitude']- (10 * 0.018), $data['longitude']+ (10 * 0.018)])
+                // ->whereBetween('latitude', [$data['latitude']- (10 * 0.018), $data['latitude']+ (10 * 0.018)])
+                // ->whereBetween('longitude', [$data['longitude']- (10 * 0.018), $data['longitude']+ (10 * 0.018)])
                 ->inRandomOrder()
                 ->take(1)
                 ->first();
@@ -289,10 +289,10 @@ class TripsController extends BaseController
         $history = Trip::where('customer_id', $id)
             ->latest()
             ->get();
-
+        
         if (count($history)) {
 
-            return $this->sendResponse($history, 'Your order history');
+            return $this->sendResponse($history,'Your moove history');
         } else {
             return $this->sendError('You have no history yet', 'You have no history yet');
         }
