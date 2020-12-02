@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Trip;
 use App\User;
+use App\Profile;
 use App\Package;
 use App\RiderLocation;
 use App\Http\Controllers\BaseController;
