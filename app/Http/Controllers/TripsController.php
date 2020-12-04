@@ -30,12 +30,12 @@ class TripsController extends BaseController
         //update status to enroute
 
 
-        $trip = Trip::find($tripId);
+        $trip = Trip::where('id',$tripId)->first();
         if ($trip == null) {
-            return $this->sendError("Trip does not exist");
+            return $this->sendError("Trip does not exist", "Trip does not exist");
         }
         if ($trip->trip_status == "IN_PROGRESS") {
-            return $this->sendError("Trip already started!");
+            return $this->sendError("Trip already started!", "Trip already started!");
         } else {
             $trip->trip_status = 'IN_PROGRESS';
             $trip->save();
@@ -54,39 +54,29 @@ class TripsController extends BaseController
         // if ended return already ended
         //update status to ended
         //update rider on a ride to false.
-    try{
-        $trip = Trip::find($tripId);
+        $trip = Trip::where('id',$tripId)->first();
 
         if ($trip == null) {
-            return $this->sendError("Trip does not exist");
+            return $this->sendError("Trip does not exist", "Trip does not exist");
         }
 
         if ($trip->trip_status == "ENDED") {
-            return $this->sendError("Trip already ended!");
+            return $this->sendError("Trip already ended!", "Trip already ended!");
         } 
 
-
-            //update rider on a ride to false:
-            $rider = auth()->user();
-            
-            $rider_status = User::where('id', $rider->id)
-                            ->update(['on_a_ride'=> 0]);
-
-            //update status to ended
-            $trip->trip_status = "ENDED";
-            $trip->save();
-
-
-            
-
-            return $this->sendResponse($trip, "Trip ended");
-    }
-
-        catch(\Exception $e){
-            return $this->sendError("This Trip Could not be ended", "This Trip Could not be ended");
-        }
+        $rider = auth()->user();
         
+        $rider->on_a_ride = false;
+        $rider->save();
+        //update status to ended
+        $trip->trip_status = "ENDED";
+        $trip->save();
+
+        return $this->sendResponse($trip, "Trip ended");
+        
+
     }
+        
 
     public function cancelTrip($tripId, $riderId)
     {
