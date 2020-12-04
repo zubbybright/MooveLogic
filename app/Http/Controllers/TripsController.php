@@ -46,37 +46,38 @@ class TripsController extends BaseController
         return $this->sendError("Cannot start trip", "Cannot start trip");
     }
 
-    public function endTrip($tripId)
+    public function endTrip($tripId, $riderId)
     {
         //locate the trip
-        //  check if the trip exist
         //check the current status of the trip
-        // if ended return already ended
-        //update status to ended
-        //update rider on a ride to false.
-        $trip = Trip::where('id',$tripId)->first();
+        // if in progress return already started
+        //update status to in progress
 
+        //how do I update the status of the package to enroute?
+        //get the id of package on trip
+        //find it on package model
+        //update status to enroute
+
+
+        $trip = Trip::where('id',$tripId)->first();
         if ($trip == null) {
             return $this->sendError("Trip does not exist", "Trip does not exist");
         }
-
         if ($trip->trip_status == "ENDED") {
             return $this->sendError("Trip already ended!", "Trip already ended!");
-        } 
+        } else {
+            $trip->trip_status = 'ENDED';
+            $trip->save();
 
-        $rider = auth()->user();
-        
-        $rider->on_a_ride = false;
-        $rider->save();
-        //update status to ended
-        $trip->trip_status = "ENDED";
-        $trip->save();
+            $rider = User::find($riderId);
+            $rider->on_a_ride = false;
+            $rider->save();
 
-        return $this->sendResponse($trip, "Trip ended");
-        
+            return $this->sendResponse($trip, "Trip started");
+        }
 
+        return $this->sendError("Cannot start trip", "Cannot start trip");
     }
-        
 
     public function cancelTrip($tripId, $riderId)
     {
