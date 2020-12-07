@@ -376,28 +376,18 @@ class TripsController extends BaseController
         }
     }
 
-    public function saveRiderLocation(Request $request)
+    public function saveRiderLocation($tripId, $lat , $long)
     {
         //get the ridr id
         //get latitude and longitude
         //get the trip id
         //save to the database
 
-        $data = $request->validate([
-            'latitude' => ['required', 'max:20'],
-            'longitude' => ['required', 'max:20'],
-            'trip_id' => ['required', 'max:20']
-        ]);
-
-        if (!$data) {
-            return $this->sendError("Something is wrong with your input", "Something is wrong with your input");
-        } else {
-
             $riderlocation = RiderLocation::create([
-                'latitude' => $data['latitude'],
-                'longitude' => $data['longitude'],
+                'latitude' => $lat,
+                'longitude' => $long,
                 'rider_id' => auth()->user()->id,
-                'trip_id' => $data['trip_id']
+                'trip_id' => $tripId
             ]);
 
             if ($riderlocation) {
@@ -406,7 +396,7 @@ class TripsController extends BaseController
 
                 return $this->sendError('Could not save your current location.');
             }
-        }
+        
     }
 
     public function updateLocation(Request $request)
