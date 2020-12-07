@@ -376,7 +376,7 @@ class TripsController extends BaseController
         }
     }
 
-    public function saveRiderLocation($tripId, $lat , $long)
+    public function saveRiderLocation($tripId, $riderId, $lat , $long)
     {
         //get the ridr id
         //get latitude and longitude
@@ -386,7 +386,7 @@ class TripsController extends BaseController
             $riderlocation = RiderLocation::create([
                 'latitude' => $lat,
                 'longitude' => $long,
-                'rider_id' => auth()->user()->id,
+                'rider_id' => $riderId,
                 'trip_id' => $tripId
             ]);
 
