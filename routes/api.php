@@ -52,7 +52,7 @@ Route::group([
     Route::post('cancel-trip/{tripId}/{riderId}', 'TripsController@cancelTrip');
 
     //save rider current location
-    Route::post('rider/location/{tripId}/{riderId}/{latitude}/{longitude}', 'TripsController@saveRiderLocation')->middleware('auth:api');
+    Route::post('rider/location/{tripId}/{riderId}/{latitude}/{longitude}', 'TripsController@saveRiderLocation');
     Route::post('update-location', 'TripsController@updateLocation')->middleware('auth:api');
 
 
