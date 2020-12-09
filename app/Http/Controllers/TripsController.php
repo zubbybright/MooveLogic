@@ -342,37 +342,16 @@ class TripsController extends BaseController
     }
 
 
-    public function getRiderLocation($tripId, $riderId, $packageId, $km, $time)
+    public function getRiderLocation($riderId, $tripId )
     {
-
-        $timeInMin = ($time * 60);
-        $baseFare = 200;
-        //  $CalculateCost = $baseFare + ($timeInMin * $km);
-        $CalculateCost = 1500;
-
-            $riderLocation = RiderLocation::where('rider_id', $riderId)
-                                ->where('trip_id',$tripId)->latest()
-                                ->first();
-            
-            $package = Package::find($packageId);
-
-       
-        //update trip cost
-        $trip = Trip::find($tripId);
-        $trip->cost_of_trip = $CalculateCost;
-        $trip->save();
-
-        $info  = [
-            'riderLocation' => $riderLocation,
-            'package' => $package,
-            'cost' => $CalculateCost,
-        ];
+        $riderLocation = RiderLocation::where('rider_id', $riderId)
+                            ->where('trip_id',$tripId)->latest()
+                            ->first();
 
         if ($riderLocation == null) {
             return $this->sendError("The rider location is not yet available.", "The rider location is not yet available.");
         } else {
-
-            return $this->sendResponse($info, "This is your rider's current location and your trip cost.");
+            return $this->sendResponse($riderLocation, "This is your rider's current location and your trip cost.");
         }
     }
 

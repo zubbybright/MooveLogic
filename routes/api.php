@@ -57,7 +57,7 @@ Route::group([
 
 
     //get rider current location
-    Route::get('getRiderLocation/{tripId}/{riderId}/{packageId}/{km}/{time}','TripsController@getRiderLocation')->middleware('auth:api');
+    Route::get('rider/current/location/{riderId}/{tripId}','TripsController@getRiderLocation');
 
     //delivered or not delivered package:
     Route::post('delivered/{packageId}', 'TripsController@deliverPackage')->middleware('auth:api');
