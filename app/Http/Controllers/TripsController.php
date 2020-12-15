@@ -347,11 +347,17 @@ class TripsController extends BaseController
         $riderLocation = RiderLocation::where('rider_id', $riderId)
                             ->where('trip_id',$tripId)->latest()
                             ->first();
+        $trip = Trip::select('trip_status')->where('id',$tripId)->first();
+
+        $info  = [
+            'trip' => $trip,
+            'riderLocation' => $riderLocation
+        ];
 
         if ($riderLocation == null) {
             return $this->sendError("The rider location is not yet available.", "The rider location is not yet available.");
         } else {
-            return $this->sendResponse($riderLocation, "This is your rider's current location and your trip cost.");
+            return $this->sendResponse($info, "This is your rider's current location and trip status.");
         }
     }
 
