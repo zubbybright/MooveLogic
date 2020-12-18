@@ -353,12 +353,8 @@ class TripsController extends BaseController
             'trip' => $trip,
             'riderLocation' => $riderLocation
         ];
-
-        if ($riderLocation == null) {
-            return $this->sendError("The rider location is not yet available.", "The rider location is not yet available.");
-        } else {
-            return $this->sendResponse($info, "This is your rider's current location and trip status.");
-        }
+        return $this->sendResponse($info, "This is your rider's current location and trip status.");
+        
     }
 
     public function saveRiderLocation($tripId, $riderId, $lat , $long)
