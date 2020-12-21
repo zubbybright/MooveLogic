@@ -288,13 +288,9 @@ class TripsController extends BaseController
         $history = Trip::where('customer_id', $id)
             ->latest()
             ->get();
-        
-        if (count($history)) {
 
-            return $this->sendResponse($history,'Your moove history');
-        } else {
-            return $this->sendError('You have no history yet', 'You have no history yet');
-        }
+        return $this->sendResponse($history,'Your moove history');
+        
     }
 
     public function deliverPackage($packageId)
