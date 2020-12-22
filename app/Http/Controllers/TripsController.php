@@ -284,17 +284,12 @@ class TripsController extends BaseController
         //check trips with customer id
         //get
         $user = auth()->user();
-        $id = $user->id;
-        $history = Trip::where('customer_id', $id)
+        $history = Trip::where('customer_id', $user->id)
             ->latest()
             ->get();
         
-        if (count($history)) {
-
-            return $this->sendResponse($history,'Your moove history');
-        } else {
-            return $this->sendError('You have no history yet', 'You have no history yet');
-        }
+        return $this->sendResponse($history, 'Your moove history.');
+        
     }
 
     public function deliverPackage($packageId)
