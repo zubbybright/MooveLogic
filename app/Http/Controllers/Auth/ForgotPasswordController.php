@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
 use App\Notifications\PasswordResetNotification;
 use App\Notifications\DatabaseNotification;
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ResetPassword;

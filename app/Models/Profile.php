@@ -1,15 +1,17 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\User;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use App\Models\User;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+
+
 
 class Profile extends Model implements HasMedia
 {
-    use HasMediaTrait;
+    use InteractsWithMedia;
     
     protected $fillable = ['first_name', 'last_name','password','user_id', 'card_number','card_name','cvv','expiration_year', 'expiration_month',];
 

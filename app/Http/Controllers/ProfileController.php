@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Feedback;
-use App\Profile;
-use App\User;
+use App\Models\Feedback;
+use App\Models\Profile;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -18,7 +18,8 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use App\Admin;
+use App\Models\Admin;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 
 
@@ -103,7 +104,7 @@ class ProfileController extends BaseController
 
         public function addProfilePic(Request $request)
         {
-            try{
+            // try{
 
                 $request->validate([
                     'profile_pic'     =>  'required|image|mimes:jpeg,png,jpg,gif,base64|max:2048'
@@ -114,11 +115,15 @@ class ProfileController extends BaseController
 
                 $dp= $profile->addMedia($request->profile_pic)->toMediaCollection();
 
+                Media::cursor()->each(
+                    fn (Media $media) => $media->update(['uuid' => Str::uuid()])
+                 );
+
                 return $this->sendResponse($dp, "Profile Picture saved.");
-            }
-            catch(\Exception $e){
+            // }
+            // catch(\Exception $e){
                 return $this->sendError("Profile Picture Not Saved", 'Profile Picture Not Saved');
-            }
+            // }
 
         }
 
