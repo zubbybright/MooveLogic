@@ -264,7 +264,7 @@
       array (
         'driver' => 'sqlite',
         'url' => NULL,
-        'database' => 'C:\\xampp\\htdocs\\moovelogic\\database\\database.sqlite',
+        'database' => 'C:\\xampp\\htdocs\\moovelogic/database/database.sqlite',
         'prefix' => '',
         'foreign_key_constraints' => true,
       ),
