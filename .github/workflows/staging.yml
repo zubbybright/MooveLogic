@@ -31,7 +31,7 @@ jobs:
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DB_CONNECTION: sqlite
-        DB_DATABASE: database_path('database.sqlite')
+        DB_DATABASE: dirname(__DIR__).'/database/database.sqlite'
       run: vendor/bin/phpunit
   laravel-ftp-deploy:
     needs: laravel-tests
