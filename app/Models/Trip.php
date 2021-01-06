@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\User;
-use App\Package;
+use App\Models\User;
+use App\Models\Package;
 use Carbon\Carbon;
 
 class Trip extends Model

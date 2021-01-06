@@ -1,9 +1,9 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use App\User;
-use App\Trip;
+use App\Models\User;
+use App\Models\Trip;
 use Illuminate\Database\Eloquent\Model;
 
 class RiderLocation extends Model

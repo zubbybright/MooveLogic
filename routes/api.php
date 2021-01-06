@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -86,5 +87,4 @@ Route::group([
 
     //get profile
     Route::get('profile', 'ProfileController@getProfile');
-
 

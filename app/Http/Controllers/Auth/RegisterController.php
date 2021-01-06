@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
-use App\User;
-use App\Profile;
+use App\Models\User;
+use App\Models\Profile;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -83,10 +83,8 @@ class RegisterController extends BaseController
         $user = User::create([
             'phone_number' => $data['phone_number'],
             'user_type' => 'CUSTOMER',
-            // 'facebook_id' => $data['facebook_id'],
             'email' => $data['email'],
             'password' => $data['password'],
-            // 'token' => $token,
         ]);
 
 

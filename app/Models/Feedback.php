@@ -1,9 +1,9 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use App\User;
-use App\Profile;
+use App\Models\User;
+use App\Models\Profile;
 use Illuminate\Database\Eloquent\Model;
 
 class Feedback extends Model

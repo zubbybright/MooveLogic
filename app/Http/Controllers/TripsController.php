@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use App\Trip;
-use App\User;
-use App\Profile;
-use App\Package;
-use App\RiderLocation;
+use App\Models\Trip;
+use App\Models\User;
+use App\Models\Profile;
+use App\Models\Package;
+use App\Models\RiderLocation;
 use App\Http\Controllers\BaseController;
 use Carbon\Carbon;
 
@@ -73,7 +73,7 @@ class TripsController extends BaseController
             $rider->on_a_ride = false;
             $rider->save();
 
-            return $this->sendResponse($trip, "Trip started");
+            return $this->sendResponse($trip, "Trip ended.");
         }
 
         return $this->sendError("Cannot start trip", "Cannot start trip");
