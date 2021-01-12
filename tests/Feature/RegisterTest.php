@@ -23,12 +23,12 @@ class RegisterTest extends TestCase
 
     public function test_a_user_can_register(){
         $response = $this->postJson('/api/auth/register', [
-            "phone_number"=>"07030224228",
+            "phone_number"=>"22219499944",
             "password"=> "password",
-            "email"=> "zubbybright@yahoo.com",
+            "email"=> "user11@moove.com",
             "password_confirmation"=> "password",
-            "first_name"=> "Zubby",
-            "last_name"=> "Bright"
+            "first_name"=> "User",
+            "last_name"=> "Test"
         ]);
 
         $response->assertStatus(200);
@@ -130,12 +130,12 @@ class RegisterTest extends TestCase
     {   
        
         $response = $this->postJson('/api/auth/register', [
-            "phone_number"=>"07030224228",
+            "phone_number"=>"22219499944",
             "password"=> "password",
-            "email"=> "zubbybright@yahoo.com",
+            "email"=> "user11@moove.com",
             "password_confirmation"=> "password",
-            "first_name"=> "Zubby",
-            "last_name"=> "Bright"
+            "first_name"=> "User",
+            "last_name"=> "Test"
         ]);
     
         $response->assertStatus(422);
