@@ -32,7 +32,6 @@ class RegisterTest extends TestCase
         ]);
 
         $response->assertStatus(200);
-        $response->dump();
     }
 
     public function test_a_user_cannot_register_with_empty_fields()
