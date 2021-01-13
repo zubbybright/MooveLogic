@@ -30,7 +30,7 @@ class LoginTest extends TestCase
     {   
         $this->register();
             
-        $response = $this->post('/api/auth/login',[
+        $response = $this->postjson('/api/auth/login',[
             "email" => "user11@moove.com",
             "password" => "password",
         ]);
@@ -44,7 +44,7 @@ class LoginTest extends TestCase
     {   
         $this->register();
             
-        $response = $this->post('/api/auth/login',[
+        $response = $this->postjson('/api/auth/login',[
             "email" => 11122211111,
             "password" => "password",
         ]);
@@ -58,7 +58,7 @@ class LoginTest extends TestCase
     {   
         $this->register();
             
-        $response = $this->post('/api/auth/login',[
+        $response = $this->postjson('/api/auth/login',[
             "email" => 92003993993,
             "password" => "password",
         ]);
