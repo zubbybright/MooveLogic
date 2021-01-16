@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+
 use App\Http\Controllers\BaseController;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class LoginController extends BaseController
 {
@@ -27,17 +28,15 @@ class LoginController extends BaseController
     public function login(Request $request)
     {
         $input = $request->all();
-  
+
+        $fieldType = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone_number';        
         $this->validate($request, [
-            'email' => 'required',
+            $fieldType => 'required',
             'password' => 'required',
-            
         ]);
 
-        $fieldType = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone_number';
-
-        if($token = auth()->attempt(array($fieldType => $input['email'], 'password' => $input['password']))){
-            
+        $fields = array($fieldType => $input[$fieldType], 'password' => $input['password']);
+        if($token = auth()->attempt($fields)){
             $data  = [
                 'user' => auth()->user(),
                 'profile' => auth()->user()->profile,
@@ -47,10 +46,8 @@ class LoginController extends BaseController
                     'expires_in' => auth()->factory()->getTTL()
                 ]
             ];
-    
             return $this->sendResponse($data, 'Login successful.');
         } else {
-
             return $this->sendError('Invalid Login Credentials.', 'Invalid Login Credentials.');
         }
 

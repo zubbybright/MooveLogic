@@ -15,6 +15,8 @@ class LoginTest extends TestCase
      * @return void
      */
 
+     const AUTH_URL = '/api/auth/login';
+     
     private function register(){
         $this->postjson('/api/auth/register',[
             "phone_number"=>"11122211111",
@@ -30,7 +32,7 @@ class LoginTest extends TestCase
     {   
         $this->register();
             
-        $response = $this->postjson('/api/auth/login',[
+        $response = $this->postjson(self::AUTH_URL,[
             "email" => "user11@moove.com",
             "password" => "password",
         ]);
@@ -43,8 +45,8 @@ class LoginTest extends TestCase
     {   
         $this->register();
             
-        $response = $this->postjson('/api/auth/login',[
-            "email" => 11122211111,
+        $response = $this->postjson(self::AUTH_URL,[
+            "phone_number" => 11122211111,
             "password" => "password",
         ]);
         
@@ -52,12 +54,24 @@ class LoginTest extends TestCase
         
     }
 
-    public function test_a_user_cannot_login_with_invalid_credentials()
+    public function test_a_user_cannot_login_with_wrong_email_format()
     {   
         $this->register();
             
-        $response = $this->postjson('/api/auth/login',[
+        $response = $this->postjson(self::AUTH_URL,[
             "email" => 92003993993,
+            "password" => "password",
+        ]);
+        
+        $response->assertStatus(422);
+    }
+
+    public function test_a_user_cannot_login_with_wrong_credential()
+    {   
+        $this->register();
+            
+        $response = $this->postjson(self::AUTH_URL,[
+            "email" => 'email@email.com',
             "password" => "password",
         ]);
         
@@ -67,5 +81,4 @@ class LoginTest extends TestCase
         ]);
         
     }
-
 }
