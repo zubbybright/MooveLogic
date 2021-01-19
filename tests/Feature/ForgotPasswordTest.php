@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class forgotPasswordTest extends TestCase
+class ForgotPasswordTest extends TestCase
 {
     use RefreshDatabase;
     /**

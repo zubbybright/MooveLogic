@@ -1,6 +1,7 @@
 <?php
 namespace Database\Seeders;
 
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 
@@ -15,7 +16,11 @@ class UserSeeder extends Seeder
     {
         //
         User::factory()
-            ->count(3)
+            ->count(10)
+            ->state(new Sequence(
+                ['user_type' => '0'],
+                ['user_type' => '1'],
+            ))
             ->create();
     }
 }
