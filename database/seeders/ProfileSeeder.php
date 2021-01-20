@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Profile;
 
-class ProfilesTableSeeder extends Seeder
+class ProfileSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,5 +14,8 @@ class ProfilesTableSeeder extends Seeder
      */
     public function run()
     {
+        Profile::factory()
+        ->count(10)
+        ->create();
     }
 }

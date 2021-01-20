@@ -5,8 +5,9 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use UsersTableSeeder;
-use ProfilesTableSeeder;
+use Database\Seeders\UserSeeder;
+use Database\Seeders\ProfileSeeder;
+use App\Models\User;
 
 class FindRiderTest extends TestCase
 {   
@@ -18,10 +19,14 @@ class FindRiderTest extends TestCase
      */
     public function test_a_rider_can_be_found()
     {   
-        $user = $this->seed(UsersTableSeeder::class);
-        $profile = $this->seed(ProfilesTableSeeder::class);
+        $this->seed();
+        $user = User::first(1); 
 
-    $response = $this->actingAs($user, 'api')->postjson('/api/request-rider',[
+        // $package = new Package;
+        // $package->customer_id = $user->id;
+        // $package->save();
+        
+    $response = $this->actingAs($user)->postjson('/api/request-rider',[
         "recipient_name"=> "Susan James",
         "recipient_phone_number" => "0787998476",
         "package_description" => "I am moving a shoe",
@@ -32,7 +37,7 @@ class FindRiderTest extends TestCase
         "latitude"=> 5.503239,
         "longitude"=> 7.498161
     ]);
-
+        $response->dump();
         $response->assertStatus(200);
     }
 }
