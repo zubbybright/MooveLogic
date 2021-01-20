@@ -14,7 +14,5 @@ class ProfilesTableSeeder extends Seeder
      */
     public function run()
     {
-        //
-        Profile::factory()->times(10)->create();
     }
 }

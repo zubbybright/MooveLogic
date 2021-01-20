@@ -2,9 +2,10 @@
 
 namespace Tests\Feature;
 
+use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\User;
 
 class LoginTest extends TestCase
 {   
@@ -15,23 +16,15 @@ class LoginTest extends TestCase
      * @return void
      */
 
-    private function register(){
-        $this->postjson('/api/auth/register',[
-            "phone_number"=>"11122211111",
-            "password"=> "password",
-            "email"=> "user11@moove.com",
-            "password_confirmation"=> "password",
-            "first_name"=> "Jane",
-            "last_name"=> "Doe"
-        ]);
-    }
-
+     const AUTH_URL = '/api/auth/login';
+     
     public function test_a_user_can_login_with_email()
     {   
-        $this->register();
-            
-        $response = $this->postjson('/api/auth/login',[
-            "email" => "user11@moove.com",
+        $this->seed();
+
+        $user = User::find(1);               
+        $response = $this->postjson(self::AUTH_URL,[
+            "email" => $user->email,
             "password" => "password",
         ]);
         
@@ -41,10 +34,11 @@ class LoginTest extends TestCase
 
     public function test_a_user_can_login_with_phone()
     {   
-        $this->register();
-            
-        $response = $this->postjson('/api/auth/login',[
-            "email" => 11122211111,
+        $this->seed();
+             
+        $user = User::first();               
+        $response = $this->postjson(self::AUTH_URL,[
+            "phone_number" => $user->phone_number,
             "password" => "password",
         ]);
         
@@ -52,13 +46,26 @@ class LoginTest extends TestCase
         
     }
 
-    public function test_a_user_cannot_login_with_invalid_credentials()
+    public function test_a_user_cannot_login_with_wrong_email_format()
     {   
-        $this->register();
-            
-        $response = $this->postjson('/api/auth/login',[
-            "email" => 92003993993,
+        $this->seed();
+
+        $response = $this->postjson(self::AUTH_URL,[
+            "email" => "email@email",
             "password" => "password",
+        ]);
+        
+        $response->assertStatus(422);
+    }
+
+    public function test_a_user_cannot_login_with_wrong_credential()
+    {   
+        $this->seed();
+
+        $user = User::first();               
+        $response = $this->postjson(self::AUTH_URL,[
+            "email" => $user->email,
+            "password" => "password1",
         ]);
         
         $response->assertStatus(400);
@@ -67,5 +74,4 @@ class LoginTest extends TestCase
         ]);
         
     }
-
 }
