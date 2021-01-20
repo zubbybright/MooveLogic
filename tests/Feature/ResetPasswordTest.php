@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -16,44 +17,35 @@ class ResetPasswordTest extends TestCase
      * @return void
      */
 
-    private $token = '4784';
-
-    private function saveUser(){
-        $user = new User;
-        $user->phone_number = "11122211111";
-        $user->email =  "jane_doe@moove.com";
-        $user->user_type = 'CUSTOMER';
-        $user->password = \bcrypt('password');
-        $user->token = $this->token;
-        $user->save();
-    }
-
 
     public function test_a_token_can_be_validated(){
-        $this->saveUser();
-        // echo $this->token;
-        // die();
+
+        $this->seed();
+        $user = User::find(1); 
+
+        $user->token = strval(rand(1000,9999));
+        $user->save();
 
         $response = $this->postjson('/api/auth/token/validate',[
-            "otp" => $this->token,
+            "otp" => $user->token,
         ]);
-
-        $response->dump();
+        
         $response->assertStatus(200);
        
     }
 
     public function test_a_user_can_reset_password(){
-        $this->saveUser();
-        // echo $this->token;
-        // die();
+        $this->seed();
+        $user = User::find(1); 
 
-        $response = $this->postjson('/api/auth/password/reset/4784',[
+        $user->token = rand(1000,9999);
+        $user->save();
+
+        $response = $this->postjson('/api/auth/password/reset/'.$user->token,[
             "new_password"  => "password1234",
             "new_password_confirmation" => "password1234"
         ]);
 
-        $response->dump();
         $response->assertStatus(200);
        
     }

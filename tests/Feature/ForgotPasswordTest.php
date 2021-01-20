@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\User;
 
 class ForgotPasswordTest extends TestCase
 {
@@ -15,32 +17,26 @@ class ForgotPasswordTest extends TestCase
      * @return void
      */
 
-    private function register(){
-        $this->postjson('/api/auth/register',[
-            "phone_number"=>"11122211111",
-            "password"=> "password",
-            "email"=> "jane_doe@moove.com",
-            "password_confirmation"=> "password",
-            "first_name"=> "Jane",
-            "last_name"=> "Doe"
-        ]);
-    }
+    const RESET_EMAIL_URL = '/api/auth/password/email';
+
 
     public function test_reset_email_can_be_sent()
     {   
-        $this->register();
-            
-        $response = $this->postjson('/api/auth/password/email',[
-            "email" => "jane_doe@moove.com",
+      
+        $this->seed();
+        
+        $user = User::find(1); 
+        $response = $this->postjson(self::RESET_EMAIL_URL,[
+            "email" => $user->email,
         ]);
 
         $response->assertStatus(200);
     }
 
     public function test_email_must_be_registered(){
-        $this->register();
-            
-        $response = $this->postjson('/api/auth/password/email',[
+        $this->seed();
+        
+        $response = $this->postjson(self::RESET_EMAIL_URL,[
             "email" => "janedoe@moove.com",
         ]);
 
@@ -52,10 +48,10 @@ class ForgotPasswordTest extends TestCase
     }
 
     public function test_email_can_be_resent(){
-        $this->register();
-            
-        $response = $this->postjson('/api/auth/resend/jane_doe@moove.com');
-
+        $this->seed();
+        $user = User::find(1); 
+        
+        $response = $this->post('/api/auth/resend/'.$user->email);
         $response->assertStatus(200);
     }
 

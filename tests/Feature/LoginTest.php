@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\User;
 
 class LoginTest extends TestCase
 {   
@@ -16,12 +17,14 @@ class LoginTest extends TestCase
      */
 
      const AUTH_URL = '/api/auth/login';
-     protected $seeder = UserSeeder::class;
-
+     
     public function test_a_user_can_login_with_email()
-    {               
+    {   
+        $this->seed();
+
+        $user = User::find(1);               
         $response = $this->postjson(self::AUTH_URL,[
-            "email" => "user11@moove.com",
+            "email" => $user->email,
             "password" => "password",
         ]);
         
@@ -30,9 +33,12 @@ class LoginTest extends TestCase
     }
 
     public function test_a_user_can_login_with_phone()
-    {               
+    {   
+        $this->seed();
+             
+        $user = User::first();               
         $response = $this->postjson(self::AUTH_URL,[
-            "phone_number" => 11122211111,
+            "phone_number" => $user->phone_number,
             "password" => "password",
         ]);
         
@@ -42,10 +48,10 @@ class LoginTest extends TestCase
 
     public function test_a_user_cannot_login_with_wrong_email_format()
     {   
-        // $this->register();
-            
+        $this->seed();
+
         $response = $this->postjson(self::AUTH_URL,[
-            "email" => 92003993993,
+            "email" => "email@email",
             "password" => "password",
         ]);
         
@@ -54,11 +60,12 @@ class LoginTest extends TestCase
 
     public function test_a_user_cannot_login_with_wrong_credential()
     {   
-        // $this->register();
-            
+        $this->seed();
+
+        $user = User::first();               
         $response = $this->postjson(self::AUTH_URL,[
-            "email" => 'email@email.com',
-            "password" => "password",
+            "email" => $user->email,
+            "password" => "password1",
         ]);
         
         $response->assertStatus(400);
