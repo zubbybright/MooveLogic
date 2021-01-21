@@ -20,11 +20,15 @@ class FindRiderTest extends TestCase
     public function test_a_rider_can_be_found()
     {   
         $this->seed();
-        $user = User::first(1); 
 
-        // $package = new Package;
-        // $package->customer_id = $user->id;
-        // $package->save();
+        $user = new User; 
+        $user->email = 'janedoe@email.com';
+        $user->phone_number = '299292999992';
+        $user->id = 11;
+        $user->user_type = 'CUSTOMER';
+        $user->on_a_ride = 0;
+        $user->password='password';
+        $user->save();
         
     $response = $this->actingAs($user)->postjson('/api/request-rider',[
         "recipient_name"=> "Susan James",
