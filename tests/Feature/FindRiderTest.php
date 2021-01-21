@@ -41,7 +41,6 @@ class FindRiderTest extends TestCase
         "latitude"=> 5.503239,
         "longitude"=> 7.498161
     ]);
-        $response->dump();
         $response->assertStatus(200);
     }
 }
