@@ -18,8 +18,8 @@ class UserSeeder extends Seeder
         User::factory()
             ->count(10)
             ->state(new Sequence(
-                ['user_type' => '0'],
-                ['user_type' => '1'],
+                ['user_type' => 'CUSTOMER'],
+                ['user_type' => 'RIDER'],
             ))
             ->create();
     }

@@ -28,6 +28,7 @@ class UserFactory extends Factory
             'phone_number' => $this->faker->unique()->phoneNumber,
             'user_type' => $this->faker->randomElement([0,1]),
             'email' => $this->faker->unique()->safeEmail,
+            'user_type' =>$this->faker->randomElement(array('CUSTOMER','RIDER') ),
             'email_verified_at' => now(),
             'password' => 'password', // password
             'remember_token' => Str::random(10),
