@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Trip;
 use App\Models\User;
 use App\Models\Profile;
-use App\Models\Package;
 use App\Models\RiderLocation;
 use App\Http\Controllers\BaseController;
 use Carbon\Carbon;
@@ -30,7 +29,7 @@ class TripsController extends BaseController
         //update status to enroute
 
 
-        $trip = Trip::where('id',$tripId)->first();
+        $trip = Trip::where('id', $tripId)->first();
         if ($trip == null) {
             return $this->sendError("Trip does not exist", "Trip does not exist");
         }
@@ -59,7 +58,7 @@ class TripsController extends BaseController
         //update status to enroute
 
 
-        $trip = Trip::where('id',$tripId)->first();
+        $trip = Trip::where('id', $tripId)->first();
         if ($trip == null) {
             return $this->sendError("Trip does not exist", "Trip does not exist");
         }
@@ -140,13 +139,13 @@ class TripsController extends BaseController
         //create package
         //create trip
         //find a free rider in the location of the customer by:
-            //get the customer's latitude and longitude
-            //check if rider's latitude and longitude is in the same range with
-            //that of the customer;
-            //check if rider is on a ride;
-            //randomly pick rider
-        
-            //if there is no rider, meeting the criteria, return "No rider available"
+        //get the customer's latitude and longitude
+        //check if rider's latitude and longitude is in the same range with
+        //that of the customer;
+        //check if rider is on a ride;
+        //randomly pick rider
+
+        //if there is no rider, meeting the criteria, return "No rider available"
         //save the trip information using the available rider id
         //update rider "on a ride" to true
         //set package status to Pending.
@@ -157,81 +156,49 @@ class TripsController extends BaseController
             'recipient_name' => ['required', 'string', 'max:100'],
             'recipient_phone_number' => ['required', 'string', 'max:14'],
             'package_description' => ['string', 'max:255'],
-            'who_pays' => ['required', 'string', 'max:100'],
-            'payment_method' => ['nullable', 'string', 'max:100'],
             'latitude' => ['required', 'max:20'],
             'longitude' => ['required', 'max:20'],
         ]);
 
-        if (!$data) {
-            return $this->sendError("Something is wrong with your input", "Something is wrong with your input");
-        } else {
-
-            $trip_cost = 1500;
-           
-            // try {
-                //create package:
-
-                $package = Package::create([
-                    'package_description' => $data['package_description'],
-                    'customer_id' => auth()->user()->id,
-                    'package_status' => 'PENDING'
-                ]);
-
-                //create trip:
-                $trip = Trip::create([
-                    'recipient_name' => $data['recipient_name'],
-                    'recipient_phone_number' => $data['recipient_phone_number'],
-                    'who_pays' => $data['who_pays'],
-                    'customer_id' => auth()->user()->id,
-                    'trip_status' => 'PENDING',
-                    'start_location' => $data['start_location'],
-                    'end_location' => $data['end_location'],
-                    'package_description' => $data['package_description'],
-                    'cost_of_trip' => $trip_cost,
-                    'payment_method' => $data['payment_method'],
-                    'package_id' => $package->id,
-                    'moove_id' => mt_rand(1000, 9999)
-                ]);
-                
-
-                $rider =  User::where('user_type', 1)
-                ->where('on_a_ride', 0)
-                // ->whereBetween('latitude', [$data['latitude']- (10 * 0.018), $data['latitude']+ (10 * 0.018)])
-                // ->whereBetween('longitude', [$data['longitude']- (10 * 0.018), $data['longitude']+ (10 * 0.018)])
-                ->inRandomOrder()
-                ->take(1)
-                ->first();
-
-                if (!$rider) {
-                    return $this->sendError("No rider available at the moment. Please try again later", "No rider available at the moment");
-                }
+        $trip_cost = 1500;
 
 
-               
-                //update trip with selected rider id:
-                $trip->rider_id = $rider->id;
-                $trip->save();
 
-                //update rider ride status:
-                $rider->on_a_ride = true;
-                $rider->save();
+        $rider =  User::rider()->where('on_a_ride', 0)->inRandomOrder()->first();
+        // ->whereBetween('latitude', [$data['latitude']- (10 * 0.018), $data['latitude']+ (10 * 0.018)])
+        // ->whereBetween('longitude', [$data['longitude']- (10 * 0.018), $data['longitude']+ (10 * 0.018)])
 
-                //get the profile of the rider:
-                $profile = $rider->profile;
-
-                //nest trip, rider and package together to get all in reponse:
-                $info  = [
-                    'trip' => $trip,
-                    'rider' => $rider,
-                    'package' => $package,
-                ];
-                return $this->sendResponse($info, 'Rider located!');
-            // } catch (\Exception $e) {
-
-            //     return $this->sendError("Cannot locate a rider at the moment", 'Cannot locate a rider at the moment');
-            // }
+        if (!$rider) {
+            return $this->sendError("No rider available at the moment. Please try again later", "No rider available at the moment");
         }
+
+        //create trip:
+        $trip = Trip::create([
+            'start_location' => $data['start_location'],
+            'end_location' => $data['end_location'],
+            'cost_of_trip' => $trip_cost,
+            'trip_status' => 0,
+            'package_description' => $data['package_description'],
+            'recipient_name' => $data['recipient_name'],
+            'recipient_phone_number' => $data['recipient_phone_number'],
+            'payment_method' => 0,
+
+            'customer_id' => auth()->user()->id,
+            'rider_id' => $rider->id,
+
+        ]);
+        
+
+        //update rider ride status:
+        $rider->on_a_ride = true;
+        $rider->save();
+
+        //nest trip, rider and package together to get all in reponse:
+        $info  = [
+            'trip' => $trip,
+            'rider' => $rider
+        ];
+        return $this->sendResponse($info, 'Rider located!');
     }
 
     public function findActiveTrip()
@@ -243,7 +210,7 @@ class TripsController extends BaseController
         $rider = auth()->user();
         $trip = Trip::where('rider_id', $rider->id)
             ->where('trip_status', 'PENDING')->latest()->first();
-        $customer = Profile::where('user_id',$trip->customer_id)->first();
+        $customer = Profile::where('user_id', $trip->customer_id)->first();
         $customerContactDetails = User::where('id', $trip->customer_id)->first();
         $info  = [
             'trip' => $trip,
@@ -287,9 +254,8 @@ class TripsController extends BaseController
         $history = Trip::where('customer_id', $user->id)
             ->latest()
             ->get();
-        
+
         return $this->sendResponse($history, 'Your moove history.');
-        
     }
 
     public function deliverPackage($packageId)
@@ -337,42 +303,40 @@ class TripsController extends BaseController
     }
 
 
-    public function getRiderLocation($riderId, $tripId )
+    public function getRiderLocation($riderId, $tripId)
     {
         $riderLocation = RiderLocation::where('rider_id', $riderId)
-                            ->where('trip_id',$tripId)->latest()
-                            ->first();
-        $trip = Trip::select('trip_status')->where('id',$tripId)->first();
+            ->where('trip_id', $tripId)->latest()
+            ->first();
+        $trip = Trip::select('trip_status')->where('id', $tripId)->first();
 
         $info  = [
             'trip' => $trip,
             'riderLocation' => $riderLocation
         ];
         return $this->sendResponse($info, "This is your rider's current location and trip status.");
-        
     }
 
-    public function saveRiderLocation($tripId, $riderId, $lat , $long)
+    public function saveRiderLocation($tripId, $riderId, $lat, $long)
     {
         //get the ridr id
         //get latitude and longitude
         //get the trip id
         //save to the database
 
-            $riderlocation = RiderLocation::create([
-                'latitude' => $lat,
-                'longitude' => $long,
-                'rider_id' => $riderId,
-                'trip_id' => $tripId
-            ]);
+        $riderlocation = RiderLocation::create([
+            'latitude' => $lat,
+            'longitude' => $long,
+            'rider_id' => $riderId,
+            'trip_id' => $tripId
+        ]);
 
-            if ($riderlocation) {
-                return $this->sendResponse($riderlocation, 'Current location saved.');
-            } else {
+        if ($riderlocation) {
+            return $this->sendResponse($riderlocation, 'Current location saved.');
+        } else {
 
-                return $this->sendError('Could not save your current location.');
-            }
-        
+            return $this->sendError('Could not save your current location.');
+        }
     }
 
     public function updateLocation(Request $request)
@@ -393,10 +357,11 @@ class TripsController extends BaseController
             $user = auth()->user();
             $userId = $user->id;
 
-            $location = User::where('id' , $userId)
-                        ->update(['latitude'=>$data['latitude'],
-                                'longitude'=>$data['longitude']]);
-           
+            $location = User::where('id', $userId)
+                ->update([
+                    'latitude' => $data['latitude'],
+                    'longitude' => $data['longitude']
+                ]);
 
             if ($location) {
                 return $this->sendResponse($user, 'Current location saved.');
@@ -415,8 +380,6 @@ class TripsController extends BaseController
         if ($trip == null) {
             return $this->sendError("Trip does not exist");
         } else {
-            $trip->get();
-
             return $this->sendResponse($trip, 'Trip Details.');
         }
     }

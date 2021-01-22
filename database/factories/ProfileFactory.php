@@ -22,10 +22,8 @@ class ProfileFactory extends Factory
     public function definition()
     {
         return [
-            //
-            'first_name' => $this->faker->name,
-            'last_name' => $this->faker->name,
-            'user_id' => $this->faker->randomElement(array(1,2,3,4,5,6,7,8,9,10))
+            'first_name' => $this->faker->firstName,
+            'last_name' => $this->faker->lastName,
         ];
     }
 }

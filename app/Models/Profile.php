@@ -14,14 +14,7 @@ class Profile extends Model implements HasMedia
 {
     use InteractsWithMedia,  HasFactory;
     
-    protected $fillable = ['first_name', 'last_name','password','user_id', 'card_number','card_name','cvv','expiration_year', 'expiration_month',];
+    protected $fillable = ['first_name', 'last_name'];
 
 
-    public function user(){
-        return $this->belongsTo(User::class);
-    }
-
-    public function feedbacks(){
-        return $this->hasMany(Feedback::class);
-    }
 }

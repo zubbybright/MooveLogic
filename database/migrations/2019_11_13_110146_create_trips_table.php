@@ -13,28 +13,29 @@ class CreateTripsTable extends Migration
      */
     public function up()
     {
+        // ['IN_PROGRESS','PENDING', 'ENDED','CANCELLED']
+        // $table->enum('payment_method',['CASH', 'CARD']);
+        // ['REQUESTER', 'RECIPIENT']
         Schema::create('trips', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('current_location')->nullable();
-            $table->string('start_location')->nullable();
-            $table->string('end_location');
-            $table->dateTime('start_time')->nullable();
-            $table->dateTime('end_time')->nullable();
-            $table->string('cost_of_trip');
-            $table->enum('trip_status',['IN_PROGRESS','PENDING', 'ENDED','CANCELLED'])->nullable();
             $table->string('recipient_name');
             $table->string('recipient_phone_number');
-            $table->enum('who_pays',['REQUESTER', 'RECIPIENT']);
-            $table->enum('payment_method',['CASH', 'CARD']);
+            $table->string('start_location');
+            $table->string('end_location');
+            $table->string('cost_of_trip');
+            $table->smallInteger('payment_method');
+            $table->smallInteger('trip_status');
+            $table->string('package_description')->nullable();
+            $table->string('current_location')->nullable();
+            $table->dateTime('start_time')->nullable();
+            $table->dateTime('end_time')->nullable();
+
             $table->unsignedBigInteger('rider_id')->nullable();
             $table->unsignedBigInteger('customer_id')->nullable();
-            $table->unsignedBigInteger('package_id')->nullable();
             $table->timestamps();
 
-    
             $table->foreign('rider_id')->references('id')->on('users');
             $table->foreign('customer_id')->references('id')->on('users');
-            $table->foreign('package_id')->references('id')->on('packages');
         });
     }
 

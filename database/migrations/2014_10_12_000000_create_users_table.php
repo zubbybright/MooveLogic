@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('phone_number')->unique();
             $table->string('email')->unique();
             $table->string('password');
+            $table->unsignedBigInteger('profile_id');
             $table->smallInteger('user_type')->default(0);
             $table->boolean('on_a_ride')->default(0);
             $table->string('facebook_id')->nullable();
@@ -25,8 +26,11 @@ class CreateUsersTable extends Migration
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('token')->nullable();
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreign('profile_id')->references('id')->on('profiles');
         });
     }
 

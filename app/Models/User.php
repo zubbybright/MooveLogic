@@ -4,9 +4,7 @@ namespace App\Models;
 
 use App\Models\Profile;
 use App\Models\Trip;
-use App\Models\Package;
 use App\Models\Feedback;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -23,7 +21,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'phone_number', 'email', 'password','facebook_id','user_type', 'current_location','on_a_ride', 'token'
+        'phone_number', 'email', 'password','profile_id','user_type', 'current_location','on_a_ride', 'token'
     ];
 
     /**
@@ -47,8 +45,18 @@ class User extends Authenticatable implements JWTSubject
         'longitude' =>'float'
     ];
 
-    public function packages(){
-        return $this->hasMany(Package::class);
+    public function scopeRider($query)
+    {
+        return $query->where('user_type', 1);
+    }
+
+    public function scopeCustomer($query)
+    {
+        return $query->where('user_type', 0);
+    }
+
+    public function profile(){
+        return $this->belongsTo(User::class);
     }
 
     public function trips(){
@@ -61,10 +69,6 @@ class User extends Authenticatable implements JWTSubject
 
     public function feedbacks(){
         return $this->hasMany(Feedback::class);
-    }
-
-    public function profile(){
-        return $this->hasOne(Profile::class);
     }
 
     public function getJWTIdentifier()

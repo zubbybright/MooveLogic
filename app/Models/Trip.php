@@ -4,21 +4,29 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
-use App\Models\Package;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Trip extends Model
 {
-    //
-    protected $fillable = ['current_location', 'start_location', 'end_location','start_time', 'end_time','cost_of_trip','trip_status','recipient_name','recipient_phone_number', 'rider_id', 'package_id','who_pays','payment_method', 'moove_id','customer_id', 'package_description'];
+    use HasFactory;
 
+    protected $fillable = ['current_location', 'start_location', 'end_location','start_time', 'end_time','cost_of_trip','trip_status','recipient_name','recipient_phone_number', 'rider_id', 'payment_method', 'customer_id', 'package_description'];
+    protected $appends = [
+        'moove_name'
+    ];
 
-    public function user(){
+    public function customer(){
         return $this->belongsTo(User::class);
     }
 
-    public function package(){
-        return $this->belongsTo(Package::class);
+    public function rider(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function getMooveNameAttribute()
+    {
+        return  "MOOV".$this->attributes['id'];
     }
 
     public function getCreatedAtAttribute($timestamp) {

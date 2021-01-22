@@ -1,6 +1,7 @@
 <?php
 namespace Database\Seeders;
 
+use App\Models\Profile;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 use App\Models\User;
@@ -21,6 +22,7 @@ class UserSeeder extends Seeder
                 ['user_type' => 0],
                 ['user_type' => 1],
             ))
+            ->has(Profile::factory())
             ->create();
     }
 }

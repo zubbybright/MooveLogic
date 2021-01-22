@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class LoginController extends BaseController
 {

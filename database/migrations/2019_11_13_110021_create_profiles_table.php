@@ -15,16 +15,9 @@ class CreateProfilesTable extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('card_number')->nullable();
-            $table->string('card_name')->nullable();
-            $table->string('cvv')->nullable();
-            $table->string('expiration_month')->nullable();
-            $table->string('expiration_year')->nullable();
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
