@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
-use App\Models\Profile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController;
 use Illuminate\Support\Facades\Validator;
@@ -34,17 +33,13 @@ class RegisterController extends BaseController
 
     protected function create(array $data)
     {   
-        $profile = Profile::create([
+        return User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
-        ]);
-
-        return User::create([
             'phone_number' => $data['phone_number'],
             'user_type' => 0,
             'email' => $data['email'],
             'password' => $data['password'],
-            'profile_id' => $profile->id,
         ]);
 
 
@@ -59,7 +54,6 @@ class RegisterController extends BaseController
     {
        $data  = [
             'user' => $user,
-            'profile' => $user->profile,
             'token' => [
                 'access_token' => $this->guard()->refresh(),
                 'token_type' => 'bearer',

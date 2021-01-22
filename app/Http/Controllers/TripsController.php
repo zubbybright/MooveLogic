@@ -136,20 +136,6 @@ class TripsController extends BaseController
 
     public function findRider(Request $request)
     {
-        //create package
-        //create trip
-        //find a free rider in the location of the customer by:
-        //get the customer's latitude and longitude
-        //check if rider's latitude and longitude is in the same range with
-        //that of the customer;
-        //check if rider is on a ride;
-        //randomly pick rider
-
-        //if there is no rider, meeting the criteria, return "No rider available"
-        //save the trip information using the available rider id
-        //update rider "on a ride" to true
-        //set package status to Pending.
-
         $data = $request->validate([
             'start_location' => ['nullable', 'max:100'],
             'end_location' => ['required', 'string', 'max:100'],
@@ -161,8 +147,6 @@ class TripsController extends BaseController
         ]);
 
         $trip_cost = 1500;
-
-
 
         $rider =  User::rider()->where('on_a_ride', 0)->inRandomOrder()->first();
         // ->whereBetween('latitude', [$data['latitude']- (10 * 0.018), $data['latitude']+ (10 * 0.018)])

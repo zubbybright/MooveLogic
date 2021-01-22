@@ -17,8 +17,9 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->string('phone_number')->unique();
             $table->string('email')->unique();
+            $table->string('first_name');
+            $table->string('last_name');
             $table->string('password');
-            $table->unsignedBigInteger('profile_id');
             $table->smallInteger('user_type')->default(0);
             $table->boolean('on_a_ride')->default(0);
             $table->string('facebook_id')->nullable();
@@ -30,7 +31,6 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
 
-            $table->foreign('profile_id')->references('id')->on('profiles');
         });
     }
 

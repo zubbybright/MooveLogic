@@ -38,7 +38,6 @@ class LoginController extends BaseController
         if($token = auth()->attempt($fields)){
             $data  = [
                 'user' => auth()->user(),
-                'profile' => auth()->user()->profile,
                 'token' => [
                     'access_token' => $token,
                     'token_type' => 'bearer',

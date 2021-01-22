@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Package;
 use App\Models\User;
 use App\Models\Trip;
 use Illuminate\Database\Eloquent\Factories\Factory;
