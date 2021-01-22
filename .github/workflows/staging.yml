@@ -27,12 +27,15 @@ jobs:
       run: |
         mkdir -p database
         touch database/database.sqlite
+    - name: Test Migration and Seeders
+      run: |
         php artisan migrate --seed
+        php artisan migrate:rollback
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
-      run: vendor/bin/phpunit
+      run: php artisan test
   laravel-ftp-deploy:
     needs: laravel-tests
     runs-on: ubuntu-latest
