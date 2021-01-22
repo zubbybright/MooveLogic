@@ -87,9 +87,31 @@ class TripTest extends TestCase
         $rider = User::rider()->first();
         $response = $this->actingAs($rider)->get('/api/active-ride');
 
-        $response->dump();
         $response->assertStatus(200);
     }
 
+    public function test_get_riders_trip_history()
+    {   
+        $this->seed();
+
+        $rider = User::rider()->first();
+        $response = $this->actingAs($rider)->get('/api/trip-history');
+
+        $response->assertStatus(400);
+        $response->assertJson([
+            'message' => 'You have no history yet',
+        ]);
+    }
+
+    public function test_get_customers_order_history()
+    {   
+        $this->seed();
+
+        $customer = User::customer()->first();
+        $response = $this->actingAs($customer)->get('/api/customer-history');
+
+        $response->assertStatus(200);
     
+    }
+
 }
