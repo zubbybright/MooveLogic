@@ -29,7 +29,6 @@ class LoginTest extends TestCase
     public function test_a_user_can_login_with_email()
     {   
 
-                    
         $response = $this->postjson(self::AUTH_URL,[
             "email" => $this->user->email,
             "password" => "password",
@@ -47,13 +46,10 @@ class LoginTest extends TestCase
         ]);
         
         $response->assertStatus(200);
-        
     }
 
     public function test_a_user_cannot_login_with_wrong_email_format()
-    {   
-        $this->seed(UserSeeder::class);
-
+    {  
         $response = $this->postjson(self::AUTH_URL,[
             "email" => "email@email",
             "password" => "password",

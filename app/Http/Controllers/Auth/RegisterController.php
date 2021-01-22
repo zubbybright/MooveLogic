@@ -57,15 +57,11 @@ class RegisterController extends BaseController
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'user_type' => [ 'string', 'max:255'],
-            // 'facebook_id' => ['nullable','string', 'max:255'],
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'phone_number' => ['required', 'string', 'max:14','unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'first_name' => ['required', 'string', 'max:100'],
             'last_name' => ['required', 'string', 'max:100'],
-
-
         ]);
 
     }
@@ -78,17 +74,15 @@ class RegisterController extends BaseController
      */
     protected function create(array $data)
     {   
-        // $token = rand(1000,9999); 
-
         $user = User::create([
             'phone_number' => $data['phone_number'],
-            'user_type' => 'CUSTOMER',
+            'user_type' => 0,
             'email' => $data['email'],
             'password' => $data['password'],
         ]);
 
 
-        $profile = Profile::create([
+        Profile::create([
             'user_id' => $user->id,
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
@@ -99,7 +93,6 @@ class RegisterController extends BaseController
         // Mail::send(new VerifyEmail($email,$token));
 
         return $user;
-        return $profile;
     }
 
     protected function registered(Request $request, $user)

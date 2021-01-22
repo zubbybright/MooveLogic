@@ -3,11 +3,25 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\User;
+use Database\Seeders\UserSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RegisterTest extends TestCase
 {   
+    use RefreshDatabase;
+
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+
+    const AUTH_URL = '/api/auth/register';
+    const INVALID_MESSAGE = 'The given data was invalid.';
+
     public function test_a_user_can_register(){
-        $response = $this->postJson('/api/auth/register', [
+        $response = $this->postjson(self::AUTH_URL,[
             "phone_number"=>"22219499944",
             "password"=> "password",
             "email"=> "user11@moove.com",
@@ -22,7 +36,7 @@ class RegisterTest extends TestCase
     public function test_a_user_cannot_register_with_empty_fields()
     {   
         
-        $response = $this->postjson('/api/auth/register',[
+        $response = $this->postjson(self::AUTH_URL,[
             "phone_number"=>" ",
             "password"=> " ",
             "email"=> " ",
@@ -34,7 +48,7 @@ class RegisterTest extends TestCase
     
         $response->assertStatus(422);
         $response->assertJson([
-            "message"=> "The given data was invalid.",
+            "message"=> self::INVALID_MESSAGE,
         ]);   
         $response->assertJsonFragment([
             'first_name' => ["The first name field is required."],
@@ -48,7 +62,7 @@ class RegisterTest extends TestCase
     public function test_phone_number_cannot_be_more_than_14_digits()
     {   
         
-        $response = $this->postjson('/api/auth/register',[
+        $response = $this->postjson(self::AUTH_URL,[
             'first_name' => 'User',
             'last_name'=>'Test',
             'phone_number' => '+234667388888883',
@@ -59,9 +73,7 @@ class RegisterTest extends TestCase
         ]);
     
         $response->assertStatus(422);
-        $response->assertJson([
-            "message"=> "The given data was invalid.",
-        ]); 
+        $response->assertJson(["message"=> self::INVALID_MESSAGE,]); 
         $response->assertJsonFragment([
             'phone_number' => ["The phone number may not be greater than 14 characters."]
         ]);
@@ -70,7 +82,7 @@ class RegisterTest extends TestCase
     public function test_email_field_must_accept_a_valid_email_format()
     {   
         
-        $response = $this->postjson('/api/auth/register',[
+        $response = $this->postjson(self::AUTH_URL,[
             'first_name' => 'John',
             'last_name'=>'Doe',
             'phone_number' => '12345678909',
@@ -92,7 +104,7 @@ class RegisterTest extends TestCase
     public function test_firstname_and_lastname_cannot_be_numbers()
     {   
         
-        $response = $this->postjson('/api/auth/register',[
+        $response = $this->postjson(self::AUTH_URL,[
             'first_name' => 102000300,
             'last_name'=>1009399494,
             'phone_number' => '88838383844',
@@ -112,11 +124,13 @@ class RegisterTest extends TestCase
 
     public function test_a_user_cannot_register_with_existing_email_or_phone()
     {   
-       
-        $response = $this->postJson('/api/auth/register', [
-            "phone_number"=>"22219499944",
+        $this->seed(UserSeeder::class);
+        $user = User::first();
+
+        $response = $this->postjson(self::AUTH_URL,[
+            "phone_number"=>$user->phone_number,
             "password"=> "password",
-            "email"=> "user11@moove.com",
+            "email"=> $user->email,
             "password_confirmation"=> "password",
             "first_name"=> "User",
             "last_name"=> "Test"
