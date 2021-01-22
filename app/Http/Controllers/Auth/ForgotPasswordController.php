@@ -2,58 +2,31 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\BaseController;
-use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
-use Illuminate\Http\Request;
-use App\Notifications\PasswordResetNotification;
-use App\Notifications\DatabaseNotification;
 use App\Models\User;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Mail;
 use App\Mail\ResetPassword;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\BaseController;
 
 
 class ForgotPasswordController extends BaseController
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Password Reset Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller is responsible for handling password reset emails and
-    | includes a trait which assists in sending these notifications from
-    | your application to your users. Feel free to explore this trait.
-    |
-    */
-
-    // use SendsPasswordResetEmails;
-
     public function sendEmail(Request $request)
     {
         $data = $request->validate([
-            'email' => ['required', 'string', 'email','min:8']
+            'email' => ['required', 'string', 'email','min:8', 'exists:users']
         ]);
         
-        $token = rand(1000,9999);
-        $email = $data['email'];
-        // $link =  "moovelogic://reset/$email";
-
-        $validEmail = User::where('email', $email)->first();
-        
-        if (!$validEmail){
-            return $this->sendError('Please enter your registered email address', 'Please enter your registered email address');
-        }
-
-        Mail::send(new ResetPassword($token,$email));
-        
-        User::where('email',$email)->update(['token'=>$token]);
-
-        return $this->sendResponse('Link Sent' , 'Link Sent');
-    
+        $this->sendEmailAndUpdate($data['email']);
     }
 
     public function resendEmail($email)
     {
+        $this->sendEmailAndUpdate($email);
+    }
+
+    private function sendEmailAndUpdate($email)
+    {
         $token = rand(1000,9999);
 
         Mail::send(new ResetPassword($token,$email));
@@ -61,6 +34,5 @@ class ForgotPasswordController extends BaseController
         User::where('email',$email)->update(['token'=>$token]);
 
         return $this->sendResponse('Link Sent' , 'Link Sent');
-    
     }
 }
