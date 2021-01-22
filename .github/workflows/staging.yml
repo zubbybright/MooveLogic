@@ -19,14 +19,14 @@ jobs:
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
     - name: Prepare environment
       run: |
-        php artisan key:generate
-        php artisan jwt:secret
+        php artisan key:generate --env=testing
+        php artisan jwt:secret --env=testing
         mkdir -p database
         touch database/database.sqlite
     - name: Test Migration and Seeders
       run: |
-        php artisan migrate --seed
-        php artisan migrate:rollback
+        php artisan migrate --seed --env=testing
+        php artisan migrate:rollback --env=testing
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       run: php artisan test
   laravel-ftp-deploy:
