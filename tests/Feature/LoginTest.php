@@ -17,14 +17,21 @@ class LoginTest extends TestCase
      */
 
      const AUTH_URL = '/api/auth/login';
+     protected $user;
+
+     protected function setUp(): void{
+         parent::setUp();
+         $this->seed(UserSeeder::class);
+         $this->user = User::first();   
+     }
+
      
     public function test_a_user_can_login_with_email()
     {   
-        $this->seed();
 
-        $user = User::find(1);               
+                    
         $response = $this->postjson(self::AUTH_URL,[
-            "email" => $user->email,
+            "email" => $this->user->email,
             "password" => "password",
         ]);
         
@@ -33,12 +40,9 @@ class LoginTest extends TestCase
     }
 
     public function test_a_user_can_login_with_phone()
-    {   
-        $this->seed();
-             
-        $user = User::first();               
+    {       
         $response = $this->postjson(self::AUTH_URL,[
-            "phone_number" => $user->phone_number,
+            "phone_number" => $this->user->phone_number,
             "password" => "password",
         ]);
         
@@ -48,7 +52,7 @@ class LoginTest extends TestCase
 
     public function test_a_user_cannot_login_with_wrong_email_format()
     {   
-        $this->seed();
+        $this->seed(UserSeeder::class);
 
         $response = $this->postjson(self::AUTH_URL,[
             "email" => "email@email",
@@ -59,12 +63,9 @@ class LoginTest extends TestCase
     }
 
     public function test_a_user_cannot_login_with_wrong_credential()
-    {   
-        $this->seed();
-
-        $user = User::first();               
+    {             
         $response = $this->postjson(self::AUTH_URL,[
-            "email" => $user->email,
+            "email" => $this->user->email,
             "password" => "password1",
         ]);
         
