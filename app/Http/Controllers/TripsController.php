@@ -195,7 +195,7 @@ class TripsController extends BaseController
                 ]);
                 
 
-                $rider =  User::where('user_type', 'RIDER')
+                $rider =  User::where('user_type', 1)
                 ->where('on_a_ride', 0)
                 // ->whereBetween('latitude', [$data['latitude']- (10 * 0.018), $data['latitude']+ (10 * 0.018)])
                 // ->whereBetween('longitude', [$data['longitude']- (10 * 0.018), $data['longitude']+ (10 * 0.018)])

@@ -3,11 +3,11 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Database\Seeders\UserSeeder;
-use Database\Seeders\ProfileSeeder;
 use App\Models\User;
+
+use function PHPUnit\Framework\assertNotNull;
 
 class FindRiderTest extends TestCase
 {
@@ -15,18 +15,9 @@ class FindRiderTest extends TestCase
     
     public function test_a_rider_can_be_found()
     {
-        $this->seed();
+        $this->seed(UserSeeder::class);
 
-        $customer = User::first('user_type', 0);
-
-        // $user = new User;
-        // $user->email = 'janedoe@email.com';
-        // $user->phone_number = '299292999992';
-        // $user->id = 11;
-        // $user->user_type = 'CUSTOMER';
-        // $user->on_a_ride = 0;
-        // $user->password = 'password';
-        // $user->save();
+        $customer = User::where('user_type', 0)->first();
 
         $response = $this->actingAs($customer)->postjson('/api/request-rider', [
             "recipient_name" => "Susan James",
@@ -39,6 +30,7 @@ class FindRiderTest extends TestCase
             "latitude" => 5.503239,
             "longitude" => 7.498161
         ]);
+
         $response->assertStatus(200);
     }
 }
