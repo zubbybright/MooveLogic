@@ -17,36 +17,69 @@ class ResetPasswordTest extends TestCase
      * @return void
      */
 
+    protected $user;
+
+    protected function setUp(): void{
+        parent::setUp();
+        $this->seed(UserSeeder::class);
+        $this->user = User::first();   
+    }
 
     public function test_a_token_can_be_validated(){
 
-        $this->seed();
-        $user = User::find(1); 
-
-        $user->token = strval(rand(1000,9999));
-        $user->save();
-
         $response = $this->postjson('/api/auth/token/validate',[
-            "otp" => $user->token,
+            "otp" => $this->user->token,
         ]);
         
         $response->assertStatus(200);
        
     }
 
-    public function test_a_user_can_reset_password(){
-        $this->seed();
-        $user = User::find(1); 
+    public function test_an_invalid_toke_fails(){
 
-        $user->token = rand(1000,9999);
-        $user->save();
+        $response = $this->postjson('/api/auth/token/validate',[
+            "otp" => "4566",
+        ]);
+        
+        $response->assertStatus(422);
+       
+    }
 
-        $response = $this->postjson('/api/auth/password/reset/'.$user->token,[
-            "new_password"  => "password1234",
-            "new_password_confirmation" => "password1234"
+    public function test_a_user_can_reset_password_and_login(){
+
+        $password =  "password1234";
+        $this->postjson('/api/auth/password/reset/'.$this->user->token,[
+            "new_password"  => $password,
+            "new_password_confirmation" => $password
         ]);
 
+
+        $response = $this->postjson('/api/auth/login', [
+            "email"  => $this->user->email,
+            "password" => $password
+        ]);
+
+
         $response->assertStatus(200);
+       
+    }
+
+    public function test_a_user_should_not_login_after_reset(){
+
+        $password = "passwod11234";
+        $this->postjson('/api/auth/password/reset/'.$this->user->token,[
+            "new_password"  => $password,
+            "new_password_confirmation" => $password
+        ]);
+
+
+        $response = $this->postjson('/api/auth/login', [
+            "email"  => $this->user->email,
+            "password" => "password12341"
+        ]);
+
+
+        $response->assertStatus(400);
        
     }
 

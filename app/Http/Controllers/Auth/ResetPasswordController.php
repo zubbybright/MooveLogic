@@ -11,13 +11,7 @@ class ResetPasswordController extends BaseController
 {
     public function validateToken(Request $request)
     {
-        $data = $request->validate(['otp' => ['required', 'string', 'min:4', 'max:4']]);
-
-        $validToken = User::whereToken($data['otp'])->first();
-
-        if ($validToken == null) {
-            return $this->sendError("Invalid OTP code.", "Invalid OTP code.");
-        }
+        $request->validate(['otp' => ['required', 'string', 'min:4', 'max:4', 'exists:users,token']]);
         return $this->sendResponse("OTP is valid.", "OTP is valid");
     }
 
@@ -33,7 +27,7 @@ class ResetPasswordController extends BaseController
             return $this->sendError("otp is invalid", "otp is invalid");
         }
 
-        $user->password = $data['new_password'];
+        $user->update(['password' => $data['new_password']]);
         $user->save();
 
         return $this->sendResponse("Password reset successful.", "Password reset successful.");
