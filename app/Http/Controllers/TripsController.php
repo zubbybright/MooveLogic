@@ -2,16 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
 use App\Models\Trip;
 use App\Models\User;
-use App\Models\Profile;
+use Illuminate\Http\Request;
 use App\Models\RiderLocation;
 use App\Http\Controllers\BaseController;
-use Carbon\Carbon;
-
 class TripsController extends BaseController
 {
     //
@@ -27,13 +22,19 @@ class TripsController extends BaseController
         //get the id of package on trip
         //find it on package model
         //update status to enroute
+        //pending o
+        //accepted 1
+        //pickup 2
+        //paid 3
+        //enroute 4
+        //
 
-
-        $trip = Trip::where('id', $tripId)->first();
+        $trip = Trip::find($tripId);
         if ($trip == null) {
             return $this->sendError("Trip does not exist", "Trip does not exist");
         }
-        if ($trip->trip_status == "IN_PROGRESS") {
+
+        if ($trip->trip_status > 0) {
             return $this->sendError("Trip already started!", "Trip already started!");
         } else {
             $trip->trip_status = 'IN_PROGRESS';
@@ -171,7 +172,7 @@ class TripsController extends BaseController
             'rider_id' => $rider->id,
 
         ]);
-        
+
 
         //update rider ride status:
         $rider->on_a_ride = true;

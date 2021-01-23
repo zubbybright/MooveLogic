@@ -9,21 +9,11 @@ use Illuminate\Http\Request;
 class LoginController extends BaseController
 {
 
-    /**
-     * Create a new Authcontroller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login']]);
     }
 
-    /**
-     * Get a JWT via given credentials.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function login(Request $request)
     {
         $input = $request->all();
