@@ -23,8 +23,8 @@ Route::group([
     Route::post('register/validate', 'Auth\RegisterController@checkToken');
     Route::post('create-admin', 'ProfileController@createAdmin');
 });
-//start, end and cancel trips;
 
+//start, end and cancel trips;
 Route::post('start-trip/{tripId}', 'TripsController@startTrip');
 Route::post('end-trip/{tripId}/{riderId}', 'TripsController@endTrip');
 Route::post('cancel-trip/{tripId}/{riderId}', 'TripsController@cancelTrip');
@@ -32,7 +32,6 @@ Route::post('cancel-trip/{tripId}/{riderId}', 'TripsController@cancelTrip');
 //save rider current location
 Route::post('rider/location/{tripId}/{riderId}/{latitude}/{longitude}', 'TripsController@saveRiderLocation');
 Route::post('update-location', 'TripsController@updateLocation')->middleware('auth:api');
-
 
 //get rider current location
 Route::get('rider/current/location/{riderId}/{tripId}', 'TripsController@getRiderLocation');
@@ -49,10 +48,12 @@ Route::get('active-ride', 'TripsController@findActiveTrip')->middleware('auth:ap
 
 //rider trip history:
 Route::get('trip-history', 'TripsController@riderTripHistory')->middleware('auth:api');
+
 //payment
 // Route::post('payment-method', 'PaymentController@makePayment');
 //calculate cost:
 Route::post('cost', 'TripsController@calculateCost');
+
 //customer order history;
 Route::get('customer-history', 'TripsController@customerOrderHistory')->middleware('auth:api');
 

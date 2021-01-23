@@ -4,7 +4,9 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\User;
+use App\Mail\ResetPassword;
 use Database\Seeders\UserSeeder;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ForgotPasswordTest extends TestCase
@@ -18,8 +20,8 @@ class ForgotPasswordTest extends TestCase
         parent::setUp();
         $this->seed(UserSeeder::class);
         $this->user = User::first();   
+        Mail::fake();
     }
-
 
     public function test_reset_email_can_be_sent()
     {   
@@ -27,6 +29,7 @@ class ForgotPasswordTest extends TestCase
             "email" => $this->user->email,
         ]);
 
+        Mail::assertSent(ResetPassword::class);
         $response->assertStatus(200);
     }
 
@@ -40,7 +43,7 @@ class ForgotPasswordTest extends TestCase
     }
 
     public function test_email_can_be_resent()
-    {        
+    {   
         $response = $this->post('/api/auth/resend/'.$this->user->email);
         $response->assertStatus(200);
     }
