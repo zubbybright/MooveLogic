@@ -18,6 +18,7 @@ class ResetPasswordTest extends TestCase
      */
 
     protected $user;
+    const VALIDATE_URL = '/api/auth/token/validate';
 
     protected function setUp(): void{
         parent::setUp();
@@ -26,19 +27,31 @@ class ResetPasswordTest extends TestCase
     }
 
     public function test_a_token_can_be_validated(){
-
-        $response = $this->postjson('/api/auth/token/validate',[
-            "otp" => $this->user->token,
+        
+        $response = $this->postjson(self::VALIDATE_URL,[
+            "token" => $this->user->token,
+            "email" => $this->user->email
         ]);
         
         $response->assertStatus(200);
        
     }
 
-    public function test_an_invalid_toke_fails(){
+    public function test_that_I_can_only_use_my_token(){
+        
+        $response = $this->postjson(self::VALIDATE_URL,[
+            "token" => $this->user->token,
+            "email" => User::skip(1)->first()->email
+        ]);
+        
+        $response->assertStatus(422);
+       
+    }
 
-        $response = $this->postjson('/api/auth/token/validate',[
-            "otp" => "4566",
+    public function test_that_I_must_pass_email_to_validate_token(){
+
+        $response = $this->postjson(self::VALIDATE_URL,[
+            "token" => $this->user->token,
         ]);
         
         $response->assertStatus(422);
@@ -48,18 +61,20 @@ class ResetPasswordTest extends TestCase
     public function test_a_user_can_reset_password_and_login(){
 
         $password =  "password1234";
-        $this->postjson('/api/auth/password/reset/'.$this->user->token,[
-            "new_password"  => $password,
-            "new_password_confirmation" => $password
+        $validate = $this->postjson('/api/auth/password/reset',[
+            "token" => $this->user->token,
+            "email" => $this->user->email,
+            "password"  => $password,
+            "password_confirmation" => $password
         ]);
 
-
+        
         $response = $this->postjson('/api/auth/login', [
             "email"  => $this->user->email,
             "password" => $password
         ]);
 
-
+        $validate->assertStatus(200);
         $response->assertStatus(200);
        
     }
@@ -67,9 +82,11 @@ class ResetPasswordTest extends TestCase
     public function test_a_user_should_not_login_after_reset(){
 
         $password = "passwod11234";
-        $this->postjson('/api/auth/password/reset/'.$this->user->token,[
-            "new_password"  => $password,
-            "new_password_confirmation" => $password
+        $reset = $this->postjson('/api/auth/password/reset', [
+            "password"  => $password,
+            "password_confirmation" => $password,
+            "token" => $this->user->token,
+            "email" => $this->user->email
         ]);
 
 
@@ -78,7 +95,7 @@ class ResetPasswordTest extends TestCase
             "password" => "password12341"
         ]);
 
-
+        $reset->assertStatus(200);
         $response->assertStatus(400);
        
     }

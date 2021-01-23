@@ -3,33 +3,43 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\BaseController;
-use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Validation\Rule;
 
 class ResetPasswordController extends BaseController
 {
     public function validateToken(Request $request)
     {
-        $request->validate(['otp' => ['required', 'string', 'min:4', 'max:4', 'exists:users,token']]);
+        $request->validate([
+            'token' => ['required', 'string', 'min:4', 'max:4'],
+            'email' => [
+                'required', 'email',
+                Rule::exists('users')->where(function ($query) use ($request) {
+                    return $query->whereToken($request->token)->whereEmail($request->email);
+                }),
+            ],
+        ]);
+
         return $this->sendResponse("OTP is valid.", "OTP is valid");
     }
 
-    public function reset(Request $request, $otp)
+    public function reset(Request $request)
     {
-
         $data = $request->validate([
-            'new_password' => ['required', 'string', 'min:8', 'confirmed'],
+            'token' => ['required', 'string', 'min:4', 'max:4'],
+            'email' => [
+                'required', 'email',
+                Rule::exists('users')->where(function ($query) use ($request) {
+                    return $query->whereToken($request->token)->whereEmail($request->email);
+                }),
+            ],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
-
-        $user = User::whereToken($otp)->first();
-        if ($user == null) {
-            return $this->sendError("otp is invalid", "otp is invalid");
-        }
-
-        $user->update(['password' => $data['new_password']]);
-        $user->save();
+            
+        User::whereEmail($data['email'])->update(['password' => bcrypt($data['password']) ] );
 
         return $this->sendResponse("Password reset successful.", "Password reset successful.");
     }
+
 }
