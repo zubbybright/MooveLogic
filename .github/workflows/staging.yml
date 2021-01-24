@@ -21,7 +21,6 @@ jobs:
       run: |
         php artisan key:generate --env=testing
         php artisan jwt:secret --env=testing
-        mkdir -p database
         touch database/database.sqlite
     - name: Test Migration and Seeders
       run: |
