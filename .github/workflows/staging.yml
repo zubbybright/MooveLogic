@@ -19,9 +19,9 @@ jobs:
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
     - name: Prepare environment
       run: |
-        php artisan key:generate --env=testing
-        php artisan jwt:secret --env=testing
         touch database/database.sqlite
+        composer dump-autoload
+        php artisan optimize --env=testing
     - name: Test Migration and Seeders
       run: |
         php artisan migrate --seed --env=testing
