@@ -58,6 +58,6 @@ class Trip extends Model
 
     public function getCanTrackAttribute()
     {
-        return $this->attributes['trip_status'] === "DELIVERING";
+        return $this->attributes['trip_status'] == 5;
     }
 }
