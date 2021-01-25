@@ -16,6 +16,8 @@ class Trip extends Model
         'moove_name',
         'display_status',
         'can_track',
+        'rider_name',
+        'rider_phone'
     ];
 
     const STATES = array(0 => "PLACED", 1 => "RIDER_ASSIGNED", 2 => "RIDER_ACCEPTED", 3 => "PAYMENT_MADE", 4 => "PACKAGE_PICKED_UP", 5 => "DELIVERING", 6 => "DELIVERED", 6 => "CANCELLED");
@@ -54,6 +56,15 @@ class Trip extends Model
         else{
             return $this->getTripStatusAttribute($this->attributes['trip_status']);
         }
+    }
+
+    public function getRiderNameAttribute()
+    {
+        return $this->rider->first_name;
+    }
+
+    public function getRiderPhoneAttribute(){
+        return $this->rider->phone_number;
     }
 
     public function getCanTrackAttribute()
