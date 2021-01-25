@@ -13,8 +13,12 @@ class Trip extends Model
 
     protected $fillable = ['current_location', 'start_location', 'end_location','start_time', 'end_time','cost_of_trip','trip_status','recipient_name','recipient_phone_number', 'rider_id', 'payment_method', 'customer_id', 'package_description'];
     protected $appends = [
-        'moove_name'
+        'moove_name',
+        'display_status',
+        'can_track',
     ];
+
+    const STATES = array( 0 => "PLACED", 1 => "RIDER_ASSIGNED", 2 => "RIDER_ACCEPTED" , 4 => "PACKAGE_PICKED_UP", 3 => "PAYMENT_MADE", 5 => "DELIVERING", 6 => "DELIVERED", 6 => "CANCELLED" );
 
     public function customer(){
         return $this->belongsTo(User::class);
@@ -35,7 +39,16 @@ class Trip extends Model
 
     public function getTripStatusAttribute($status)
     {
-        $dict = array( 0 => "PLACED", 1 => "RIDER_ASSIGNED", 2, "RIDER_ACCEPTED", "PACKAGE_PICKED_UP", 3 => "PAYMENT_MADE", 4 => "DELIVERING", 5 => "DELIVERED", 6 => "CANCELLED" );
-        return $dict[$status];
+        return self::STATES[$status];
+    }
+
+    public function getDisplayStatusAttribute()
+    {
+        return $this->attributes['trip_status'] ;
+    }
+
+    public function getCanTrackAttribute()
+    {
+        return $this->attributes['trip_status'] === "DELIVERING";
     }
 }
