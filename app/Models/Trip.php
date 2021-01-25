@@ -52,7 +52,7 @@ class Trip extends Model
             return "PENDING";
         }
         else{
-            return $this->attributes['trip_status'];
+            return $this->getTripStatusAttribute($this->attributes['trip_status']);
         }
     }
 
