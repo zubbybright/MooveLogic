@@ -36,7 +36,7 @@ class LoginController extends BaseController
             ];
             return $this->sendResponse($data, 'Login successful.');
         } else {
-            return $this->sendError('Invalid Login Credentials.', 'Invalid Login Credentials.');
+            return $this->sendError('The provided login details is not valid. Please verify , then try again', 'Invalid Login Credentials.');
         }
 
 

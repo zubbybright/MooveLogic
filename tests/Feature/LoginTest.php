@@ -67,7 +67,7 @@ class LoginTest extends TestCase
         
         $response->assertStatus(400);
         $response->assertJson([
-            'message' => 'Invalid Login Credentials.',
+            'message' => 'The provided login details is not valid. Please verify , then try again',
         ]);
         
     }
