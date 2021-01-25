@@ -32,4 +32,10 @@ class Trip extends Model
     public function getCreatedAtAttribute($timestamp) {
         return Carbon::parse($timestamp)->format('F d, Y');
     }
+
+    public function getTripStatusAttribute($status)
+    {
+        $dict = array( 0 => "PLACED", 1 => "RIDER_ASSIGNED", 2, "RIDER_ACCEPTED", "PACKAGE_PICKED_UP", 3 => "PAYMENT_MADE", 4 => "DELIVERING", 5 => "DELIVERED", 6 => "CANCELLED" );
+        return $dict[$status];
+    }
 }
