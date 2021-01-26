@@ -39,4 +39,7 @@ jobs:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.CPANEL_USERNAME }}
         password: ${{ secrets.CPANEL_PASSWORD }}
-        script: ls -a
+        script: |
+          cd stg-api
+          composer install
+          php artisan optimize
