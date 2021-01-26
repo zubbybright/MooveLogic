@@ -34,8 +34,9 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: FTP-Deploy-Action
-      uses: SamKirkland/FTP-Deploy-Action@2.0.0
-      env:
-        FTP_SERVER: moovelogic.com
-        FTP_USERNAME: ftp-stg@moovelogic.com
-        FTP_PASSWORD: B*cb00G(2u?h
+      uses: appleboy/ssh-action@master
+      with:
+        host: 146.71.86.211
+        username: moovelo1
+        password: K05BXs;m0Wj0i#
+        script: ls -a
