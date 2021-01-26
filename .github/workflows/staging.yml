@@ -41,5 +41,6 @@ jobs:
         password: ${{ secrets.CPANEL_PASSWORD }}
         script: |
           cd stg-api
+          git pull
           composer install
           php artisan optimize
