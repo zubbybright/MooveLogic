@@ -36,7 +36,7 @@ jobs:
     - name: FTP-Deploy-Action
       uses: appleboy/ssh-action@master
       with:
-        host: 146.71.86.211
-        username: moovelo1
-        password: K05BXs;m0Wj0i#
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.CPANEL_USERNAME }}
+        password: ${{ secrets.CPANEL_PASSWORD }}
         script: ls -a
