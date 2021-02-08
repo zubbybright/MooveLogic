@@ -108,22 +108,9 @@ class TripsController extends BaseController
     }
 
 
-    private function _estimatedCostOfTrip()
-    {
-        return "1000 - 2000";
-    }
-
+   
     public function calculateCost(Request $request)
     {
-
-        $data = $request->validate([
-            'start_location' => ['nullable', 'max:100'],
-            'end_location' => ['required', 'string', 'max:100'],
-            'package_description' => ['string', 'max:255'],
-            "km" => ['required', 'string', 'max:100'],
-            "time" => ['required', 'string', "max:100"]
-        ]);
-
         // $timeInMin = ($data['time'] * 60);
         // $baseFare = 200;
         // $calculateCost = $baseFare + ($timeInMin * $data['km']);
