@@ -157,7 +157,6 @@ class TripsController extends BaseController
 
             'customer_id' => auth()->user()->id,
             'rider_id' => $rider->id,
-
         ]);
 
 
@@ -166,11 +165,11 @@ class TripsController extends BaseController
         $rider->save();
 
         //nest trip, rider and package together to get all in reponse:
-        $info  = [
-            'trip' => $trip,
-            'rider' => $rider
-        ];
-        return $this->sendResponse($info, 'Rider located!');
+        // $info  = [
+        //     'trip' => $trip,
+        //     'rider' => $rider
+        // ];
+        return $this->sendResponse($trip, 'Rider located!');
     }
 
     public function findActiveTrip()

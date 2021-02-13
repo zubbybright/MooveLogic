@@ -31,7 +31,7 @@ class CreateTripsTable extends Migration
             $table->dateTime('end_time')->nullable();
 
             $table->unsignedBigInteger('rider_id')->nullable();
-            $table->unsignedBigInteger('customer_id')->nullable();
+            $table->unsignedBigInteger('customer_id');
             $table->timestamps();
 
             $table->foreign('rider_id')->references('id')->on('users');
