@@ -61,7 +61,7 @@ class TripTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_get_customers_order_history()
+    public function test_customers_order_history_can_be_gotten()
     {   
         $response = $this->actingAs($this->customer)->get('/api/customer-history');
 
