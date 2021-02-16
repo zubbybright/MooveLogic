@@ -37,8 +37,7 @@ class ResetPassword extends Mailable
      */
     public function build()
     {
-        return $this->from('noreply@moovelogic.com')
-        ->to($this->email)
+        return $this->to($this->email)
         ->subject('RESET YOUR PASSWORD')
         ->view('emails.users.reset')
         ->with(['year' => Carbon::now()->year,])
