@@ -149,7 +149,7 @@ class TripsController extends BaseController
             'start_location' => $data['start_location'],
             'end_location' => $data['end_location'],
             'cost_of_trip' => $trip_cost,
-            'trip_status' => 0,
+            'trip_status' => 3,
             'package_description' => $data['package_description'],
             'recipient_name' => $data['recipient_name'],
             'recipient_phone_number' => $data['recipient_phone_number'],

@@ -20,7 +20,7 @@ class Trip extends Model
         'rider_phone'
     ];
 
-    const STATES = array(0 => "PLACED", 1 => "RIDER_ASSIGNED", 2 => "RIDER_ACCEPTED", 3 => "PAYMENT_MADE", 4 => "PACKAGE_PICKED_UP", 5 => "DELIVERING", 6 => "DELIVERED", 6 => "CANCELLED");
+    const STATES = array(0 => "PLACED", 1 => "RIDER_ASSIGNED", 2 => "RIDER_ACCEPTED", 3 => "PAYMENT_MADE", 4 => "PACKAGE_PICKED_UP", 5 => "DELIVERING", 6 => "DELIVERED", 7 => "CANCELLED");
 
     public function customer()
     {
