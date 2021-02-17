@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Carbon\Carbon;
 
 class ResetPassword extends Mailable
 {
@@ -36,9 +37,11 @@ class ResetPassword extends Mailable
      */
     public function build()
     {
-        return $this->from('noreply@moovelogic.com')
+        return $this->from('noreply@moovelogic.com', 'Moovelogic')
         ->to($this->email)
         ->subject('RESET YOUR PASSWORD')
-        ->view('emails.users.reset');
+        ->view('emails.users.reset')
+        ->with(['year' => Carbon::now()->year,])
+        ;
     }
 }
