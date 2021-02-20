@@ -7,28 +7,13 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\RiderLocation;
 use App\Http\Controllers\BaseController;
+
 class TripsController extends BaseController
 {
     //
 
     public function startTrip($tripId)
     {
-        //locate the trip
-        //check the current status of the trip
-        // if in progress return already started
-        //update status to in progress
-
-        //how do I update the status of the package to enroute?
-        //get the id of package on trip
-        //find it on package model
-        //update status to enroute
-        //pending o
-        //accepted 1
-        //pickup 2
-        //paid 3
-        //enroute 4
-        //
-
         $trip = Trip::find($tripId);
         if ($trip == null) {
             return $this->sendError("Trip does not exist", "Trip does not exist");
@@ -48,27 +33,25 @@ class TripsController extends BaseController
 
     public function endTrip($tripId)
     {
-        $trip = Trip::where('id', $tripId)->first();
+        $trip = Trip::find($tripId);
         if ($trip == null) {
             return $this->sendError("Trip does not exist", "Trip does not exist");
         }
-        if ($trip->trip_status > 5 ) {
+        if ($trip->trip_status > 5) {
             return $this->sendError("Trip already ended!", "Trip already ended!");
-        } else {
-            $trip->trip_status = 6;
-            $trip->save();
-
-            $rider = $trip->rider;
-            $rider->on_a_ride = false;
-            $rider->save();
-
-            return $this->sendResponse($trip, "Trip ended.");
         }
 
-        return $this->sendError("Cannot start trip", "Cannot start trip");
+        $trip->trip_status = 6;
+        $trip->save();
+
+        $rider = $trip->rider;
+        $rider->on_a_ride = false;
+        $rider->save();
+
+        return $this->sendResponse($trip, "Trip ended.");
     }
 
-    public function cancelTrip($tripId, $riderId)
+    public function cancelTrip($tripId)
     {
         $trip = Trip::find($tripId);
 
@@ -76,28 +59,23 @@ class TripsController extends BaseController
             return $this->sendError("Trip does not exist");
         }
 
-        if ($trip->trip_status == "CANCELLED") {
+        if ($trip->trip_status == 7) {
             return $this->sendError("Trip has already been cancelled!");
-        } else {
-            //update status to cancelled
-            $trip->trip_status = "CANCELLED";
-            $trip->save();
-
-
-            //update rider on a ride to false:
-            // $riderId= Trip::where('id', $tripId)
-            //             ->get('rider_id');
-
-            $rider = User::find($riderId);
-            $rider->on_a_ride = false;
-            $rider->save();
-
-            return $this->sendResponse($trip, "Trip cancelled.");
         }
+
+        //update status to cancelled
+        $trip->trip_status = 7;
+        $trip->save();
+
+        $rider = $trip->rider;
+        $rider->on_a_ride = false;
+        $rider->save();
+
+        return $this->sendResponse($trip, "Trip cancelled.");
     }
 
 
-   
+
     public function calculateCost(Request $request)
     {
         // $timeInMin = ($data['time'] * 60);
@@ -161,11 +139,10 @@ class TripsController extends BaseController
         $trip = Trip::where('rider_id', $rider->id)
             ->where('trip_status', '<',  6)->latest()->first();
 
-        if(!$trip)
-        {
+        if (!$trip) {
             return $this->sendResponse(false,  'No active trip');
-        }   
-        
+        }
+
         if ($trip) {
             $trip->load('customer');
             return $this->sendResponse($trip, 'This is your active ride');

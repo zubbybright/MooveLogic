@@ -27,7 +27,7 @@ Route::group([
 //start, end and cancel trips;
 Route::post('start-trip/{tripId}', 'TripsController@startTrip');
 Route::post('end-trip/{tripId}', 'TripsController@endTrip');
-Route::post('cancel-trip/{tripId}/{riderId}', 'TripsController@cancelTrip');
+Route::post('cancel-trip/{tripId}', 'TripsController@cancelTrip');
 
 //save rider current location
 Route::post('rider/location/{tripId}/{riderId}/{latitude}/{longitude}', 'TripsController@saveRiderLocation');
