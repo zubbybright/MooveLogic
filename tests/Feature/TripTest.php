@@ -69,4 +69,10 @@ class TripTest extends TestCase
     
     }
 
+    public function test_find_rider_active_trip()
+    {
+        $response = $this->actingAs($this->rider)->get('/api/active-ride');
+        $response->assertStatus(200);
+    }
+
 }

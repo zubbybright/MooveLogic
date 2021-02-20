@@ -163,36 +163,26 @@ class TripsController extends BaseController
         //update rider ride status:
         $rider->on_a_ride = true;
         $rider->save();
-
-        //nest trip, rider and package together to get all in reponse:
-        // $info  = [
-        //     'trip' => $trip,
-        //     'rider' => $rider
-        // ];
         return $this->sendResponse($trip, 'Rider located!');
     }
 
     public function findActiveTrip()
     {
-        //get the rider's id
-        //find a trip with this rider's id and with status pending
-        //if found return the trip
-        //if not found return "No trip found"
         $rider = auth()->user();
         $trip = Trip::where('rider_id', $rider->id)
-            ->where('trip_status', 'PENDING')->latest()->first();
-        $customer = Profile::where('user_id', $trip->customer_id)->first();
-        $customerContactDetails = User::where('id', $trip->customer_id)->first();
-        $info  = [
-            'trip' => $trip,
-            'customer' => $customer,
-            'customerContact' => $customerContactDetails
-        ];
+            ->where('trip_status', '<',  6)->latest()->first();
+
+        if(!$trip)
+        {
+            return $this->sendResponse(false,  'No active trip');
+        }   
+        
         if ($trip) {
-            return $this->sendResponse($info, 'This is your active ride');
+            $trip->load('customer');
+            return $this->sendResponse($trip, 'This is your active ride');
         } else {
 
-            return $this->sendError('No trip found');
+            return $this->sendError('Something went wrong please contact admin');
         }
     }
 
