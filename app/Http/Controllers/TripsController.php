@@ -34,10 +34,10 @@ class TripsController extends BaseController
             return $this->sendError("Trip does not exist", "Trip does not exist");
         }
 
-        if ($trip->trip_status > 0) {
+        if ($trip->trip_status > 3) {
             return $this->sendError("Trip already started!", "Trip already started!");
         } else {
-            $trip->trip_status = 'IN_PROGRESS';
+            $trip->trip_status = 5;
             $trip->save();
 
             return $this->sendResponse($trip, "Trip started");
